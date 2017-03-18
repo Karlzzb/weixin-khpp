@@ -2,20 +2,18 @@ package com.khpp.weixin.handler;
 
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSON;
-import com.khpp.weixin.builder.AbstractBuilder;
-import com.khpp.weixin.builder.ImageBuilder;
-import com.khpp.weixin.builder.TextBuilder;
-import com.khpp.weixin.dto.WxMenuKey;
-import com.khpp.weixin.service.WeixinService;
-
-import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+
+import org.springframework.stereotype.Component;
+
+import com.khpp.weixin.builder.AbstractBuilder;
+import com.khpp.weixin.builder.TextBuilder;
+import com.khpp.weixin.config.WxMenuKeyConfig;
+import com.khpp.weixin.dto.WxMenuKey;
+import com.khpp.weixin.service.WeixinService;
 
 /**
  * 
@@ -25,50 +23,40 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 @Component
 public class MenuHandler extends AbstractHandler {
 
-  @Override
-  public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
-      Map<String, Object> context, WxMpService wxMpService,
-      WxSessionManager sessionManager) {
-    WeixinService weixinService = (WeixinService) wxMpService;
+	@Override
+	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
+			Map<String, Object> context, WxMpService wxMpService,
+			WxSessionManager sessionManager) {
+		WeixinService weixinService = (WeixinService) wxMpService;
 
-    String key = wxMessage.getEventKey();
-    WxMenuKey menuKey = null;
-    try {
-      menuKey = JSON.parseObject(key, WxMenuKey.class);
-    } catch (Exception e) {
-      return WxMpXmlOutMessage.TEXT().content(key)
-          .fromUser(wxMessage.getToUser())
-          .toUser(wxMessage.getFromUser()).build();
-    }
+		String key = wxMessage.getEventKey();
+		WxMenuKey menuKey = new WxMenuKey(key, key);
 
-    AbstractBuilder builder = null;
-    switch (menuKey.getType()) {
-    case WxConsts.XML_MSG_TEXT:
-      builder = new TextBuilder();
-      break;
-    case WxConsts.XML_MSG_IMAGE:
-      builder = new ImageBuilder();
-      break;
-    case WxConsts.XML_MSG_VOICE:
-      break;
-    case WxConsts.XML_MSG_VIDEO:
-      break;
-    case WxConsts.XML_MSG_NEWS:
-      break;
-    default:
-      break;
-    }
+		AbstractBuilder builder = null;
+		switch (menuKey.getType()) {
+		case WxMenuKeyConfig.CLICK_HELP:
+			builder = new TextBuilder();
+			menuKey.setContent("有什么可以帮您！");
+			break;
+		case WxMenuKeyConfig.PARKING_SELL:
+			builder = new TextBuilder();
+			menuKey.setContent("您附近有需求的停车场有：\n 1.宝龙广场  \n 2.长泰广场\n 请选择?");
+			break;
+		default:
+			break;
+		}
 
-    if (builder != null) {
-      try {
-        return builder.build(menuKey.getContent(), wxMessage, weixinService);
-      } catch (Exception e) {
-        this.logger.error(e.getMessage(), e);
-      }
-    }
+		if (builder != null) {
+			try {
+				return builder.build(menuKey.getContent(), wxMessage,
+						weixinService);
+			} catch (Exception e) {
+				this.logger.error(e.getMessage(), e);
+			}
+		}
 
-    return null;
+		return null;
 
-  }
+	}
 
 }

@@ -2,11 +2,21 @@ package com.khpp.weixin.service;
 
 import javax.annotation.PostConstruct;
 
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
+import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
+import me.chanjar.weixin.mp.bean.kefu.result.WxMpKfOnlineList;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.khpp.weixin.config.MenuConfig;
 import com.khpp.weixin.config.WxMpConfig;
 import com.khpp.weixin.handler.AbstractHandler;
 import com.khpp.weixin.handler.KfSessionHandler;
@@ -19,14 +29,6 @@ import com.khpp.weixin.handler.StoreCheckNotifyHandler;
 import com.khpp.weixin.handler.SubscribeHandler;
 import com.khpp.weixin.handler.UnsubscribeHandler;
 
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
-import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import me.chanjar.weixin.mp.bean.kefu.result.WxMpKfOnlineList;
-import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
-import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-
 /**
  * 
  * @author Binary Wang
@@ -34,152 +36,163 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
  */
 @Service
 public class WeixinService extends WxMpServiceImpl {
-  private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-  @Autowired
-  protected LogHandler logHandler;
+	@Autowired
+	protected LogHandler logHandler;
 
-  @Autowired
-  protected NullHandler nullHandler;
+	@Autowired
+	protected NullHandler nullHandler;
 
-  @Autowired
-  protected KfSessionHandler kfSessionHandler;
+	@Autowired
+	protected KfSessionHandler kfSessionHandler;
 
-  @Autowired
-  protected StoreCheckNotifyHandler storeCheckNotifyHandler;
+	@Autowired
+	protected StoreCheckNotifyHandler storeCheckNotifyHandler;
 
-  @Autowired
-  private WxMpConfig wxConfig;
+	@Autowired
+	private WxMpConfig wxConfig;
 
-  @Autowired
-  private LocationHandler locationHandler;
+	@Autowired
+	private LocationHandler locationHandler;
 
-  @Autowired
-  private MenuHandler menuHandler;
+	@Autowired
+	private MenuHandler menuHandler;
 
-  @Autowired
-  private MsgHandler msgHandler;
+	@Autowired
+	private MsgHandler msgHandler;
 
-  @Autowired
-  private UnsubscribeHandler unsubscribeHandler;
+	@Autowired
+	private UnsubscribeHandler unsubscribeHandler;
 
-  @Autowired
-  private SubscribeHandler subscribeHandler;
+	@Autowired
+	private SubscribeHandler subscribeHandler;
 
-  private WxMpMessageRouter router;
+	private WxMpMessageRouter router;
 
-  @PostConstruct
-  public void init() {
-    final WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
-    config.setAppId(this.wxConfig.getAppid());// 设置微信公众号的appid
-    config.setSecret(this.wxConfig.getAppsecret());// 设置微信公众号的app corpSecret
-    config.setToken(this.wxConfig.getToken());// 设置微信公众号的token
-    config.setAesKey(this.wxConfig.getAesKey());// 设置消息加解密密钥
-    super.setWxMpConfigStorage(config);
+	@PostConstruct
+	public void init() {
+		final WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
+		config.setAppId(this.wxConfig.getAppid());// 设置微信公众号的appid
+		config.setSecret(this.wxConfig.getAppsecret());// 设置微信公众号的app corpSecret
+		config.setToken(this.wxConfig.getToken());// 设置微信公众号的token
+		config.setAesKey(this.wxConfig.getAesKey());// 设置消息加解密密钥
+		super.setWxMpConfigStorage(config);
 
-    this.refreshRouter();
-  }
+		this.refreshRouter();
 
-  private void refreshRouter() {
-    final WxMpMessageRouter newRouter = new WxMpMessageRouter(this);
+		try {
+			this.getMenuService().menuCreate(MenuConfig.getMenu(this));
+		} catch (WxErrorException e) {
+			this.logger.error("菜单初始化失败！", e);
+		}
+	}
 
-    // 记录所有事件的日志
-    newRouter.rule().handler(this.logHandler).next();
+	private void refreshRouter() {
+		final WxMpMessageRouter newRouter = new WxMpMessageRouter(this);
 
-    // 接收客服会话管理事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_KF_CREATE_SESSION)
-        .handler(this.kfSessionHandler).end();
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_KF_CLOSE_SESSION)
-        .handler(this.kfSessionHandler).end();
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_KF_SWITCH_SESSION)
-        .handler(this.kfSessionHandler).end();
-    
-    // 门店审核事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-      .event(WxConsts.EVT_POI_CHECK_NOTIFY)
-      .handler(this.storeCheckNotifyHandler)
-      .end();
+		// 记录所有事件的日志
+		newRouter.rule().handler(this.logHandler).next();
 
-    // 自定义菜单事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.BUTTON_CLICK).handler(this.getMenuHandler()).end();
+		// 接收客服会话管理事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_KF_CREATE_SESSION)
+				.handler(this.kfSessionHandler).end();
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_KF_CLOSE_SESSION)
+				.handler(this.kfSessionHandler).end();
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_KF_SWITCH_SESSION)
+				.handler(this.kfSessionHandler).end();
 
-    // 点击菜单连接事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.BUTTON_VIEW).handler(this.nullHandler).end();
+		// 门店审核事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_POI_CHECK_NOTIFY)
+				.handler(this.storeCheckNotifyHandler).end();
 
-    // 关注事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.EVT_SUBSCRIBE).handler(this.getSubscribeHandler())
-        .end();
+		// 自定义菜单事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.BUTTON_CLICK).handler(this.getMenuHandler())
+				.end();
 
-    // 取消关注事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.EVT_UNSUBSCRIBE).handler(this.getUnsubscribeHandler())
-        .end();
+		// 点击菜单连接事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.BUTTON_VIEW).handler(this.nullHandler).end();
 
-    // 上报地理位置事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.EVT_LOCATION).handler(this.getLocationHandler()).end();
+		// 关注事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_SUBSCRIBE)
+				.handler(this.getSubscribeHandler()).end();
 
-    // 接收地理位置消息
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_LOCATION)
-        .handler(this.getLocationHandler()).end();
+		// 取消关注事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_UNSUBSCRIBE)
+				.handler(this.getUnsubscribeHandler()).end();
 
-    // 扫码事件
-    newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
-        .event(WxConsts.EVT_SCAN).handler(this.getScanHandler()).end();
+		// 上报地理位置事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_LOCATION)
+				.handler(this.getLocationHandler()).end();
 
-    // 默认
-    newRouter.rule().async(false).handler(this.getMsgHandler()).end();
+		// 接收地理位置消息
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_LOCATION)
+				.handler(this.getLocationHandler()).end();
 
-    this.router = newRouter;
-  }
+		// 扫码事件
+		newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+				.event(WxConsts.EVT_SCAN).handler(this.getScanHandler()).end();
 
+		// 默认
+		newRouter.rule().async(false).handler(this.getMsgHandler()).end();
 
-  public WxMpXmlOutMessage route(WxMpXmlMessage message) {
-    try {
-      return this.router.route(message);
-    } catch (Exception e) {
-      this.logger.error(e.getMessage(), e);
-    }
+		this.router = newRouter;
+	}
 
-    return null;
-  }
+	public WxMpXmlOutMessage route(WxMpXmlMessage message) {
+		try {
+			return this.router.route(message);
+		} catch (Exception e) {
+			this.logger.error(e.getMessage(), e);
+		}
 
-  public boolean hasKefuOnline() {
-    try {
-      WxMpKfOnlineList kfOnlineList = this.getKefuService().kfOnlineList();
-      return kfOnlineList != null && kfOnlineList.getKfOnlineList().size() > 0;
-    } catch (Exception e) {
-      this.logger.error("获取客服在线状态异常: " + e.getMessage(), e);
-    }
+		return null;
+	}
 
-    return false;
-  }
+	public boolean hasKefuOnline() {
+		try {
+			WxMpKfOnlineList kfOnlineList = this.getKefuService()
+					.kfOnlineList();
+			return kfOnlineList != null
+					&& kfOnlineList.getKfOnlineList().size() > 0;
+		} catch (Exception e) {
+			this.logger.error("获取客服在线状态异常: " + e.getMessage(), e);
+		}
 
-  protected MenuHandler getMenuHandler() {
-    return this.menuHandler;
-  }
+		return false;
+	}
 
-  protected SubscribeHandler getSubscribeHandler() {
-    return this.subscribeHandler;
-  }
+	protected MenuHandler getMenuHandler() {
+		return this.menuHandler;
+	}
 
-  protected UnsubscribeHandler getUnsubscribeHandler() {
-    return this.unsubscribeHandler;
-  }
+	protected SubscribeHandler getSubscribeHandler() {
+		return this.subscribeHandler;
+	}
 
-  protected AbstractHandler getLocationHandler() {
-    return this.locationHandler;
-  }
+	protected UnsubscribeHandler getUnsubscribeHandler() {
+		return this.unsubscribeHandler;
+	}
 
-  protected MsgHandler getMsgHandler() {
-    return this.msgHandler;
-  }
+	protected AbstractHandler getLocationHandler() {
+		return this.locationHandler;
+	}
 
-  protected AbstractHandler getScanHandler() {
-    return null;
-  }
+	protected MsgHandler getMsgHandler() {
+		return this.msgHandler;
+	}
+
+	protected AbstractHandler getScanHandler() {
+		return null;
+	}
 
 }
