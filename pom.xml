@@ -25,30 +25,24 @@
 		<jetty-maven-plugin.version>9.3.0.RC0</jetty-maven-plugin.version>
 		<dom4j.version>2.0.0</dom4j.version>
 		<mybatis.version>3.2.1</mybatis.version>
+        <shiro.version>1.2.3</shiro.version>
+       <cglib.version>3.1</cglib.version>
 	</properties>
 
 	<dependencies>
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-lang3</artifactId> 
+			<version>${commons-lang3.version}</version> </dependency> <dependency> <groupId>com.google.guava</groupId> 
+			<artifactId>guava</artifactId> <version>${guava.version}</version> </dependency> 
+			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-oxm</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
+		<!-- 微信接口封装 -->
 		<dependency>
 			<groupId>com.github.binarywang</groupId>
 			<artifactId>weixin-java-mp</artifactId>
 			<version>${weixin-java-mp.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
+		<!-- 日志相关 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -60,11 +54,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-oxm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
@@ -94,20 +83,32 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
+			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<artifactId>spring-jdbc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		        <dependency>  
-            <groupId>org.springframework</groupId>  
-            <artifactId>spring-jdbc</artifactId>  
-            <version>${spring.version}</version>  
-        </dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+				
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		
 		<!-- mybatis核心包 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -119,16 +120,6 @@
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${aspectj.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>${aspectj.version}</version>
 		</dependency>
 
 		<!-- 映入JSON -->
@@ -142,6 +133,12 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+
 		<!-- servlet api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -159,7 +156,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.6</version>
+			<version>5.1.34</version>
 		</dependency>
 		<!-- dom4j -->
 		<dependency>
@@ -169,9 +166,9 @@
 		</dependency>
 		<!-- 导入dbcp的jar包，用来在applicationContext.xml中配置数据库 -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.2.2</version>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
 		</dependency>
 		<!-- JSTL标签类 -->
 		<dependency>
@@ -186,16 +183,68 @@
 			<!-- 表示开发的时候引入，发布的时候不会加载此包 -->
 			<scope>test</scope>
 		</dependency>
+        <!-- shiro -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-quartz</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+		
 	</dependencies>
 
 	<build>
+        <!--配置Maven 对resource文件 过滤 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>	
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty-maven-plugin.version}</version>
 			</plugin>
-
+			<plugin>    
+			      <groupId>org.apache.maven.plugins</groupId>    
+			      <artifactId>maven-resources-plugin</artifactId>    
+			      <configuration>    
+			          <encoding>UTF-8</encoding>    
+			      </configuration>    
+			</plugin> 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

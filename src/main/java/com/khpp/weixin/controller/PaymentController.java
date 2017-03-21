@@ -32,7 +32,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
@@ -46,8 +45,8 @@ import com.khpp.weixin.utils.XMLUtil;
  * <p>
  * Created by FirenzesEagle on 2016/6/20 0020. Email:liumingbo2008@gmail.com
  */
-@Controller
-@RequestMapping(value = "wxPay")
+// @Controller
+// @RequestMapping(value = "wxPay")
 public class PaymentController extends GenericController {
 
 	// 企业向个人转账微信API路径

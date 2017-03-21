@@ -7,11 +7,14 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.khpp.weixin.builder.AbstractBuilder;
 import com.khpp.weixin.builder.TextBuilder;
 import com.khpp.weixin.config.WxMenuKeyConfig;
+import com.khpp.weixin.db.domain.User;
+import com.khpp.weixin.db.service.UserService;
 import com.khpp.weixin.dto.WxMenuKey;
 import com.khpp.weixin.service.WeixinService;
 
@@ -22,6 +25,9 @@ import com.khpp.weixin.service.WeixinService;
  */
 @Component
 public class MenuHandler extends AbstractHandler {
+
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -41,6 +47,7 @@ public class MenuHandler extends AbstractHandler {
 		case WxMenuKeyConfig.PARKING_SELL:
 			builder = new TextBuilder();
 			menuKey.setContent("您附近有需求的停车场有：\n 1.宝龙广场  \n 2.长泰广场\n 请选择?");
+			userService.insert(new User(wxMessage.getFromUser(), "123456"));
 			break;
 		default:
 			break;

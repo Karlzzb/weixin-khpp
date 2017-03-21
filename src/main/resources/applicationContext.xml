@@ -10,6 +10,7 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
   <import resource="classpath*:spring-service-bean.xml" />
+  <import resource="classpath*:spring-mybatis.xml" />
 
   <util:properties id="wxProperties" location="classpath:/wx.properties" />
 

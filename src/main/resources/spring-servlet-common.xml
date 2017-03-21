@@ -35,6 +35,4 @@
 		<property name="supportedMediaTypes" value="application/json" />
 	</bean>
 
-	<aop:aspectj-autoproxy proxy-target-class="true" />
-
 </beans>
