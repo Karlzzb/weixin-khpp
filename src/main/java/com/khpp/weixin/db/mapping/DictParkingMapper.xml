@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.khpp.weixin.db.dao.DictParkingMapper" >
+  <resultMap id="BaseResultMap" type="com.khpp.weixin.db.domain.DictParking" >
+    <id column="parking_id" property="parkingId" jdbcType="INTEGER" />
+    <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.khpp.weixin.db.domain.DictParking" extends="BaseResultMap" >
+    <result column="location" property="location" jdbcType="BINARY" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    parking_id, parking_name, create_time, dml_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    location
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from dict_parking
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from dict_parking
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from dict_parking
+    where parking_id = #{parkingId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from dict_parking
+    where parking_id = #{parkingId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
+    delete from dict_parking
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.khpp.weixin.db.domain.DictParking" >
+    insert into dict_parking (parking_id, parking_name, create_time, 
+      dml_time, location)
+    values (#{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dmlTime,jdbcType=TIMESTAMP}, #{location,jdbcType=BINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.DictParking" >
+    insert into dict_parking
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="parkingId != null" >
+        parking_id,
+      </if>
+      <if test="parkingName != null" >
+        parking_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dmlTime != null" >
+        dml_time,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="parkingId != null" >
+        #{parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingName != null" >
+        #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=BINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.khpp.weixin.db.domain.DictParkingExample" resultType="java.lang.Integer" >
+    select count(*) from dict_parking
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update dict_parking
+    <set >
+      <if test="record.parkingId != null" >
+        parking_id = #{record.parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkingName != null" >
+        parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dmlTime != null" >
+        dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=BINARY},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update dict_parking
+    set parking_id = #{record.parkingId,jdbcType=INTEGER},
+      parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      location = #{record.location,jdbcType=BINARY}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update dict_parking
+    set parking_id = #{record.parkingId,jdbcType=INTEGER},
+      parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.khpp.weixin.db.domain.DictParking" >
+    update dict_parking
+    <set >
+      <if test="parkingName != null" >
+        parking_name = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=BINARY},
+      </if>
+    </set>
+    where parking_id = #{parkingId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.khpp.weixin.db.domain.DictParking" >
+    update dict_parking
+    set parking_name = #{parkingName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=BINARY}
+    where parking_id = #{parkingId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.DictParking" >
+    update dict_parking
+    set parking_name = #{parkingName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP}
+    where parking_id = #{parkingId,jdbcType=INTEGER}
+  </update>
+</mapper>

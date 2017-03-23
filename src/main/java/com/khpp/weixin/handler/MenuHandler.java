@@ -47,7 +47,7 @@ public class MenuHandler extends AbstractHandler {
 		case WxMenuKeyConfig.PARKING_SELL:
 			builder = new TextBuilder();
 			menuKey.setContent("您附近有需求的停车场有：\n 1.宝龙广场  \n 2.长泰广场\n 请选择?");
-			userService.insert(new User(wxMessage.getFromUser(), "123456"));
+			userService.insert(new User(wxMessage.getFromUser(), "测试用户"));
 			break;
 		default:
 			break;

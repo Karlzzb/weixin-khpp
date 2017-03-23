@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.khpp.weixin.db.dao.ParkingOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.khpp.weixin.db.domain.ParkingOrder" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="offer_id" property="offerId" jdbcType="INTEGER" />
+    <result column="parking_id" property="parkingId" jdbcType="INTEGER" />
+    <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
+    <result column="user_id_sellor" property="userIdSellor" jdbcType="INTEGER" />
+    <result column="user_id_buier" property="userIdBuier" jdbcType="INTEGER" />
+    <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
+    <result column="wx_from_order_id" property="wxFromOrderId" jdbcType="VARCHAR" />
+    <result column="wx_to_order_id" property="wxToOrderId" jdbcType="VARCHAR" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="service_fee" property="serviceFee" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.khpp.weixin.db.domain.ParkingOrder" extends="BaseResultMap" >
+    <result column="location" property="location" jdbcType="BINARY" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    order_id, offer_id, parking_id, parking_name, user_id_sellor, user_id_buier, order_status, 
+    wx_from_order_id, wx_to_order_id, paid_amount, service_fee, create_time, dml_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    location
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from parking_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from parking_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from parking_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parking_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
+    delete from parking_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
+    insert into parking_order (order_id, offer_id, parking_id, 
+      parking_name, user_id_sellor, user_id_buier, 
+      order_status, wx_from_order_id, wx_to_order_id, 
+      paid_amount, service_fee, create_time, 
+      dml_time, location)
+    values (#{orderId,jdbcType=INTEGER}, #{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, 
+      #{parkingName,jdbcType=VARCHAR}, #{userIdSellor,jdbcType=INTEGER}, #{userIdBuier,jdbcType=INTEGER}, 
+      #{orderStatus,jdbcType=TINYINT}, #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, 
+      #{paidAmount,jdbcType=DECIMAL}, #{serviceFee,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dmlTime,jdbcType=TIMESTAMP}, #{location,jdbcType=BINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
+    insert into parking_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="offerId != null" >
+        offer_id,
+      </if>
+      <if test="parkingId != null" >
+        parking_id,
+      </if>
+      <if test="parkingName != null" >
+        parking_name,
+      </if>
+      <if test="userIdSellor != null" >
+        user_id_sellor,
+      </if>
+      <if test="userIdBuier != null" >
+        user_id_buier,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="wxFromOrderId != null" >
+        wx_from_order_id,
+      </if>
+      <if test="wxToOrderId != null" >
+        wx_to_order_id,
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount,
+      </if>
+      <if test="serviceFee != null" >
+        service_fee,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dmlTime != null" >
+        dml_time,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="offerId != null" >
+        #{offerId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingId != null" >
+        #{parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingName != null" >
+        #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIdSellor != null" >
+        #{userIdSellor,jdbcType=INTEGER},
+      </if>
+      <if test="userIdBuier != null" >
+        #{userIdBuier,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="wxFromOrderId != null" >
+        #{wxFromOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxToOrderId != null" >
+        #{wxToOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="paidAmount != null" >
+        #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceFee != null" >
+        #{serviceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=BINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" resultType="java.lang.Integer" >
+    select count(*) from parking_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update parking_order
+    <set >
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=INTEGER},
+      </if>
+      <if test="record.offerId != null" >
+        offer_id = #{record.offerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkingId != null" >
+        parking_id = #{record.parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkingName != null" >
+        parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userIdSellor != null" >
+        user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      </if>
+      <if test="record.userIdBuier != null" >
+        user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderStatus != null" >
+        order_status = #{record.orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.wxFromOrderId != null" >
+        wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxToOrderId != null" >
+        wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paidAmount != null" >
+        paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.serviceFee != null" >
+        service_fee = #{record.serviceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dmlTime != null" >
+        dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=BINARY},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update parking_order
+    set order_id = #{record.orderId,jdbcType=INTEGER},
+      offer_id = #{record.offerId,jdbcType=INTEGER},
+      parking_id = #{record.parkingId,jdbcType=INTEGER},
+      parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
+      order_status = #{record.orderStatus,jdbcType=TINYINT},
+      wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
+      wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
+      paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
+      service_fee = #{record.serviceFee,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      location = #{record.location,jdbcType=BINARY}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update parking_order
+    set order_id = #{record.orderId,jdbcType=INTEGER},
+      offer_id = #{record.offerId,jdbcType=INTEGER},
+      parking_id = #{record.parkingId,jdbcType=INTEGER},
+      parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
+      order_status = #{record.orderStatus,jdbcType=TINYINT},
+      wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
+      wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
+      paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
+      service_fee = #{record.serviceFee,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
+    update parking_order
+    <set >
+      <if test="offerId != null" >
+        offer_id = #{offerId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingId != null" >
+        parking_id = #{parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingName != null" >
+        parking_name = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="userIdSellor != null" >
+        user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      </if>
+      <if test="userIdBuier != null" >
+        user_id_buier = #{userIdBuier,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=TINYINT},
+      </if>
+      <if test="wxFromOrderId != null" >
+        wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxToOrderId != null" >
+        wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceFee != null" >
+        service_fee = #{serviceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=BINARY},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
+    update parking_order
+    set offer_id = #{offerId,jdbcType=INTEGER},
+      parking_id = #{parkingId,jdbcType=INTEGER},
+      parking_name = #{parkingName,jdbcType=VARCHAR},
+      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      user_id_buier = #{userIdBuier,jdbcType=INTEGER},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
+      wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
+      paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      service_fee = #{serviceFee,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=BINARY}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
+    update parking_order
+    set offer_id = #{offerId,jdbcType=INTEGER},
+      parking_id = #{parkingId,jdbcType=INTEGER},
+      parking_name = #{parkingName,jdbcType=VARCHAR},
+      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      user_id_buier = #{userIdBuier,jdbcType=INTEGER},
+      order_status = #{orderStatus,jdbcType=TINYINT},
+      wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
+      wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
+      paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      service_fee = #{serviceFee,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+</mapper>

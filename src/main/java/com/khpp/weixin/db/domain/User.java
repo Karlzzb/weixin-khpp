@@ -2,75 +2,110 @@ package com.khpp.weixin.db.domain;
 
 import java.util.Date;
 
-/**
- * 用户模型
- * 
- * @author StarZou
- * @since 2014年7月5日 下午12:07:20
- **/
 public class User {
-    private Long id;
+	public User(String username, String wxOpenId) {
+		super();
+		this.username = username;
+		this.wxOpenId = wxOpenId;
+	}
 
-    private String username;
+	private Integer userId;
 
-    private String password;
+	private String username;
 
-    private String state;
+	private String wxOpenId;
 
-    private Date createTime;
+	private String password;
 
-    public User() {
+	private String paidPw;
 
-    }
+	private Byte userState;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+	private Date subscribeTime;
 
-    public Long getId() {
-        return id;
-    }
+	private Date unsubscribeTime;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private Date createTime;
 
-    public String getUsername() {
-        return username;
-    }
+	private Date dmlTime;
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
+	public Integer getUserId() {
+		return userId;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setUsername(String username) {
+		this.username = username == null ? null : username.trim();
+	}
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
-    }
+	public String getWxOpenId() {
+		return wxOpenId;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setWxOpenId(String wxOpenId) {
+		this.wxOpenId = wxOpenId == null ? null : wxOpenId.trim();
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", state=" + state + ", createTime=" + createTime + "]";
-    }
+	public void setPassword(String password) {
+		this.password = password == null ? null : password.trim();
+	}
 
+	public String getPaidPw() {
+		return paidPw;
+	}
+
+	public void setPaidPw(String paidPw) {
+		this.paidPw = paidPw == null ? null : paidPw.trim();
+	}
+
+	public Byte getUserState() {
+		return userState;
+	}
+
+	public void setUserState(Byte userState) {
+		this.userState = userState;
+	}
+
+	public Date getSubscribeTime() {
+		return subscribeTime;
+	}
+
+	public void setSubscribeTime(Date subscribeTime) {
+		this.subscribeTime = subscribeTime;
+	}
+
+	public Date getUnsubscribeTime() {
+		return unsubscribeTime;
+	}
+
+	public void setUnsubscribeTime(Date unsubscribeTime) {
+		this.unsubscribeTime = unsubscribeTime;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getDmlTime() {
+		return dmlTime;
+	}
+
+	public void setDmlTime(Date dmlTime) {
+		this.dmlTime = dmlTime;
+	}
 }

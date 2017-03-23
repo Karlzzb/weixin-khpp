@@ -14,21 +14,15 @@ public class UserServiceTest extends TestSupport {
 
 	@Test
 	public void test_insert() {
-		User model = new User();
-		model.setUsername("starzou");
-		model.setPassword("123456");
+		User model = new User("starzou", "123456");
 		model.setCreateTime(new Date());
-
 		userService.insert(model);
 	}
 
 	// @Test
 	public void test_10insert() {
 		for (int i = 0; i < 10; i++) {
-			User model = new User();
-			model.setUsername("starzou" + i);
-			model.setPassword("123456");
-			model.setCreateTime(new Date());
+			User model = new User("starzou", "123456");
 			userService.insert(model);
 		}
 	}

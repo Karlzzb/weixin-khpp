@@ -15,8 +15,8 @@ import com.khpp.weixin.db.service.UserService;
  *
  */
 @Service
-public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
-		UserService {
+public class UserServiceImpl extends GenericServiceImpl<User, Integer>
+		implements UserService {
 
 	@Resource
 	private UserMapper userMapper;
@@ -32,22 +32,22 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements
 	}
 
 	@Override
-	public int delete(Long id) {
+	public int delete(Integer id) {
 		return userMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public User authentication(User user) {
-		return userMapper.authentication(user);
+		return null;
 	}
 
 	@Override
-	public User selectById(Long id) {
+	public User selectById(Integer id) {
 		return userMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
-	public GenericDao<User, Long> getDao() {
+	public GenericDao<User, Integer> getDao() {
 		return userMapper;
 	}
 

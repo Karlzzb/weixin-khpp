@@ -1,32 +1,35 @@
 package com.khpp.weixin.db.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.khpp.weixin.core.GenericDao;
 import com.khpp.weixin.db.domain.User;
+import com.khpp.weixin.db.domain.UserExample;
 
-/**
- * 用户Dao接口
- * 
- * @author StarZou
- * @since 2014年7月5日 上午11:49:57
- **/
-public interface UserMapper extends GenericDao<User, Long> {
+public interface UserMapper extends GenericDao<User, Integer> {
+	int countByExample(UserExample example);
 
-	int deleteByPrimaryKey(Long id);
+	int deleteByExample(UserExample example);
 
-	User selectByPrimaryKey(Long id);
+	int deleteByPrimaryKey(Integer userId);
+
+	int insert(User record);
+
+	int insertSelective(User record);
+
+	List<User> selectByExample(UserExample example);
+
+	User selectByPrimaryKey(Integer userId);
+
+	int updateByExampleSelective(@Param("record") User record,
+			@Param("example") UserExample example);
+
+	int updateByExample(@Param("record") User record,
+			@Param("example") UserExample example);
 
 	int updateByPrimaryKeySelective(User record);
 
 	int updateByPrimaryKey(User record);
-
-	/**
-	 * 用户登录验证查询
-	 * 
-	 * @param record
-	 * @return
-	 */
-	User authentication(@Param("record") User record);
-
 }
