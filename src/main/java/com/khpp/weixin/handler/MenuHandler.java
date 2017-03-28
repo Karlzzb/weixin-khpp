@@ -1,5 +1,7 @@
 package com.khpp.weixin.handler;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -13,7 +15,8 @@ import org.springframework.stereotype.Component;
 import com.khpp.weixin.builder.AbstractBuilder;
 import com.khpp.weixin.builder.TextBuilder;
 import com.khpp.weixin.config.WxMenuKeyConfig;
-import com.khpp.weixin.db.domain.User;
+import com.khpp.weixin.db.domain.DictParking;
+import com.khpp.weixin.db.service.DictParkingService;
 import com.khpp.weixin.db.service.UserService;
 import com.khpp.weixin.dto.WxMenuKey;
 import com.khpp.weixin.service.WeixinService;
@@ -28,6 +31,9 @@ public class MenuHandler extends AbstractHandler {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private DictParkingService dictParkingService;
 
 	@Override
 	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -46,8 +52,11 @@ public class MenuHandler extends AbstractHandler {
 			break;
 		case WxMenuKeyConfig.PARKING_SELL:
 			builder = new TextBuilder();
-			menuKey.setContent("您附近有需求的停车场有：\n 1.宝龙广场  \n 2.长泰广场\n 请选择?");
-			userService.insert(new User(wxMessage.getFromUser(), "测试用户"));
+			menuKey.setContent(getParkingList());
+			break;
+		case WxMenuKeyConfig.PARKING_BUY:
+			builder = new TextBuilder();
+			menuKey.setContent(getParkingList());
 			break;
 		default:
 			break;
@@ -63,7 +72,22 @@ public class MenuHandler extends AbstractHandler {
 		}
 
 		return null;
+	}
 
+	private String getParkingList() {
+		String content = "您附近有需求的停车场有: \n";
+		List<DictParking> parkingList = dictParkingService.selectList();
+		if (parkingList == null || parkingList.isEmpty()) {
+			return content;
+		}
+		for (Iterator<DictParking> iterator = parkingList.iterator(); iterator
+				.hasNext();) {
+			DictParking dictParking = (DictParking) iterator.next();
+			content += dictParking.getParkingId() + "."
+					+ dictParking.getParkingName() + " \n";
+		}
+		content += "请选择?";
+		return content;
 	}
 
 }

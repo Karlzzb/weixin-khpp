@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.khpp.weixin.config.MenuConfig;
 import com.khpp.weixin.config.WxMpConfig;
+import com.khpp.weixin.db.service.DictParkingService;
 import com.khpp.weixin.handler.AbstractHandler;
 import com.khpp.weixin.handler.KfSessionHandler;
 import com.khpp.weixin.handler.LocationHandler;
@@ -68,6 +69,9 @@ public class WeixinService extends WxMpServiceImpl {
 	@Autowired
 	private SubscribeHandler subscribeHandler;
 
+	@Autowired
+	private DictParkingService dictParkingService;
+
 	private WxMpMessageRouter router;
 
 	@PostConstruct
@@ -82,7 +86,8 @@ public class WeixinService extends WxMpServiceImpl {
 		this.refreshRouter();
 
 		try {
-			this.getMenuService().menuCreate(MenuConfig.getMenu(this));
+			this.getMenuService().menuCreate(
+					MenuConfig.getMenu(this, dictParkingService));
 		} catch (WxErrorException e) {
 			this.logger.error("菜单初始化失败！", e);
 		}

@@ -1,9 +1,15 @@
 package com.khpp.weixin.config;
 
+import java.util.Iterator;
+import java.util.List;
+
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.mp.api.WxMpService;
+
+import com.khpp.weixin.db.domain.DictParking;
+import com.khpp.weixin.db.service.DictParkingService;
 
 /**
  * Created by FirenzesEagle on 2016/6/1 0001. Email:liumingbo2008@gmail.com
@@ -15,7 +21,8 @@ public class MenuConfig {
 	 *
 	 * @return
 	 */
-	public static WxMenu getMenu(WxMpService wxMpService) {
+	public static WxMenu getMenu(WxMpService wxMpService,
+			DictParkingService dictParkingService) {
 
 		WxMenu menu = new WxMenu();
 		WxMenuButton button1 = new WxMenuButton();
@@ -42,24 +49,29 @@ public class MenuConfig {
 		button21.setType(WxConsts.BUTTON_CLICK);
 		button21.setName("卖停车券");
 		button21.setKey(WxMenuKeyConfig.PARKING_SELL);
+		// button21.setKey(WxMenuKeyConfig.PARKING_SELL);
+		// getParkingList(button21, dictParkingService,
+		// WxMenuKeyConfig.PARKING_SELL);
 
 		WxMenuButton button22 = new WxMenuButton();
-		button22.setType(WxConsts.BUTTON_VIEW);
+		button22.setType(WxConsts.BUTTON_CLICK);
 		button22.setName("买停车券");
-		button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("",
-				"snsapi_base", ""));
+		button22.setKey(WxMenuKeyConfig.PARKING_BUY);
+		// getParkingList(button22, dictParkingService,
+		// WxMenuKeyConfig.PARKING_BUY);
 
 		WxMenuButton button23 = new WxMenuButton();
 		button23.setType(WxConsts.BUTTON_VIEW);
 		button23.setName("我的订单");
-		button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("",
-				"snsapi_base", ""));
+		button23.setUrl(wxMpService.oauth2buildAuthorizationUrl(
+				"http://ljyzzb.tunnel.qydev.com/index", "snsapi_base", null));
 
 		WxMenuButton button24 = new WxMenuButton();
 		button24.setType(WxConsts.BUTTON_VIEW);
 		button24.setName("停车场申请");
-		button24.setUrl(wxMpService.oauth2buildAuthorizationUrl("",
-				"snsapi_base", ""));
+		button24.setUrl(wxMpService.oauth2buildAuthorizationUrl(
+				"http://ljyzzb.tunnel.qydev.com/page/login", "snsapi_base",
+				null));
 
 		WxMenuButton button25 = new WxMenuButton();
 		button25.setType(WxConsts.BUTTON_LOCATION_SELECT);
@@ -82,5 +94,23 @@ public class MenuConfig {
 		menu.getButtons().add(button3);
 
 		return menu;
+	}
+
+	private static void getParkingList(WxMenuButton parent,
+			DictParkingService dictParkingService, final String buttonKey) {
+		List<DictParking> parkingList = dictParkingService.selectList();
+		if (parkingList == null || parkingList.isEmpty()) {
+			return;
+		}
+		WxMenuButton subButton = null;
+		for (Iterator<DictParking> iterator = parkingList.iterator(); iterator
+				.hasNext();) {
+			DictParking dictParking = (DictParking) iterator.next();
+			subButton = new WxMenuButton();
+			subButton.setType(WxConsts.BUTTON_CLICK);
+			subButton.setName(dictParking.getParkingName());
+			subButton.setKey(buttonKey + "|" + dictParking.getParkingId());
+			parent.getSubButtons().add(subButton);
+		}
 	}
 }
