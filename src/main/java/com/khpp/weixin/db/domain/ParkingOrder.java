@@ -16,7 +16,7 @@ public class ParkingOrder {
 
     private Integer userIdBuier;
 
-    private Byte orderStatus;
+    private Integer orderStatus;
 
     private String wxFromOrderId;
 
@@ -26,11 +26,13 @@ public class ParkingOrder {
 
     private BigDecimal serviceFee;
 
+    private Float latitude;
+
+    private Float longitude;
+
     private Date createTime;
 
     private Date dmlTime;
-
-    private byte[] location;
 
     public Integer getOrderId() {
         return orderId;
@@ -80,11 +82,11 @@ public class ParkingOrder {
         this.userIdBuier = userIdBuier;
     }
 
-    public Byte getOrderStatus() {
+    public Integer getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(Byte orderStatus) {
+    public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -120,6 +122,22 @@ public class ParkingOrder {
         this.serviceFee = serviceFee;
     }
 
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -134,13 +152,5 @@ public class ParkingOrder {
 
     public void setDmlTime(Date dmlTime) {
         this.dmlTime = dmlTime;
-    }
-
-    public byte[] getLocation() {
-        return location;
-    }
-
-    public void setLocation(byte[] location) {
-        this.location = location;
     }
 }

@@ -8,16 +8,15 @@
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
     <result column="user_id_sellor" property="userIdSellor" jdbcType="INTEGER" />
     <result column="user_id_buier" property="userIdBuier" jdbcType="INTEGER" />
-    <result column="order_status" property="orderStatus" jdbcType="TINYINT" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
     <result column="wx_from_order_id" property="wxFromOrderId" jdbcType="VARCHAR" />
     <result column="wx_to_order_id" property="wxToOrderId" jdbcType="VARCHAR" />
     <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
     <result column="service_fee" property="serviceFee" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.khpp.weixin.db.domain.ParkingOrder" extends="BaseResultMap" >
-    <result column="location" property="location" jdbcType="BINARY" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -79,27 +78,9 @@
   </sql>
   <sql id="Base_Column_List" >
     order_id, offer_id, parking_id, parking_name, user_id_sellor, user_id_buier, order_status, 
-    wx_from_order_id, wx_to_order_id, paid_amount, service_fee, create_time, dml_time
+    wx_from_order_id, wx_to_order_id, paid_amount, service_fee, latitude, longitude, 
+    create_time, dml_time
   </sql>
-  <sql id="Blob_Column_List" >
-    location
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from parking_order
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
     select
     <if test="distinct" >
@@ -114,11 +95,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from parking_order
     where order_id = #{orderId,jdbcType=INTEGER}
   </select>
@@ -136,13 +115,15 @@
     insert into parking_order (order_id, offer_id, parking_id, 
       parking_name, user_id_sellor, user_id_buier, 
       order_status, wx_from_order_id, wx_to_order_id, 
-      paid_amount, service_fee, create_time, 
-      dml_time, location)
+      paid_amount, service_fee, latitude, 
+      longitude, create_time, dml_time
+      )
     values (#{orderId,jdbcType=INTEGER}, #{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, 
       #{parkingName,jdbcType=VARCHAR}, #{userIdSellor,jdbcType=INTEGER}, #{userIdBuier,jdbcType=INTEGER}, 
-      #{orderStatus,jdbcType=TINYINT}, #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, 
-      #{paidAmount,jdbcType=DECIMAL}, #{serviceFee,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dmlTime,jdbcType=TIMESTAMP}, #{location,jdbcType=BINARY})
+      #{orderStatus,jdbcType=INTEGER}, #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, 
+      #{paidAmount,jdbcType=DECIMAL}, #{serviceFee,jdbcType=DECIMAL}, #{latitude,jdbcType=REAL}, 
+      #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
     insert into parking_order
@@ -180,14 +161,17 @@
       <if test="serviceFee != null" >
         service_fee,
       </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="dmlTime != null" >
         dml_time,
-      </if>
-      <if test="location != null" >
-        location,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -210,7 +194,7 @@
         #{userIdBuier,jdbcType=INTEGER},
       </if>
       <if test="orderStatus != null" >
-        #{orderStatus,jdbcType=TINYINT},
+        #{orderStatus,jdbcType=INTEGER},
       </if>
       <if test="wxFromOrderId != null" >
         #{wxFromOrderId,jdbcType=VARCHAR},
@@ -224,14 +208,17 @@
       <if test="serviceFee != null" >
         #{serviceFee,jdbcType=DECIMAL},
       </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="dmlTime != null" >
         #{dmlTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="location != null" >
-        #{location,jdbcType=BINARY},
       </if>
     </trim>
   </insert>
@@ -263,7 +250,7 @@
         user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
       </if>
       <if test="record.orderStatus != null" >
-        order_status = #{record.orderStatus,jdbcType=TINYINT},
+        order_status = #{record.orderStatus,jdbcType=INTEGER},
       </if>
       <if test="record.wxFromOrderId != null" >
         wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
@@ -277,36 +264,19 @@
       <if test="record.serviceFee != null" >
         service_fee = #{record.serviceFee,jdbcType=DECIMAL},
       </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.dmlTime != null" >
         dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.location != null" >
-        location = #{record.location,jdbcType=BINARY},
-      </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update parking_order
-    set order_id = #{record.orderId,jdbcType=INTEGER},
-      offer_id = #{record.offerId,jdbcType=INTEGER},
-      parking_id = #{record.parkingId,jdbcType=INTEGER},
-      parking_name = #{record.parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
-      user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
-      order_status = #{record.orderStatus,jdbcType=TINYINT},
-      wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
-      wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
-      paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
-      service_fee = #{record.serviceFee,jdbcType=DECIMAL},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
-      location = #{record.location,jdbcType=BINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,11 +289,13 @@
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
       user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
       user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
-      order_status = #{record.orderStatus,jdbcType=TINYINT},
+      order_status = #{record.orderStatus,jdbcType=INTEGER},
       wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
       wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
       paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
       service_fee = #{record.serviceFee,jdbcType=DECIMAL},
+      latitude = #{record.latitude,jdbcType=REAL},
+      longitude = #{record.longitude,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -349,7 +321,7 @@
         user_id_buier = #{userIdBuier,jdbcType=INTEGER},
       </if>
       <if test="orderStatus != null" >
-        order_status = #{orderStatus,jdbcType=TINYINT},
+        order_status = #{orderStatus,jdbcType=INTEGER},
       </if>
       <if test="wxFromOrderId != null" >
         wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
@@ -363,33 +335,19 @@
       <if test="serviceFee != null" >
         service_fee = #{serviceFee,jdbcType=DECIMAL},
       </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="dmlTime != null" >
         dml_time = #{dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="location != null" >
-        location = #{location,jdbcType=BINARY},
-      </if>
     </set>
-    where order_id = #{orderId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
-    update parking_order
-    set offer_id = #{offerId,jdbcType=INTEGER},
-      parking_id = #{parkingId,jdbcType=INTEGER},
-      parking_name = #{parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
-      user_id_buier = #{userIdBuier,jdbcType=INTEGER},
-      order_status = #{orderStatus,jdbcType=TINYINT},
-      wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
-      wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
-      paid_amount = #{paidAmount,jdbcType=DECIMAL},
-      service_fee = #{serviceFee,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      dml_time = #{dmlTime,jdbcType=TIMESTAMP},
-      location = #{location,jdbcType=BINARY}
     where order_id = #{orderId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
@@ -399,11 +357,13 @@
       parking_name = #{parkingName,jdbcType=VARCHAR},
       user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
       user_id_buier = #{userIdBuier,jdbcType=INTEGER},
-      order_status = #{orderStatus,jdbcType=TINYINT},
+      order_status = #{orderStatus,jdbcType=INTEGER},
       wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
       wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
       paid_amount = #{paidAmount,jdbcType=DECIMAL},
       service_fee = #{serviceFee,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=REAL},
+      longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dml_time = #{dmlTime,jdbcType=TIMESTAMP}
     where order_id = #{orderId,jdbcType=INTEGER}

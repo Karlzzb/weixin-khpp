@@ -235,6 +235,126 @@ public class DictParkingExample {
             return (Criteria) this;
         }
 
+        public Criteria andLatitudeIsNull() {
+            addCriterion("latitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIsNotNull() {
+            addCriterion("latitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeEqualTo(Float value) {
+            addCriterion("latitude =", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotEqualTo(Float value) {
+            addCriterion("latitude <>", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThan(Float value) {
+            addCriterion("latitude >", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThanOrEqualTo(Float value) {
+            addCriterion("latitude >=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThan(Float value) {
+            addCriterion("latitude <", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThanOrEqualTo(Float value) {
+            addCriterion("latitude <=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIn(List<Float> values) {
+            addCriterion("latitude in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotIn(List<Float> values) {
+            addCriterion("latitude not in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeBetween(Float value1, Float value2) {
+            addCriterion("latitude between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotBetween(Float value1, Float value2) {
+            addCriterion("latitude not between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIsNull() {
+            addCriterion("longitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIsNotNull() {
+            addCriterion("longitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeEqualTo(Float value) {
+            addCriterion("longitude =", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotEqualTo(Float value) {
+            addCriterion("longitude <>", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeGreaterThan(Float value) {
+            addCriterion("longitude >", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeGreaterThanOrEqualTo(Float value) {
+            addCriterion("longitude >=", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeLessThan(Float value) {
+            addCriterion("longitude <", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeLessThanOrEqualTo(Float value) {
+            addCriterion("longitude <=", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIn(List<Float> values) {
+            addCriterion("longitude in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotIn(List<Float> values) {
+            addCriterion("longitude not in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeBetween(Float value1, Float value2) {
+            addCriterion("longitude between", value1, value2, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotBetween(Float value1, Float value2) {
+            addCriterion("longitude not between", value1, value2, "longitude");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

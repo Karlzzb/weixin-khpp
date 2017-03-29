@@ -4,7 +4,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -16,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.khpp.weixin.db.domain.DictParking;
 import com.khpp.weixin.db.domain.ParkingOffer;
@@ -23,10 +28,15 @@ import com.khpp.weixin.db.domain.User;
 import com.khpp.weixin.db.service.DictParkingService;
 import com.khpp.weixin.db.service.ParkingOfferService;
 import com.khpp.weixin.db.service.UserService;
+import com.khpp.weixin.service.WeixinService;
+import com.khpp.weixin.web.model.ParkingOfferModel;
 
 @Controller
 @RequestMapping("/wxredirect")
 public class WxRedirectController extends GenericController {
+
+	@Resource
+	private WeixinService weixinService;
 
 	@Resource
 	private UserService userService;
@@ -99,5 +109,49 @@ public class WxRedirectController extends GenericController {
 		model.addAttribute("offerList", parkingOfferList);
 
 		return "pakringBuyList";
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 * @throws WxErrorException
+	 */
+	@RequestMapping(value = "parkingOffer", method = RequestMethod.GET)
+	public ModelAndView parkingOffer(String code, Model model,
+			HttpSession session) throws WxErrorException {
+		WxMpUser wxMapuser = weixinService.oauth2getUserInfo(
+				weixinService.oauth2getAccessToken(code), null);
+		session.setAttribute("wxMapuser", wxMapuser);
+
+		List<DictParking> parkingList = dictParkingService.selectList();
+		model.addAttribute("parkingList", parkingList);
+		ModelAndView modelAndView = new ModelAndView("parkingOfferForm");
+		modelAndView.addObject("ParkingOfferModel", new ParkingOfferModel());
+		modelAndView.addObject("parkingList", parkingList);
+		return modelAndView;
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "parkingOfferSubmit", method = RequestMethod.POST)
+	public String parkingOfferSubmit(
+			@Valid ParkingOfferModel parkingOfferModel,
+			BindingResult bindingResult, HttpSession session) {
+		if (bindingResult.hasErrors()) {
+			return "parkingOffer";
+		}
+
+		WxMpUser wxMapuser = (WxMpUser) session.getAttribute("wxMapuser");
+		DictParking dictParking = dictParkingService
+				.selectById(parkingOfferModel.getParkingId());
+
+		parkingOfferService.insert(parkingOfferModel.toDomain(dictParking,
+				wxMapuser));
+		return "redirect:/wxredirect/pakringBuyList?selectParkin="
+				+ parkingOfferModel.getParkingId();
 	}
 }

@@ -39,12 +39,12 @@ public class MenuConfig {
 		button2.setName("停车优惠");
 
 		WxMenuButton button21 = new WxMenuButton();
-		button21.setType(WxConsts.BUTTON_CLICK);
+		button21.setType(WxConsts.BUTTON_VIEW);
 		button21.setName("卖停车券");
 		button21.setKey(WxMenuKeyConfig.PARKING_SELL);
-		// button21.setKey(WxMenuKeyConfig.PARKING_SELL);
-		// getParkingList(button21, dictParkingService,
-		// WxMenuKeyConfig.PARKING_SELL);
+		button21.setUrl(wxMpService.oauth2buildAuthorizationUrl(
+				"http://ljyzzb.tunnel.qydev.com/wxredirect/parkingOffer",
+				"snsapi_userinfo", null));
 
 		WxMenuButton button22 = new WxMenuButton();
 		button22.setType(WxConsts.BUTTON_VIEW);
@@ -52,7 +52,7 @@ public class MenuConfig {
 		button22.setKey(WxMenuKeyConfig.PARKING_BUY);
 		button22.setUrl(wxMpService.oauth2buildAuthorizationUrl(
 				"http://ljyzzb.tunnel.qydev.com/wxredirect/pakringBuyList",
-				"snsapi_base", null));
+				"snsapi_userinfo", null));
 
 		WxMenuButton button23 = new WxMenuButton();
 		button23.setType(WxConsts.BUTTON_VIEW);

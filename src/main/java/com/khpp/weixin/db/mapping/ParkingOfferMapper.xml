@@ -6,13 +6,13 @@
     <result column="parking_id" property="parkingId" jdbcType="INTEGER" />
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
     <result column="user_id_sellor" property="userIdSellor" jdbcType="INTEGER" />
-    <result column="offer_status" property="offerStatus" jdbcType="TINYINT" />
+    <result column="offer_status" property="offerStatus" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.khpp.weixin.db.domain.ParkingOffer" extends="BaseResultMap" >
-    <result column="location" property="location" jdbcType="BINARY" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,28 +73,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    offer_id, parking_id, parking_name, user_id_sellor, offer_status, price, create_time, 
-    dml_time
+    offer_id, parking_id, parking_name, user_id_sellor, offer_status, price, detail, 
+    latitude, longitude, create_time, dml_time
   </sql>
-  <sql id="Blob_Column_List" >
-    location
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOfferExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from parking_offer
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.ParkingOfferExample" >
     select
     <if test="distinct" >
@@ -109,11 +90,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from parking_offer
     where offer_id = #{offerId,jdbcType=INTEGER}
   </select>
@@ -130,12 +109,12 @@
   <insert id="insert" parameterType="com.khpp.weixin.db.domain.ParkingOffer" >
     insert into parking_offer (offer_id, parking_id, parking_name, 
       user_id_sellor, offer_status, price, 
-      create_time, dml_time, location
-      )
+      detail, latitude, longitude, 
+      create_time, dml_time)
     values (#{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, 
-      #{userIdSellor,jdbcType=INTEGER}, #{offerStatus,jdbcType=TINYINT}, #{price,jdbcType=DECIMAL}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}, #{location,jdbcType=BINARY}
-      )
+      #{userIdSellor,jdbcType=INTEGER}, #{offerStatus,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{detail,jdbcType=VARCHAR}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.ParkingOffer" >
     insert into parking_offer
@@ -158,14 +137,20 @@
       <if test="price != null" >
         price,
       </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="dmlTime != null" >
         dml_time,
-      </if>
-      <if test="location != null" >
-        location,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -182,19 +167,25 @@
         #{userIdSellor,jdbcType=INTEGER},
       </if>
       <if test="offerStatus != null" >
-        #{offerStatus,jdbcType=TINYINT},
+        #{offerStatus,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="dmlTime != null" >
         #{dmlTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="location != null" >
-        #{location,jdbcType=BINARY},
       </if>
     </trim>
   </insert>
@@ -220,10 +211,19 @@
         user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
       </if>
       <if test="record.offerStatus != null" >
-        offer_status = #{record.offerStatus,jdbcType=TINYINT},
+        offer_status = #{record.offerStatus,jdbcType=INTEGER},
       </if>
       <if test="record.price != null" >
         price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.detail != null" >
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -231,25 +231,7 @@
       <if test="record.dmlTime != null" >
         dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.location != null" >
-        location = #{record.location,jdbcType=BINARY},
-      </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update parking_offer
-    set offer_id = #{record.offerId,jdbcType=INTEGER},
-      parking_id = #{record.parkingId,jdbcType=INTEGER},
-      parking_name = #{record.parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
-      offer_status = #{record.offerStatus,jdbcType=TINYINT},
-      price = #{record.price,jdbcType=DECIMAL},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
-      location = #{record.location,jdbcType=BINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -260,8 +242,11 @@
       parking_id = #{record.parkingId,jdbcType=INTEGER},
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
       user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
-      offer_status = #{record.offerStatus,jdbcType=TINYINT},
+      offer_status = #{record.offerStatus,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=REAL},
+      longitude = #{record.longitude,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -281,10 +266,19 @@
         user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
       </if>
       <if test="offerStatus != null" >
-        offer_status = #{offerStatus,jdbcType=TINYINT},
+        offer_status = #{offerStatus,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -292,22 +286,7 @@
       <if test="dmlTime != null" >
         dml_time = #{dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="location != null" >
-        location = #{location,jdbcType=BINARY},
-      </if>
     </set>
-    where offer_id = #{offerId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.khpp.weixin.db.domain.ParkingOffer" >
-    update parking_offer
-    set parking_id = #{parkingId,jdbcType=INTEGER},
-      parking_name = #{parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
-      offer_status = #{offerStatus,jdbcType=TINYINT},
-      price = #{price,jdbcType=DECIMAL},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      dml_time = #{dmlTime,jdbcType=TIMESTAMP},
-      location = #{location,jdbcType=BINARY}
     where offer_id = #{offerId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.ParkingOffer" >
@@ -315,8 +294,11 @@
     set parking_id = #{parkingId,jdbcType=INTEGER},
       parking_name = #{parkingName,jdbcType=VARCHAR},
       user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
-      offer_status = #{offerStatus,jdbcType=TINYINT},
+      offer_status = #{offerStatus,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      detail = #{detail,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=REAL},
+      longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dml_time = #{dmlTime,jdbcType=TIMESTAMP}
     where offer_id = #{offerId,jdbcType=INTEGER}

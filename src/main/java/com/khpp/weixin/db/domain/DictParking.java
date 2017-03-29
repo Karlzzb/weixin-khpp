@@ -7,11 +7,13 @@ public class DictParking {
 
     private String parkingName;
 
+    private Float latitude;
+
+    private Float longitude;
+
     private Date createTime;
 
     private Date dmlTime;
-
-    private byte[] location;
 
     public Integer getParkingId() {
         return parkingId;
@@ -29,6 +31,22 @@ public class DictParking {
         this.parkingName = parkingName == null ? null : parkingName.trim();
     }
 
+    public Float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Float latitude) {
+        this.latitude = latitude;
+    }
+
+    public Float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Float longitude) {
+        this.longitude = longitude;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -43,13 +61,5 @@ public class DictParking {
 
     public void setDmlTime(Date dmlTime) {
         this.dmlTime = dmlTime;
-    }
-
-    public byte[] getLocation() {
-        return location;
-    }
-
-    public void setLocation(byte[] location) {
-        this.location = location;
     }
 }

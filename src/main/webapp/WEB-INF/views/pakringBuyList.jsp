@@ -1,6 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,16 +52,16 @@
         <thead>
             <tr>
                 <th>创建时间</th>
+                <th>卖家描述</th>
                 <th>价格</th>
-                <th>描述</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach items="${offerList}" var="parkingOffer">  
 	            <tr>
-	                <td>${parkingOffer.createTime}</td>
-	                <td>${parkingOffer.price}</td>
+	                <td><fmt:formatDate value='${parkingOffer.createTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/></td>
 	                <td>${parkingOffer.detail}</td>
+	                <td>${parkingOffer.price}</td>
 	            </tr>
             </c:forEach>  
         </tbody>

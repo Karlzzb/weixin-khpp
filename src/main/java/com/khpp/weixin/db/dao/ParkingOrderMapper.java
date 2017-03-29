@@ -19,8 +19,6 @@ public interface ParkingOrderMapper extends GenericDao<ParkingOrder, Integer> {
 
 	int insertSelective(ParkingOrder record);
 
-	List<ParkingOrder> selectByExampleWithBLOBs(ParkingOrderExample example);
-
 	List<ParkingOrder> selectByExample(ParkingOrderExample example);
 
 	ParkingOrder selectByPrimaryKey(Integer orderId);
@@ -28,15 +26,10 @@ public interface ParkingOrderMapper extends GenericDao<ParkingOrder, Integer> {
 	int updateByExampleSelective(@Param("record") ParkingOrder record,
 			@Param("example") ParkingOrderExample example);
 
-	int updateByExampleWithBLOBs(@Param("record") ParkingOrder record,
-			@Param("example") ParkingOrderExample example);
-
 	int updateByExample(@Param("record") ParkingOrder record,
 			@Param("example") ParkingOrderExample example);
 
 	int updateByPrimaryKeySelective(ParkingOrder record);
-
-	int updateByPrimaryKeyWithBLOBs(ParkingOrder record);
 
 	int updateByPrimaryKey(ParkingOrder record);
 }

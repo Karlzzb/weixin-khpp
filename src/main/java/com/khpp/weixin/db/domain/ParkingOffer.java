@@ -1,96 +1,119 @@
 package com.khpp.weixin.db.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ParkingOffer {
-    private Integer offerId;
+	public static final int OFFERSTATUS_PUBLIC = 1;
+	public static final int OFFERSTATUS_SELL = 2;
+	public static final int OFFERSTATUS_NONE = 3;
 
-    private Integer parkingId;
+	private Integer offerId;
 
-    private String parkingName;
+	private Integer parkingId;
 
-    private Integer userIdSellor;
+	private String parkingName;
 
-    private Byte offerStatus;
+	private Integer userIdSellor;
 
-    private BigDecimal price;
+	private Integer offerStatus;
 
-    private Date createTime;
+	private Double price;
 
-    private Date dmlTime;
+	private String detail;
 
-    private byte[] location;
+	private Float latitude;
 
-    public Integer getOfferId() {
-        return offerId;
-    }
+	private Float longitude;
 
-    public void setOfferId(Integer offerId) {
-        this.offerId = offerId;
-    }
+	private Date createTime;
 
-    public Integer getParkingId() {
-        return parkingId;
-    }
+	private Date dmlTime;
 
-    public void setParkingId(Integer parkingId) {
-        this.parkingId = parkingId;
-    }
+	public Integer getOfferId() {
+		return offerId;
+	}
 
-    public String getParkingName() {
-        return parkingName;
-    }
+	public void setOfferId(Integer offerId) {
+		this.offerId = offerId;
+	}
 
-    public void setParkingName(String parkingName) {
-        this.parkingName = parkingName == null ? null : parkingName.trim();
-    }
+	public Integer getParkingId() {
+		return parkingId;
+	}
 
-    public Integer getUserIdSellor() {
-        return userIdSellor;
-    }
+	public void setParkingId(Integer parkingId) {
+		this.parkingId = parkingId;
+	}
 
-    public void setUserIdSellor(Integer userIdSellor) {
-        this.userIdSellor = userIdSellor;
-    }
+	public String getParkingName() {
+		return parkingName;
+	}
 
-    public Byte getOfferStatus() {
-        return offerStatus;
-    }
+	public void setParkingName(String parkingName) {
+		this.parkingName = parkingName == null ? null : parkingName.trim();
+	}
 
-    public void setOfferStatus(Byte offerStatus) {
-        this.offerStatus = offerStatus;
-    }
+	public Integer getUserIdSellor() {
+		return userIdSellor;
+	}
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+	public void setUserIdSellor(Integer userIdSellor) {
+		this.userIdSellor = userIdSellor;
+	}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+	public Integer getOfferStatus() {
+		return offerStatus;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setOfferStatus(Integer offerStatus) {
+		this.offerStatus = offerStatus;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Double getPrice() {
+		return price;
+	}
 
-    public Date getDmlTime() {
-        return dmlTime;
-    }
+	public void setPrice(Double price) {
+		this.price = price;
+	}
 
-    public void setDmlTime(Date dmlTime) {
-        this.dmlTime = dmlTime;
-    }
+	public String getDetail() {
+		return detail;
+	}
 
-    public byte[] getLocation() {
-        return location;
-    }
+	public void setDetail(String detail) {
+		this.detail = detail == null ? null : detail.trim();
+	}
 
-    public void setLocation(byte[] location) {
-        this.location = location;
-    }
+	public Float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Float latitude) {
+		this.latitude = latitude;
+	}
+
+	public Float getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Float longitude) {
+		this.longitude = longitude;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getDmlTime() {
+		return dmlTime;
+	}
+
+	public void setDmlTime(Date dmlTime) {
+		this.dmlTime = dmlTime;
+	}
 }

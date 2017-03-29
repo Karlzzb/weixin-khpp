@@ -366,52 +366,52 @@ public class ParkingOfferExample {
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusEqualTo(Byte value) {
+        public Criteria andOfferStatusEqualTo(Integer value) {
             addCriterion("offer_status =", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusNotEqualTo(Byte value) {
+        public Criteria andOfferStatusNotEqualTo(Integer value) {
             addCriterion("offer_status <>", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusGreaterThan(Byte value) {
+        public Criteria andOfferStatusGreaterThan(Integer value) {
             addCriterion("offer_status >", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusGreaterThanOrEqualTo(Byte value) {
+        public Criteria andOfferStatusGreaterThanOrEqualTo(Integer value) {
             addCriterion("offer_status >=", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusLessThan(Byte value) {
+        public Criteria andOfferStatusLessThan(Integer value) {
             addCriterion("offer_status <", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusLessThanOrEqualTo(Byte value) {
+        public Criteria andOfferStatusLessThanOrEqualTo(Integer value) {
             addCriterion("offer_status <=", value, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusIn(List<Byte> values) {
+        public Criteria andOfferStatusIn(List<Integer> values) {
             addCriterion("offer_status in", values, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusNotIn(List<Byte> values) {
+        public Criteria andOfferStatusNotIn(List<Integer> values) {
             addCriterion("offer_status not in", values, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusBetween(Byte value1, Byte value2) {
+        public Criteria andOfferStatusBetween(Integer value1, Integer value2) {
             addCriterion("offer_status between", value1, value2, "offerStatus");
             return (Criteria) this;
         }
 
-        public Criteria andOfferStatusNotBetween(Byte value1, Byte value2) {
+        public Criteria andOfferStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("offer_status not between", value1, value2, "offerStatus");
             return (Criteria) this;
         }
@@ -473,6 +473,196 @@ public class ParkingOfferExample {
 
         public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("price not between", value1, value2, "price");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIsNull() {
+            addCriterion("detail is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIsNotNull() {
+            addCriterion("detail is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailEqualTo(String value) {
+            addCriterion("detail =", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailNotEqualTo(String value) {
+            addCriterion("detail <>", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailGreaterThan(String value) {
+            addCriterion("detail >", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailGreaterThanOrEqualTo(String value) {
+            addCriterion("detail >=", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailLessThan(String value) {
+            addCriterion("detail <", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailLessThanOrEqualTo(String value) {
+            addCriterion("detail <=", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailLike(String value) {
+            addCriterion("detail like", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailNotLike(String value) {
+            addCriterion("detail not like", value, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailIn(List<String> values) {
+            addCriterion("detail in", values, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailNotIn(List<String> values) {
+            addCriterion("detail not in", values, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailBetween(String value1, String value2) {
+            addCriterion("detail between", value1, value2, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andDetailNotBetween(String value1, String value2) {
+            addCriterion("detail not between", value1, value2, "detail");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIsNull() {
+            addCriterion("latitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIsNotNull() {
+            addCriterion("latitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeEqualTo(Float value) {
+            addCriterion("latitude =", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotEqualTo(Float value) {
+            addCriterion("latitude <>", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThan(Float value) {
+            addCriterion("latitude >", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThanOrEqualTo(Float value) {
+            addCriterion("latitude >=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThan(Float value) {
+            addCriterion("latitude <", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThanOrEqualTo(Float value) {
+            addCriterion("latitude <=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIn(List<Float> values) {
+            addCriterion("latitude in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotIn(List<Float> values) {
+            addCriterion("latitude not in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeBetween(Float value1, Float value2) {
+            addCriterion("latitude between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotBetween(Float value1, Float value2) {
+            addCriterion("latitude not between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIsNull() {
+            addCriterion("longitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIsNotNull() {
+            addCriterion("longitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeEqualTo(Float value) {
+            addCriterion("longitude =", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotEqualTo(Float value) {
+            addCriterion("longitude <>", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeGreaterThan(Float value) {
+            addCriterion("longitude >", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeGreaterThanOrEqualTo(Float value) {
+            addCriterion("longitude >=", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeLessThan(Float value) {
+            addCriterion("longitude <", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeLessThanOrEqualTo(Float value) {
+            addCriterion("longitude <=", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIn(List<Float> values) {
+            addCriterion("longitude in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotIn(List<Float> values) {
+            addCriterion("longitude not in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeBetween(Float value1, Float value2) {
+            addCriterion("longitude between", value1, value2, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotBetween(Float value1, Float value2) {
+            addCriterion("longitude not between", value1, value2, "longitude");
             return (Criteria) this;
         }
 

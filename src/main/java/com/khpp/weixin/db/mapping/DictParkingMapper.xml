@@ -4,11 +4,10 @@
   <resultMap id="BaseResultMap" type="com.khpp.weixin.db.domain.DictParking" >
     <id column="parking_id" property="parkingId" jdbcType="INTEGER" />
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.khpp.weixin.db.domain.DictParking" extends="BaseResultMap" >
-    <result column="location" property="location" jdbcType="BINARY" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,27 +68,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    parking_id, parking_name, create_time, dml_time
+    parking_id, parking_name, latitude, longitude, create_time, dml_time
   </sql>
-  <sql id="Blob_Column_List" >
-    location
-  </sql>
-  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from dict_parking
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
     select
     <if test="distinct" >
@@ -104,11 +84,9 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
     from dict_parking
     where parking_id = #{parkingId,jdbcType=INTEGER}
   </select>
@@ -123,10 +101,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.khpp.weixin.db.domain.DictParking" >
-    insert into dict_parking (parking_id, parking_name, create_time, 
-      dml_time, location)
-    values (#{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{dmlTime,jdbcType=TIMESTAMP}, #{location,jdbcType=BINARY})
+    insert into dict_parking (parking_id, parking_name, latitude, 
+      longitude, create_time, dml_time
+      )
+    values (#{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, #{latitude,jdbcType=REAL}, 
+      #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.DictParking" >
     insert into dict_parking
@@ -137,14 +117,17 @@
       <if test="parkingName != null" >
         parking_name,
       </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
       <if test="dmlTime != null" >
         dml_time,
-      </if>
-      <if test="location != null" >
-        location,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -154,14 +137,17 @@
       <if test="parkingName != null" >
         #{parkingName,jdbcType=VARCHAR},
       </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="dmlTime != null" >
         #{dmlTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="location != null" >
-        #{location,jdbcType=BINARY},
       </if>
     </trim>
   </insert>
@@ -180,27 +166,19 @@
       <if test="record.parkingName != null" >
         parking_name = #{record.parkingName,jdbcType=VARCHAR},
       </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.dmlTime != null" >
         dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.location != null" >
-        location = #{record.location,jdbcType=BINARY},
-      </if>
     </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExampleWithBLOBs" parameterType="map" >
-    update dict_parking
-    set parking_id = #{record.parkingId,jdbcType=INTEGER},
-      parking_name = #{record.parkingName,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
-      location = #{record.location,jdbcType=BINARY}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -209,6 +187,8 @@
     update dict_parking
     set parking_id = #{record.parkingId,jdbcType=INTEGER},
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=REAL},
+      longitude = #{record.longitude,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -221,29 +201,26 @@
       <if test="parkingName != null" >
         parking_name = #{parkingName,jdbcType=VARCHAR},
       </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="dmlTime != null" >
         dml_time = #{dmlTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="location != null" >
-        location = #{location,jdbcType=BINARY},
-      </if>
     </set>
-    where parking_id = #{parkingId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.khpp.weixin.db.domain.DictParking" >
-    update dict_parking
-    set parking_name = #{parkingName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      dml_time = #{dmlTime,jdbcType=TIMESTAMP},
-      location = #{location,jdbcType=BINARY}
     where parking_id = #{parkingId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.DictParking" >
     update dict_parking
     set parking_name = #{parkingName,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=REAL},
+      longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dml_time = #{dmlTime,jdbcType=TIMESTAMP}
     where parking_id = #{parkingId,jdbcType=INTEGER}
