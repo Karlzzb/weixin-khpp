@@ -1,5 +1,7 @@
 package com.khpp.weixin.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -13,9 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.khpp.weixin.db.domain.DictParking;
+import com.khpp.weixin.db.domain.ParkingOffer;
 import com.khpp.weixin.db.domain.User;
+import com.khpp.weixin.db.service.DictParkingService;
+import com.khpp.weixin.db.service.ParkingOfferService;
 import com.khpp.weixin.db.service.UserService;
 
 @Controller
@@ -25,10 +31,11 @@ public class WxRedirectController extends GenericController {
 	@Resource
 	private UserService userService;
 
-	@RequestMapping(value = "/parkingSelect", method = RequestMethod.GET)
-	public ModelAndView student() {
-		return null;
-	}
+	@Resource
+	private DictParkingService dictParkingService;
+
+	@Resource
+	private ParkingOfferService parkingOfferService;
 
 	/**
 	 * 用户登录
@@ -62,5 +69,35 @@ public class WxRedirectController extends GenericController {
 			return "login";
 		}
 		return "redirect:/";
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "pakringBuyList", method = RequestMethod.GET)
+	public String parkingList(
+			@RequestParam(value = "selectParking", required = false) String selectParkingIdStr,
+			Model model) {
+		List<DictParking> parkingList = dictParkingService.selectList();
+		model.addAttribute("parkingList", parkingList);
+		DictParking selectParking = parkingList.get(0);
+		Integer selectParkingId = selectParking.getParkingId();
+		if (selectParkingIdStr != null && !selectParkingIdStr.isEmpty()) {
+			selectParkingId = Integer.valueOf(selectParkingIdStr);
+			for (DictParking d : parkingList) {
+				if (d.getParkingId().equals(selectParkingId)) {
+					selectParking = d;
+					break;
+				}
+			}
+		}
+		model.addAttribute("selectParking", selectParking);
+		List<ParkingOffer> parkingOfferList = parkingOfferService
+				.getOfferListByParkingId(selectParkingId);
+		model.addAttribute("offerList", parkingOfferList);
+
+		return "pakringBuyList";
 	}
 }

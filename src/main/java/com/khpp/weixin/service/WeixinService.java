@@ -86,8 +86,7 @@ public class WeixinService extends WxMpServiceImpl {
 		this.refreshRouter();
 
 		try {
-			this.getMenuService().menuCreate(
-					MenuConfig.getMenu(this, dictParkingService));
+			this.getMenuService().menuCreate(MenuConfig.getMenu(this));
 		} catch (WxErrorException e) {
 			this.logger.error("菜单初始化失败！", e);
 		}
