@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.khpp.weixin.db.domain.DictParking" >
     <id column="parking_id" property="parkingId" jdbcType="INTEGER" />
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
+    <result column="defined_price" property="definedPrice" jdbcType="DECIMAL" />
     <result column="latitude" property="latitude" jdbcType="REAL" />
     <result column="longitude" property="longitude" jdbcType="REAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    parking_id, parking_name, latitude, longitude, create_time, dml_time
+    parking_id, parking_name, defined_price, latitude, longitude, create_time, dml_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.DictParkingExample" >
     select
@@ -101,12 +102,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.khpp.weixin.db.domain.DictParking" >
-    insert into dict_parking (parking_id, parking_name, latitude, 
-      longitude, create_time, dml_time
-      )
-    values (#{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, #{latitude,jdbcType=REAL}, 
-      #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}
-      )
+    insert into dict_parking (parking_id, parking_name, defined_price, 
+      latitude, longitude, create_time, 
+      dml_time)
+    values (#{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, #{definedPrice,jdbcType=DECIMAL}, 
+      #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dmlTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.DictParking" >
     insert into dict_parking
@@ -116,6 +117,9 @@
       </if>
       <if test="parkingName != null" >
         parking_name,
+      </if>
+      <if test="definedPrice != null" >
+        defined_price,
       </if>
       <if test="latitude != null" >
         latitude,
@@ -136,6 +140,9 @@
       </if>
       <if test="parkingName != null" >
         #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="definedPrice != null" >
+        #{definedPrice,jdbcType=DECIMAL},
       </if>
       <if test="latitude != null" >
         #{latitude,jdbcType=REAL},
@@ -166,6 +173,9 @@
       <if test="record.parkingName != null" >
         parking_name = #{record.parkingName,jdbcType=VARCHAR},
       </if>
+      <if test="record.definedPrice != null" >
+        defined_price = #{record.definedPrice,jdbcType=DECIMAL},
+      </if>
       <if test="record.latitude != null" >
         latitude = #{record.latitude,jdbcType=REAL},
       </if>
@@ -187,6 +197,7 @@
     update dict_parking
     set parking_id = #{record.parkingId,jdbcType=INTEGER},
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      defined_price = #{record.definedPrice,jdbcType=DECIMAL},
       latitude = #{record.latitude,jdbcType=REAL},
       longitude = #{record.longitude,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -200,6 +211,9 @@
     <set >
       <if test="parkingName != null" >
         parking_name = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="definedPrice != null" >
+        defined_price = #{definedPrice,jdbcType=DECIMAL},
       </if>
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=REAL},
@@ -219,6 +233,7 @@
   <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.DictParking" >
     update dict_parking
     set parking_name = #{parkingName,jdbcType=VARCHAR},
+      defined_price = #{definedPrice,jdbcType=DECIMAL},
       latitude = #{latitude,jdbcType=REAL},
       longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},

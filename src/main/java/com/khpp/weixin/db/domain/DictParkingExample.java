@@ -1,5 +1,6 @@
 package com.khpp.weixin.db.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -232,6 +233,66 @@ public class DictParkingExample {
 
         public Criteria andParkingNameNotBetween(String value1, String value2) {
             addCriterion("parking_name not between", value1, value2, "parkingName");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceIsNull() {
+            addCriterion("defined_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceIsNotNull() {
+            addCriterion("defined_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceEqualTo(BigDecimal value) {
+            addCriterion("defined_price =", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceNotEqualTo(BigDecimal value) {
+            addCriterion("defined_price <>", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceGreaterThan(BigDecimal value) {
+            addCriterion("defined_price >", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("defined_price >=", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceLessThan(BigDecimal value) {
+            addCriterion("defined_price <", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("defined_price <=", value, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceIn(List<BigDecimal> values) {
+            addCriterion("defined_price in", values, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceNotIn(List<BigDecimal> values) {
+            addCriterion("defined_price not in", values, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("defined_price between", value1, value2, "definedPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefinedPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("defined_price not between", value1, value2, "definedPrice");
             return (Criteria) this;
         }
 

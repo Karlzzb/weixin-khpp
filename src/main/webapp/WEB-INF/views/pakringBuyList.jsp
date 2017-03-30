@@ -38,10 +38,10 @@
             <c:forEach items="${parkingList}" var="dictParking">  
             	<c:choose>  
 					<c:when test="${dictParking.parkingId == selectParking.parkingId}">  
-						<li class="active"><a href="${pageContext.request.contextPath}?selectParking=${dictParking.parkingId}">${dictParking.parkingName}</a></li>
+						<li class="active"><a href="${pageContext.request.contextPath}/innerweb/pakringBuyList?selectParking=${dictParking.parkingId}">${dictParking.parkingName}</a></li>
 					</c:when>   
 					<c:otherwise>  
-						<li ><a href="${pageContext.request.contextPath}?selectParking=${dictParking.parkingId}">${dictParking.parkingName}</a></li>
+						<li ><a href="${pageContext.request.contextPath}/innerweb/pakringBuyList?selectParking=${dictParking.parkingId}">${dictParking.parkingName}</a></li>
 					</c:otherwise>  
 				</c:choose>  
             </c:forEach>  
@@ -51,17 +51,21 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>创建时间</th>
-                <th>卖家描述</th>
-                <th>价格</th>
+                <th>交易时间（始~末）</th>
+                <th>卖家</th>
+                <th>价格(元)</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach items="${offerList}" var="parkingOffer">  
 	            <tr>
-	                <td><fmt:formatDate value='${parkingOffer.createTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/></td>
-	                <td>${parkingOffer.detail}</td>
-	                <td>${parkingOffer.price}</td>
+	                <td>
+	                <fmt:formatDate value='${parkingOffer.validStartTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/>
+	                <br>到<br>
+	                <fmt:formatDate value='${parkingOffer.validEndTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/>
+	                </td>
+	                <td>${parkingOffer.wxNickName}</td>
+	                <td>${parkingOffer.price}(元)</td>
 	            </tr>
             </c:forEach>  
         </tbody>

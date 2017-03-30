@@ -5,9 +5,12 @@
     <id column="offer_id" property="offerId" jdbcType="INTEGER" />
     <result column="parking_id" property="parkingId" jdbcType="INTEGER" />
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
-    <result column="user_id_sellor" property="userIdSellor" jdbcType="INTEGER" />
+    <result column="wx_openid" property="wxOpenid" jdbcType="VARCHAR" />
+    <result column="wx_nick_name" property="wxNickName" jdbcType="VARCHAR" />
     <result column="offer_status" property="offerStatus" jdbcType="INTEGER" />
     <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="valid_start_time" property="validStartTime" jdbcType="TIMESTAMP" />
+    <result column="valid_end_time" property="validEndTime" jdbcType="TIMESTAMP" />
     <result column="detail" property="detail" jdbcType="VARCHAR" />
     <result column="latitude" property="latitude" jdbcType="REAL" />
     <result column="longitude" property="longitude" jdbcType="REAL" />
@@ -73,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    offer_id, parking_id, parking_name, user_id_sellor, offer_status, price, detail, 
-    latitude, longitude, create_time, dml_time
+    offer_id, parking_id, parking_name, wx_openid, wx_nick_name, offer_status, price, 
+    valid_start_time, valid_end_time, detail, latitude, longitude, create_time, dml_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.ParkingOfferExample" >
     select
@@ -108,11 +111,13 @@
   </delete>
   <insert id="insert" parameterType="com.khpp.weixin.db.domain.ParkingOffer" >
     insert into parking_offer (offer_id, parking_id, parking_name, 
-      user_id_sellor, offer_status, price, 
+      wx_openid, wx_nick_name, offer_status, 
+      price, valid_start_time, valid_end_time, 
       detail, latitude, longitude, 
       create_time, dml_time)
     values (#{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, 
-      #{userIdSellor,jdbcType=INTEGER}, #{offerStatus,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{wxOpenid,jdbcType=VARCHAR}, #{wxNickName,jdbcType=VARCHAR}, #{offerStatus,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{validStartTime,jdbcType=TIMESTAMP}, #{validEndTime,jdbcType=TIMESTAMP}, 
       #{detail,jdbcType=VARCHAR}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
   </insert>
@@ -128,14 +133,23 @@
       <if test="parkingName != null" >
         parking_name,
       </if>
-      <if test="userIdSellor != null" >
-        user_id_sellor,
+      <if test="wxOpenid != null" >
+        wx_openid,
+      </if>
+      <if test="wxNickName != null" >
+        wx_nick_name,
       </if>
       <if test="offerStatus != null" >
         offer_status,
       </if>
       <if test="price != null" >
         price,
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time,
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time,
       </if>
       <if test="detail != null" >
         detail,
@@ -163,14 +177,23 @@
       <if test="parkingName != null" >
         #{parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="userIdSellor != null" >
-        #{userIdSellor,jdbcType=INTEGER},
+      <if test="wxOpenid != null" >
+        #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null" >
+        #{wxNickName,jdbcType=VARCHAR},
       </if>
       <if test="offerStatus != null" >
         #{offerStatus,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="validStartTime != null" >
+        #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        #{validEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=VARCHAR},
@@ -207,14 +230,23 @@
       <if test="record.parkingName != null" >
         parking_name = #{record.parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="record.userIdSellor != null" >
-        user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      <if test="record.wxOpenid != null" >
+        wx_openid = #{record.wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxNickName != null" >
+        wx_nick_name = #{record.wxNickName,jdbcType=VARCHAR},
       </if>
       <if test="record.offerStatus != null" >
         offer_status = #{record.offerStatus,jdbcType=INTEGER},
       </if>
       <if test="record.price != null" >
         price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validStartTime != null" >
+        valid_start_time = #{record.validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validEndTime != null" >
+        valid_end_time = #{record.validEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.detail != null" >
         detail = #{record.detail,jdbcType=VARCHAR},
@@ -241,9 +273,12 @@
     set offer_id = #{record.offerId,jdbcType=INTEGER},
       parking_id = #{record.parkingId,jdbcType=INTEGER},
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      wx_openid = #{record.wxOpenid,jdbcType=VARCHAR},
+      wx_nick_name = #{record.wxNickName,jdbcType=VARCHAR},
       offer_status = #{record.offerStatus,jdbcType=INTEGER},
       price = #{record.price,jdbcType=DECIMAL},
+      valid_start_time = #{record.validStartTime,jdbcType=TIMESTAMP},
+      valid_end_time = #{record.validEndTime,jdbcType=TIMESTAMP},
       detail = #{record.detail,jdbcType=VARCHAR},
       latitude = #{record.latitude,jdbcType=REAL},
       longitude = #{record.longitude,jdbcType=REAL},
@@ -262,14 +297,23 @@
       <if test="parkingName != null" >
         parking_name = #{parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="userIdSellor != null" >
-        user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      <if test="wxOpenid != null" >
+        wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null" >
+        wx_nick_name = #{wxNickName,jdbcType=VARCHAR},
       </if>
       <if test="offerStatus != null" >
         offer_status = #{offerStatus,jdbcType=INTEGER},
       </if>
       <if test="price != null" >
         price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
       </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=VARCHAR},
@@ -293,9 +337,12 @@
     update parking_offer
     set parking_id = #{parkingId,jdbcType=INTEGER},
       parking_name = #{parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      wx_nick_name = #{wxNickName,jdbcType=VARCHAR},
       offer_status = #{offerStatus,jdbcType=INTEGER},
       price = #{price,jdbcType=DECIMAL},
+      valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
       detail = #{detail,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=REAL},
       longitude = #{longitude,jdbcType=REAL},

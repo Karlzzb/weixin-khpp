@@ -3,21 +3,23 @@ package com.khpp.weixin.db.domain;
 import java.util.Date;
 
 public class ParkingOffer {
-	public static final int OFFERSTATUS_PUBLIC = 1;
-	public static final int OFFERSTATUS_SELL = 2;
-	public static final int OFFERSTATUS_NONE = 3;
-
 	private Integer offerId;
 
 	private Integer parkingId;
 
 	private String parkingName;
 
-	private Integer userIdSellor;
+	private String wxOpenid;
+
+	private String wxNickName;
 
 	private Integer offerStatus;
 
 	private Double price;
+
+	private Date validStartTime;
+
+	private Date validEndTime;
 
 	private String detail;
 
@@ -53,12 +55,20 @@ public class ParkingOffer {
 		this.parkingName = parkingName == null ? null : parkingName.trim();
 	}
 
-	public Integer getUserIdSellor() {
-		return userIdSellor;
+	public String getWxOpenid() {
+		return wxOpenid;
 	}
 
-	public void setUserIdSellor(Integer userIdSellor) {
-		this.userIdSellor = userIdSellor;
+	public void setWxOpenid(String wxOpenid) {
+		this.wxOpenid = wxOpenid == null ? null : wxOpenid.trim();
+	}
+
+	public String getWxNickName() {
+		return wxNickName;
+	}
+
+	public void setWxNickName(String wxNickName) {
+		this.wxNickName = wxNickName == null ? null : wxNickName.trim();
 	}
 
 	public Integer getOfferStatus() {
@@ -75,6 +85,22 @@ public class ParkingOffer {
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public Date getValidStartTime() {
+		return validStartTime;
+	}
+
+	public void setValidStartTime(Date validStartTime) {
+		this.validStartTime = validStartTime;
+	}
+
+	public Date getValidEndTime() {
+		return validEndTime;
+	}
+
+	public void setValidEndTime(Date validEndTime) {
+		this.validEndTime = validEndTime;
 	}
 
 	public String getDetail() {

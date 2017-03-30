@@ -3,63 +3,73 @@ package com.khpp.weixin.db.domain;
 import java.util.Date;
 
 public class DictParking {
-    private Integer parkingId;
+	private Integer parkingId;
 
-    private String parkingName;
+	private String parkingName;
 
-    private Float latitude;
+	private Double definedPrice;
 
-    private Float longitude;
+	private Float latitude;
 
-    private Date createTime;
+	private Float longitude;
 
-    private Date dmlTime;
+	private Date createTime;
 
-    public Integer getParkingId() {
-        return parkingId;
-    }
+	private Date dmlTime;
 
-    public void setParkingId(Integer parkingId) {
-        this.parkingId = parkingId;
-    }
+	public Integer getParkingId() {
+		return parkingId;
+	}
 
-    public String getParkingName() {
-        return parkingName;
-    }
+	public void setParkingId(Integer parkingId) {
+		this.parkingId = parkingId;
+	}
 
-    public void setParkingName(String parkingName) {
-        this.parkingName = parkingName == null ? null : parkingName.trim();
-    }
+	public String getParkingName() {
+		return parkingName;
+	}
 
-    public Float getLatitude() {
-        return latitude;
-    }
+	public void setParkingName(String parkingName) {
+		this.parkingName = parkingName == null ? null : parkingName.trim();
+	}
 
-    public void setLatitude(Float latitude) {
-        this.latitude = latitude;
-    }
+	public Double getDefinedPrice() {
+		return definedPrice;
+	}
 
-    public Float getLongitude() {
-        return longitude;
-    }
+	public void setDefinedPrice(Double definedPrice) {
+		this.definedPrice = definedPrice;
+	}
 
-    public void setLongitude(Float longitude) {
-        this.longitude = longitude;
-    }
+	public Float getLatitude() {
+		return latitude;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setLatitude(Float latitude) {
+		this.latitude = latitude;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Float getLongitude() {
+		return longitude;
+	}
 
-    public Date getDmlTime() {
-        return dmlTime;
-    }
+	public void setLongitude(Float longitude) {
+		this.longitude = longitude;
+	}
 
-    public void setDmlTime(Date dmlTime) {
-        this.dmlTime = dmlTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getDmlTime() {
+		return dmlTime;
+	}
+
+	public void setDmlTime(Date dmlTime) {
+		this.dmlTime = dmlTime;
+	}
 }

@@ -39,6 +39,7 @@ DROP TABLE IF EXISTS `dict_parking`;
 CREATE TABLE `dict_parking` (
   `parking_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parking_name` varchar(64) NOT NULL COMMENT '停车场名称',
+  `defined_price` DECIMAL(8,2) NOT NULL DEFAULT 5 COMMENT '预定售价',
   `latitude` FLOAT(10,6) NOT NULL DEFAULT 0 COMMENT '纬度',
   `longitude` FLOAT(10,6) NOT NULL DEFAULT 0 COMMENT '经度 ',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -51,14 +52,17 @@ CREATE TABLE `parking_offer` (
   `offer_id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT'停车券ID',
   `parking_id` int(11) unsigned NOT NULL COMMENT'停车场ID',
   `parking_name` varchar(64) NOT NULL COMMENT '停车场名称',
-  `user_id_sellor` int(11) unsigned NOT NULL COMMENT '卖家ID',
+  `wx_openid` int(11) unsigned NOT NULL COMMENT '卖家微信ID',
+  `wx_nick_name` int(11) unsigned NOT NULL COMMENT '卖家微信匿名',
   `offer_status` int(11) NOT NULL DEFAULT '1' COMMENT '卡券状态：1-发布中；2-已售出；3-失效;',
   `price` DECIMAL(8,2) NOT NULL COMMENT '卖家售价',
+  `valid_start_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '有效交易时间（开始）',
+  `valid_end_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '有效交易时间（结束）',
   `detail` varchar(64) NOT NULL DEFAULT '' COMMENT '卖家描述',
   `latitude` FLOAT(10,6) NOT NULL DEFAULT 0 COMMENT '纬度',
   `longitude` FLOAT(10,6) NOT NULL DEFAULT 0 COMMENT '经度 ',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `dml_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '数据更新日期',
   PRIMARY KEY (`offer_id`),
-  key user_id_sellor_key(`user_id_sellor`)
+  key user_id_sellor_key(`wx_openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='停车券表';
