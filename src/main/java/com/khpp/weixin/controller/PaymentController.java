@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
 import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
 
@@ -32,9 +31,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
+import com.khpp.weixin.service.WeixinService;
 import com.khpp.weixin.utils.MD5Util;
 import com.khpp.weixin.utils.ReturnModel;
 import com.khpp.weixin.utils.Sha1Util;
@@ -42,11 +43,10 @@ import com.khpp.weixin.utils.XMLUtil;
 
 /**
  * 微信支付Controller
- * <p>
- * Created by FirenzesEagle on 2016/6/20 0020. Email:liumingbo2008@gmail.com
+ *
  */
-// @Controller
-// @RequestMapping(value = "wxPay")
+@Controller
+@RequestMapping(value = "wxPay")
 public class PaymentController extends GenericController {
 
 	// 企业向个人转账微信API路径
@@ -54,9 +54,7 @@ public class PaymentController extends GenericController {
 	// apiclient_cert.p12证书存放路径
 	private static final String CERTIFICATE_LOCATION = "";
 	@Autowired
-	protected WxMpConfigStorage configStorage;
-	@Autowired
-	protected WxMpService wxMpService;
+	protected WeixinService wxMpService;
 
 	/**
 	 * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
@@ -76,8 +74,8 @@ public class PaymentController extends GenericController {
 		payInfo.setTradeType(request.getParameter("trade_type"));
 		payInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
 		payInfo.setNotifyURL("");
-		this.logger
-				.info("PartnerKey is :" + this.configStorage.getPartnerKey());
+		this.logger.info("PartnerKey is :"
+				+ getWxMpConfigStorage().getPartnerKey());
 		WxPayUnifiedOrderResult result = this.wxMpService.getPayService()
 				.unifiedOrder(payInfo);
 		this.logger.info(new Gson().toJson(result));
@@ -95,15 +93,15 @@ public class PaymentController extends GenericController {
 			HttpServletRequest request) {
 		ReturnModel returnModel = new ReturnModel();
 		WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
-		prepayInfo.setOpenid(request.getParameter("openid"));
-		prepayInfo.setOutTradeNo(request.getParameter("out_trade_no"));
-		prepayInfo.setTotalFee(Integer.valueOf(request
-				.getParameter("total_fee")));
-		prepayInfo.setBody(request.getParameter("body"));
-		prepayInfo.setTradeType(request.getParameter("trade_type"));
-		prepayInfo.setSpbillCreateIp(request.getParameter("spbill_create_ip"));
+		prepayInfo.setOpenid("oQ7vLv8wzJK5dV-xOHRqFb8pwjxI");
+		prepayInfo.setOutTradeNo("22oQ2JK5dV3312xO33HRqFb8pwjxI");
+		prepayInfo.setTotalFee(1);
+		prepayInfo.setBody("主题");
+		prepayInfo.setTradeType("JSAPI");
+		prepayInfo.setSpbillCreateIp("192.168.235.1");
 		// TODO(user) 填写通知回调地址
-		prepayInfo.setNotifyURL("");
+		prepayInfo
+				.setNotifyURL("http://ljyzzb.tunnel.qydev.com/wxPay/getJSSDKCallbackData");
 
 		try {
 			Map<String, String> payInfo = this.wxMpService.getPayService()
@@ -132,7 +130,7 @@ public class PaymentController extends GenericController {
 			synchronized (this) {
 				Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
 				if (this.wxMpService.getPayService().checkSign(kvm,
-						configStorage.getPartnerKey())) {
+						getWxMpConfigStorage().getPartnerKey())) {
 					if (kvm.get("result_code").equals("SUCCESS")) {
 						// TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
 						logger.info("out_trade_no: " + kvm.get("out_trade_no")
@@ -163,8 +161,8 @@ public class PaymentController extends GenericController {
 	public void payToIndividual(HttpServletResponse response,
 			HttpServletRequest request) {
 		TreeMap<String, String> map = new TreeMap<String, String>();
-		map.put("mch_appid", this.configStorage.getAppId());
-		map.put("mchid", this.configStorage.getPartnerId());
+		map.put("mch_appid", getWxMpConfigStorage().getAppId());
+		map.put("mchid", getWxMpConfigStorage().getPartnerId());
 		map.put("nonce_str", Sha1Util.getNonceStr());
 		map.put("partner_trade_no", request.getParameter("partner_trade_no"));
 		map.put("openid", request.getParameter("openid"));
@@ -174,8 +172,8 @@ public class PaymentController extends GenericController {
 		map.put("spbill_create_ip", request.getParameter("spbill_create_ip"));
 		try {
 			Map<String, String> returnMap = enterprisePay(map,
-					this.configStorage.getPartnerKey(), CERTIFICATE_LOCATION,
-					ENTERPRISE_PAY_URL);
+					getWxMpConfigStorage().getPartnerKey(),
+					CERTIFICATE_LOCATION, ENTERPRISE_PAY_URL);
 			if ("SUCCESS".equals(returnMap.get("result_code").toUpperCase())
 					&& "SUCCESS".equals(returnMap.get("return_code")
 							.toUpperCase())) {
@@ -285,5 +283,9 @@ public class PaymentController extends GenericController {
 		}
 		EntityUtils.consume(entity);
 		return returnMap;
+	}
+
+	private WxMpConfigStorage getWxMpConfigStorage() {
+		return this.wxMpService.getWxMpConfigStorage();
 	}
 }
