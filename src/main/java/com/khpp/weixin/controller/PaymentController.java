@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
+import me.chanjar.weixin.mp.bean.pay.request.WxPayBaseRequest;
 import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
 import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
 
@@ -95,17 +96,18 @@ public class PaymentController extends GenericController {
 		WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
 		prepayInfo.setOpenid("oQ7vLv8wzJK5dV-xOHRqFb8pwjxI");
 		prepayInfo.setOutTradeNo("22oQ2JK5dV3312xO33HRqFb8pwjxI");
-		prepayInfo.setTotalFee(1);
-		prepayInfo.setBody("主题");
+		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee("0.2"));
+		prepayInfo.setBody("parkingoffer");
 		prepayInfo.setTradeType("JSAPI");
 		prepayInfo.setSpbillCreateIp("192.168.235.1");
-		// TODO(user) 填写通知回调地址
 		prepayInfo
 				.setNotifyURL("http://ljyzzb.tunnel.qydev.com/wxPay/getJSSDKCallbackData");
 
 		try {
+			logger.debug("prepayInfo=" + new Gson().toJson(prepayInfo));
 			Map<String, String> payInfo = this.wxMpService.getPayService()
 					.getPayInfo(prepayInfo);
+			logger.debug("paidedResult=" + new Gson().toJson(prepayInfo));
 			returnModel.setResult(true);
 			returnModel.setDatum(payInfo);
 			renderString(response, returnModel);

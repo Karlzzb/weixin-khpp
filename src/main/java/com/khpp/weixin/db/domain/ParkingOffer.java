@@ -2,6 +2,8 @@ package com.khpp.weixin.db.domain;
 
 import java.util.Date;
 
+import com.khpp.weixin.utils.DateUtil;
+
 public class ParkingOffer {
 	private Integer offerId;
 
@@ -141,5 +143,15 @@ public class ParkingOffer {
 
 	public void setDmlTime(Date dmlTime) {
 		this.dmlTime = dmlTime;
+	}
+
+	public String getStartTime() {
+		return validStartTime == null ? "" : DateUtil
+				.dateToTimeString(this.validStartTime);
+	}
+
+	public String getEndTime() {
+		return validEndTime == null ? "" : DateUtil
+				.dateToTimeString(this.validEndTime);
 	}
 }

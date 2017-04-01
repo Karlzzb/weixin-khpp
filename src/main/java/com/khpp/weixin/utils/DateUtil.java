@@ -7,6 +7,7 @@ import java.util.Date;
 public class DateUtil {
 
 	private static final String FULL_DATE_FORMATE = "yyyy-MM-dd HH:mm:ss";
+	private static final String TIME_DATE_FORMATE = "HH:mm:ss";
 
 	/**
 	 * get date after/before baseDaten n hours
@@ -48,6 +49,17 @@ public class DateUtil {
 	 */
 	public static String dateToFullString(Date time) {
 		return dateToString(time, FULL_DATE_FORMATE);
+	}
+
+	/**
+	 * HH:mm:ss
+	 * 
+	 * @param time
+	 * @param x
+	 * @return
+	 */
+	public static String dateToTimeString(Date time) {
+		return dateToString(time, TIME_DATE_FORMATE);
 	}
 
 	private static String dateToString(Date time, String format) {

@@ -13,6 +13,15 @@
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	$("#myModal").on('show.bs.modal', function(event){
+        var button = $(event.relatedTarget);  // Button that triggered the modal
+        $("#pricedesc").html("售价："+button.data('price')+"<br/>有效交易时间：当日"+button.data('stime')+"至"+button.data('etime'));
+	    $(this).find('.modal-title').text('购买车停车券');
+	});	
+})
+</script>
 <style type="text/css">
     .bs-example{
     	margin: 20px;
@@ -54,22 +63,48 @@
                 <th>交易时间（始~末）</th>
                 <th>卖家</th>
                 <th>价格(元)</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             <c:forEach items="${offerList}" var="parkingOffer">  
-	            <tr>
+	            <tr class="info">
 	                <td>
-	                <fmt:formatDate value='${parkingOffer.validStartTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/>
-	                <br>到<br>
-	                <fmt:formatDate value='${parkingOffer.validEndTime}' type='date' pattern='yyyy-MM-dd HH:mm:SS'/>
+	                <fmt:formatDate value='${parkingOffer.validStartTime}' type='date' pattern='HH:mm:SS'/>
+	                                                 至
+	                <fmt:formatDate value='${parkingOffer.validEndTime}' type='date' pattern='HH:mm:SS'/>
 	                </td>
 	                <td>${parkingOffer.wxNickName}</td>
 	                <td>${parkingOffer.price}(元)</td>
+	                <td>
+	                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-stime="${parkingOffer.startTime}" data-etime="${parkingOffer.endTime}" data-price="${parkingOffer.price}">购买</button>
+	                </td>
 	            </tr>
             </c:forEach>  
         </tbody>
     </table>
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">购买车停车券</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label id="pricedesc" for="recipient-name" class="control-label"></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">购买</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>                                		
