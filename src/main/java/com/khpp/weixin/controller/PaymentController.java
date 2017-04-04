@@ -36,11 +36,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.google.gson.Gson;
+import com.khpp.weixin.config.WxMpConfig;
 import com.khpp.weixin.service.WeixinService;
 import com.khpp.weixin.utils.MD5Util;
-import com.khpp.weixin.utils.ReturnModel;
 import com.khpp.weixin.utils.Sha1Util;
 import com.khpp.weixin.utils.XMLUtil;
+import com.khpp.weixin.web.model.ReturnModel;
 
 /**
  * 微信支付Controller
@@ -52,10 +53,10 @@ public class PaymentController extends GenericController {
 
 	// 企业向个人转账微信API路径
 	private static final String ENTERPRISE_PAY_URL = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
-	// apiclient_cert.p12证书存放路径
-	private static final String CERTIFICATE_LOCATION = "";
 	@Autowired
 	protected WeixinService wxMpService;
+	@Autowired
+	private WxMpConfig wxConfig;
 
 	/**
 	 * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
@@ -92,30 +93,31 @@ public class PaymentController extends GenericController {
 	@RequestMapping(value = "getJSSDKPayInfo")
 	public void getJSSDKPayInfo(HttpServletResponse response,
 			HttpServletRequest request) {
-		ReturnModel returnModel = new ReturnModel();
 		WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
 		prepayInfo.setOpenid("oQ7vLv8wzJK5dV-xOHRqFb8pwjxI");
-		prepayInfo.setOutTradeNo("22oQ2JK5dV3312xO33HRqFb8pwjxI");
-		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee("0.2"));
-		prepayInfo.setBody("parkingoffer");
+		prepayInfo.setOutTradeNo("6AED000AF86A084F9CB0264161E29DD3");
+		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee("0.1"));
+		prepayInfo.setBody("1");
 		prepayInfo.setTradeType("JSAPI");
-		prepayInfo.setSpbillCreateIp("192.168.235.1");
+		// prepayInfo.setSpbillCreateIp(WebUtil.getIpAddr(request));
+		prepayInfo.setSpbillCreateIp("58.35.32.146");
+		// prepayInfo.setTimeStart(DateUtil.dateToTightString(new Date()));
+		// prepayInfo.setTimeExpire(DateUtil.dateToTightString(DateUtil.hourSwing(
+		// new Date(), 1)));
 		prepayInfo
-				.setNotifyURL("http://ljyzzb.tunnel.qydev.com/wxPay/getJSSDKCallbackData");
+				.setNotifyURL("ljyzzb.tunnel.qydev.com/wxPay/getJSSDKCallbackData");
+		prepayInfo.setDeviceInfo("WEB");
 
 		try {
-			logger.debug("prepayInfo=" + new Gson().toJson(prepayInfo));
-			Map<String, String> payInfo = this.wxMpService.getPayService()
+			Map<String, String> payInfo = wxMpService.getPayService()
 					.getPayInfo(prepayInfo);
-			logger.debug("paidedResult=" + new Gson().toJson(prepayInfo));
+			logger.info("paidedResult=" + new Gson().toJson(prepayInfo));
+			ReturnModel returnModel = new ReturnModel();
 			returnModel.setResult(true);
 			returnModel.setDatum(payInfo);
 			renderString(response, returnModel);
 		} catch (WxErrorException e) {
-			returnModel.setResult(false);
-			returnModel.setReason(e.getError().toString());
-			renderString(response, returnModel);
-			this.logger.error(e.getError().toString());
+			logger.error("微信支付失败！订单号：{},原因:{}", "", e.getMessage());
 		}
 	}
 
@@ -175,7 +177,7 @@ public class PaymentController extends GenericController {
 		try {
 			Map<String, String> returnMap = enterprisePay(map,
 					getWxMpConfigStorage().getPartnerKey(),
-					CERTIFICATE_LOCATION, ENTERPRISE_PAY_URL);
+					this.wxConfig.getCertificatePath(), ENTERPRISE_PAY_URL);
 			if ("SUCCESS".equals(returnMap.get("result_code").toUpperCase())
 					&& "SUCCESS".equals(returnMap.get("return_code")
 							.toUpperCase())) {

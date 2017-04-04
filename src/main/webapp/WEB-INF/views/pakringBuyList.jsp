@@ -1,7 +1,8 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +14,36 @@
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.form.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
 	$("#myModal").on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);  // Button that triggered the modal
         $("#pricedesc").html("售价："+button.data('price')+"<br/>有效交易时间：当日"+button.data('stime')+"至"+button.data('etime'));
 	    $(this).find('.modal-title').text('购买车停车券');
-	});	
-})
+	});
+
+    var options = { 
+            success: onBridgeReady
+    };	
+    $('#prepayform').ajaxForm(options);
+});
+function onBridgeReady(data){
+   WeixinJSBridge.invoke(
+       'getBrandWCPayRequest', {
+           "appId":data.datum.appId,
+           "timeStamp":data.datum.timeStamp,
+           "nonceStr":data.datum.nonceStr,
+           "package":data.datum.package,   
+           "signType":data.datum.signType,
+           "paySign":data.datum.paySign
+       },
+       function(res){
+    	   //alert(JSON.stringify(res));
+           if(res.err_msg == "get_brand_wcpay_request:ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+       }
+   ); 
+}
 </script>
 <style type="text/css">
     .bs-example{
@@ -92,15 +115,17 @@ $(document).ready(function(){
                     <h4 class="modal-title">购买车停车券</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form">
+                    <form:form id="prepayform" class="form-horizontal" action="/wxPay/getJSSDKPayInfo" method="post">
                         <div class="form-group">
                             <label id="pricedesc" for="recipient-name" class="control-label"></label>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">购买</button>
+	 			        <div class="form-group">
+				            <div class="col-xs-offset-3 col-xs-9">
+				                <input type="submit" class="btn btn-primary" value="购买">
+				                <input type="reset" class="btn btn-default" data-dismiss="modal" value="取消">
+				            </div>
+				        </div>
+                   </form:form>
                 </div>
             </div>
         </div>

@@ -92,7 +92,7 @@ public class WxRedirectController extends GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "pakringBuyList", method = RequestMethod.GET)
+	@RequestMapping(value = "parkingBuyList", method = RequestMethod.GET)
 	public String parkingList(
 			@RequestParam(value = "selectParking", required = false) String selectParkingIdStr,
 			Model model) {

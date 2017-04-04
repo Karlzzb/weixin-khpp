@@ -8,6 +8,7 @@ public class DateUtil {
 
 	private static final String FULL_DATE_FORMATE = "yyyy-MM-dd HH:mm:ss";
 	private static final String TIME_DATE_FORMATE = "HH:mm:ss";
+	private static final String TIGHT_DATE_FORMATE = "yyyyMMddHHmmss";
 
 	/**
 	 * get date after/before baseDaten n hours
@@ -68,5 +69,9 @@ public class DateUtil {
 
 		SimpleDateFormat formatter = new SimpleDateFormat(format);
 		return formatter.format(time);
+	}
+
+	public static String dateToTightString(Date time) {
+		return dateToString(time, TIGHT_DATE_FORMATE);
 	}
 }

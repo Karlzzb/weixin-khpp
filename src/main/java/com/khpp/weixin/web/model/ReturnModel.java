@@ -1,4 +1,5 @@
-package com.khpp.weixin.utils;
+package com.khpp.weixin.web.model;
+
 
 public class ReturnModel extends GenericReturnModel<Object> {
 

@@ -51,7 +51,7 @@ public class MenuConfig {
 		button22.setName("买停车券");
 		button22.setKey(WxMenuKeyConfig.PARKING_BUY);
 		button22.setUrl(wxMpService.oauth2buildAuthorizationUrl(
-				"http://ljyzzb.tunnel.qydev.com/wxredirect/pakringBuyList",
+				"http://ljyzzb.tunnel.qydev.com/wxredirect/parkingBuyList",
 				"snsapi_userinfo", null));
 
 		WxMenuButton button23 = new WxMenuButton();
