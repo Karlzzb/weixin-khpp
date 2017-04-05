@@ -38,4 +38,10 @@ public class ParkingOfferServiceImpl extends
 		ParkingOfferExample example = new ParkingOfferExample();
 		return parkingOfferMapper.selectByExample(example);
 	}
+
+	@Override
+	public Integer updateOfferStatus(int offerId, int offerStatus) {
+		return parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(
+				offerId, offerStatus));
+	}
 }

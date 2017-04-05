@@ -48,8 +48,8 @@
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
         <mvc:interceptor>
-            <mvc:mapping path="/wxredirect/*"/>
             <bean id="wxredirectInterceptor" class="com.khpp.weixin.web.security.WxredirectInterceptor"/>
+            <mvc:mapping path="/wxredirect/*"/>
         </mvc:interceptor>       
     </mvc:interceptors>       
 

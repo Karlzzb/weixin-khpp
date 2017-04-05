@@ -8,12 +8,12 @@ import com.khpp.weixin.core.GenericDao;
 import com.khpp.weixin.db.domain.ParkingOrder;
 import com.khpp.weixin.db.domain.ParkingOrderExample;
 
-public interface ParkingOrderMapper extends GenericDao<ParkingOrder, Integer> {
+public interface ParkingOrderMapper extends GenericDao<ParkingOrder, String> {
 	int countByExample(ParkingOrderExample example);
 
 	int deleteByExample(ParkingOrderExample example);
 
-	int deleteByPrimaryKey(Integer orderId);
+	int deleteByPrimaryKey(String orderId);
 
 	int insert(ParkingOrder record);
 
@@ -21,7 +21,7 @@ public interface ParkingOrderMapper extends GenericDao<ParkingOrder, Integer> {
 
 	List<ParkingOrder> selectByExample(ParkingOrderExample example);
 
-	ParkingOrder selectByPrimaryKey(Integer orderId);
+	ParkingOrder selectByPrimaryKey(String orderId);
 
 	int updateByExampleSelective(@Param("record") ParkingOrder record,
 			@Param("example") ParkingOrderExample example);

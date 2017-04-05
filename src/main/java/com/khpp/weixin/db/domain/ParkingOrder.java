@@ -1,156 +1,205 @@
 package com.khpp.weixin.db.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
+import com.khpp.weixin.utils.MD5Util;
+
 public class ParkingOrder {
-    private Integer orderId;
+	public ParkingOrder(Integer offerId, Integer parkingId, String parkingName,
+			String wxOpenidSellor, String wxNickNameSellor,
+			String wxOpenidBuier, String wxNickNameBuier, Integer orderStatus,
+			Double paidAmount, Double serviceFee) {
+		super();
+		this.offerId = offerId;
+		this.parkingId = parkingId;
+		this.parkingName = parkingName;
+		this.wxOpenidSellor = wxOpenidSellor;
+		this.wxNickNameSellor = wxNickNameSellor;
+		this.wxOpenidBuier = wxOpenidBuier;
+		this.wxNickNameBuier = wxNickNameBuier;
+		this.orderStatus = orderStatus;
+		this.paidAmount = paidAmount;
+		this.serviceFee = serviceFee;
+		this.orderId = MD5Util.md5EncodeUTF8(wxOpenidBuier + offerId
+				+ wxOpenidSellor);
+	}
 
-    private Integer offerId;
+	public ParkingOrder() {
+		super();
+	}
 
-    private Integer parkingId;
+	private String orderId;
 
-    private String parkingName;
+	private Integer offerId;
 
-    private Integer userIdSellor;
+	private Integer parkingId;
 
-    private Integer userIdBuier;
+	private String parkingName;
 
-    private Integer orderStatus;
+	private String wxOpenidSellor;
 
-    private String wxFromOrderId;
+	private String wxNickNameSellor;
 
-    private String wxToOrderId;
+	private String wxOpenidBuier;
 
-    private BigDecimal paidAmount;
+	private String wxNickNameBuier;
 
-    private BigDecimal serviceFee;
+	private Integer orderStatus;
 
-    private Float latitude;
+	private String wxFromOrderId;
 
-    private Float longitude;
+	private String wxToOrderId;
 
-    private Date createTime;
+	private Double paidAmount;
 
-    private Date dmlTime;
+	private Double serviceFee;
 
-    public Integer getOrderId() {
-        return orderId;
-    }
+	private Float latitude;
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
+	private Float longitude;
 
-    public Integer getOfferId() {
-        return offerId;
-    }
+	private Date createTime;
 
-    public void setOfferId(Integer offerId) {
-        this.offerId = offerId;
-    }
+	private Date dmlTime;
 
-    public Integer getParkingId() {
-        return parkingId;
-    }
+	public String getOrderId() {
+		return orderId;
+	}
 
-    public void setParkingId(Integer parkingId) {
-        this.parkingId = parkingId;
-    }
+	public void setOrderId(String orderId) {
+		this.orderId = orderId == null ? null : orderId.trim();
+	}
 
-    public String getParkingName() {
-        return parkingName;
-    }
+	public Integer getOfferId() {
+		return offerId;
+	}
 
-    public void setParkingName(String parkingName) {
-        this.parkingName = parkingName == null ? null : parkingName.trim();
-    }
+	public void setOfferId(Integer offerId) {
+		this.offerId = offerId;
+	}
 
-    public Integer getUserIdSellor() {
-        return userIdSellor;
-    }
+	public Integer getParkingId() {
+		return parkingId;
+	}
 
-    public void setUserIdSellor(Integer userIdSellor) {
-        this.userIdSellor = userIdSellor;
-    }
+	public void setParkingId(Integer parkingId) {
+		this.parkingId = parkingId;
+	}
 
-    public Integer getUserIdBuier() {
-        return userIdBuier;
-    }
+	public String getParkingName() {
+		return parkingName;
+	}
 
-    public void setUserIdBuier(Integer userIdBuier) {
-        this.userIdBuier = userIdBuier;
-    }
+	public void setParkingName(String parkingName) {
+		this.parkingName = parkingName == null ? null : parkingName.trim();
+	}
 
-    public Integer getOrderStatus() {
-        return orderStatus;
-    }
+	public String getWxOpenidSellor() {
+		return wxOpenidSellor;
+	}
 
-    public void setOrderStatus(Integer orderStatus) {
-        this.orderStatus = orderStatus;
-    }
+	public void setWxOpenidSellor(String wxOpenidSellor) {
+		this.wxOpenidSellor = wxOpenidSellor == null ? null : wxOpenidSellor
+				.trim();
+	}
 
-    public String getWxFromOrderId() {
-        return wxFromOrderId;
-    }
+	public String getWxNickNameSellor() {
+		return wxNickNameSellor;
+	}
 
-    public void setWxFromOrderId(String wxFromOrderId) {
-        this.wxFromOrderId = wxFromOrderId == null ? null : wxFromOrderId.trim();
-    }
+	public void setWxNickNameSellor(String wxNickNameSellor) {
+		this.wxNickNameSellor = wxNickNameSellor == null ? null
+				: wxNickNameSellor.trim();
+	}
 
-    public String getWxToOrderId() {
-        return wxToOrderId;
-    }
+	public String getWxOpenidBuier() {
+		return wxOpenidBuier;
+	}
 
-    public void setWxToOrderId(String wxToOrderId) {
-        this.wxToOrderId = wxToOrderId == null ? null : wxToOrderId.trim();
-    }
+	public void setWxOpenidBuier(String wxOpenidBuier) {
+		this.wxOpenidBuier = wxOpenidBuier == null ? null : wxOpenidBuier
+				.trim();
+	}
 
-    public BigDecimal getPaidAmount() {
-        return paidAmount;
-    }
+	public String getWxNickNameBuier() {
+		return wxNickNameBuier;
+	}
 
-    public void setPaidAmount(BigDecimal paidAmount) {
-        this.paidAmount = paidAmount;
-    }
+	public void setWxNickNameBuier(String wxNickNameBuier) {
+		this.wxNickNameBuier = wxNickNameBuier == null ? null : wxNickNameBuier
+				.trim();
+	}
 
-    public BigDecimal getServiceFee() {
-        return serviceFee;
-    }
+	public Integer getOrderStatus() {
+		return orderStatus;
+	}
 
-    public void setServiceFee(BigDecimal serviceFee) {
-        this.serviceFee = serviceFee;
-    }
+	public void setOrderStatus(Integer orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 
-    public Float getLatitude() {
-        return latitude;
-    }
+	public String getWxFromOrderId() {
+		return wxFromOrderId;
+	}
 
-    public void setLatitude(Float latitude) {
-        this.latitude = latitude;
-    }
+	public void setWxFromOrderId(String wxFromOrderId) {
+		this.wxFromOrderId = wxFromOrderId == null ? null : wxFromOrderId
+				.trim();
+	}
 
-    public Float getLongitude() {
-        return longitude;
-    }
+	public String getWxToOrderId() {
+		return wxToOrderId;
+	}
 
-    public void setLongitude(Float longitude) {
-        this.longitude = longitude;
-    }
+	public void setWxToOrderId(String wxToOrderId) {
+		this.wxToOrderId = wxToOrderId == null ? null : wxToOrderId.trim();
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public Double getPaidAmount() {
+		return paidAmount;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setPaidAmount(Double paidAmount) {
+		this.paidAmount = paidAmount;
+	}
 
-    public Date getDmlTime() {
-        return dmlTime;
-    }
+	public Double getServiceFee() {
+		return serviceFee;
+	}
 
-    public void setDmlTime(Date dmlTime) {
-        this.dmlTime = dmlTime;
-    }
+	public void setServiceFee(Double serviceFee) {
+		this.serviceFee = serviceFee;
+	}
+
+	public Float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Float latitude) {
+		this.latitude = latitude;
+	}
+
+	public Float getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Float longitude) {
+		this.longitude = longitude;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getDmlTime() {
+		return dmlTime;
+	}
+
+	public void setDmlTime(Date dmlTime) {
+		this.dmlTime = dmlTime;
+	}
 }

@@ -131,7 +131,6 @@ public class WxRedirectController extends GenericController {
 		ModelAndView modelAndView = new ModelAndView("parkingOfferForm");
 		ParkingOfferModel offerModel = new ParkingOfferModel(new Date(),
 				DateUtil.hourSwing(new Date(), CommonConstans.OFFERVALIDHOURS));
-
 		modelAndView.addObject("parkingOfferModel", offerModel);
 		modelAndView.addObject("parkingList", parkingList);
 		return modelAndView;

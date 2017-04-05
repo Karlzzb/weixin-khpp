@@ -20,6 +20,7 @@ $(document).ready(function(){
 	$("#myModal").on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);  // Button that triggered the modal
         $("#pricedesc").html("售价："+button.data('price')+"<br/>有效交易时间：当日"+button.data('stime')+"至"+button.data('etime'));
+        $("#selectOfferId").val(button.data('offerId'));
 	    $(this).find('.modal-title').text('购买车停车券');
 	});
 
@@ -100,7 +101,7 @@ function onBridgeReady(data){
 	                <td>${parkingOffer.wxNickName}</td>
 	                <td>${parkingOffer.price}(元)</td>
 	                <td>
-	                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-stime="${parkingOffer.startTime}" data-etime="${parkingOffer.endTime}" data-price="${parkingOffer.price}">购买</button>
+	                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-offerid="${parkingOffer.offerId}" data-stime="${parkingOffer.startTime}" data-etime="${parkingOffer.endTime}" data-price="${parkingOffer.price}">购买</button>
 	                </td>
 	            </tr>
             </c:forEach>  
@@ -118,6 +119,7 @@ function onBridgeReady(data){
                     <form:form id="prepayform" class="form-horizontal" action="/wxPay/getJSSDKPayInfo" method="post">
                         <div class="form-group">
                             <label id="pricedesc" for="recipient-name" class="control-label"></label>
+                            <form:hidden path="selectOfferId" />
                         </div>
 	 			        <div class="form-group">
 				            <div class="col-xs-offset-3 col-xs-9">

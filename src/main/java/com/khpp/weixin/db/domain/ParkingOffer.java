@@ -5,6 +5,17 @@ import java.util.Date;
 import com.khpp.weixin.utils.DateUtil;
 
 public class ParkingOffer {
+	public ParkingOffer(Integer offerId, Integer offerStatus) {
+		super();
+		this.offerId = offerId;
+		this.offerStatus = offerStatus;
+	}
+
+	public ParkingOffer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	private Integer offerId;
 
 	private Integer parkingId;

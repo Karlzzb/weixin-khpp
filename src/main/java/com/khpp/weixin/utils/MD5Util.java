@@ -9,6 +9,10 @@ public class MD5Util {
 	private static final String HEX_DIGITS[] = { "0", "1", "2", "3", "4", "5",
 			"6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
+	public static String md5EncodeUTF8(String origin) {
+		return md5Encode(origin, null);
+	}
+
 	public static String md5Encode(String origin, String charsetname) {
 		String resultString = null;
 		try {

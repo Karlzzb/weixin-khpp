@@ -116,52 +116,62 @@ public class ParkingOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdEqualTo(Integer value) {
+        public Criteria andOrderIdEqualTo(String value) {
             addCriterion("order_id =", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotEqualTo(Integer value) {
+        public Criteria andOrderIdNotEqualTo(String value) {
             addCriterion("order_id <>", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThan(Integer value) {
+        public Criteria andOrderIdGreaterThan(String value) {
             addCriterion("order_id >", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andOrderIdGreaterThanOrEqualTo(String value) {
             addCriterion("order_id >=", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThan(Integer value) {
+        public Criteria andOrderIdLessThan(String value) {
             addCriterion("order_id <", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdLessThanOrEqualTo(Integer value) {
+        public Criteria andOrderIdLessThanOrEqualTo(String value) {
             addCriterion("order_id <=", value, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdIn(List<Integer> values) {
+        public Criteria andOrderIdLike(String value) {
+            addCriterion("order_id like", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdNotLike(String value) {
+            addCriterion("order_id not like", value, "orderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderIdIn(List<String> values) {
             addCriterion("order_id in", values, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotIn(List<Integer> values) {
+        public Criteria andOrderIdNotIn(List<String> values) {
             addCriterion("order_id not in", values, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdBetween(Integer value1, Integer value2) {
+        public Criteria andOrderIdBetween(String value1, String value2) {
             addCriterion("order_id between", value1, value2, "orderId");
             return (Criteria) this;
         }
 
-        public Criteria andOrderIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andOrderIdNotBetween(String value1, String value2) {
             addCriterion("order_id not between", value1, value2, "orderId");
             return (Criteria) this;
         }
@@ -356,123 +366,283 @@ public class ParkingOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorIsNull() {
-            addCriterion("user_id_sellor is null");
+        public Criteria andWxOpenidSellorIsNull() {
+            addCriterion("wx_openid_sellor is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorIsNotNull() {
-            addCriterion("user_id_sellor is not null");
+        public Criteria andWxOpenidSellorIsNotNull() {
+            addCriterion("wx_openid_sellor is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorEqualTo(Integer value) {
-            addCriterion("user_id_sellor =", value, "userIdSellor");
+        public Criteria andWxOpenidSellorEqualTo(String value) {
+            addCriterion("wx_openid_sellor =", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorNotEqualTo(Integer value) {
-            addCriterion("user_id_sellor <>", value, "userIdSellor");
+        public Criteria andWxOpenidSellorNotEqualTo(String value) {
+            addCriterion("wx_openid_sellor <>", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorGreaterThan(Integer value) {
-            addCriterion("user_id_sellor >", value, "userIdSellor");
+        public Criteria andWxOpenidSellorGreaterThan(String value) {
+            addCriterion("wx_openid_sellor >", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id_sellor >=", value, "userIdSellor");
+        public Criteria andWxOpenidSellorGreaterThanOrEqualTo(String value) {
+            addCriterion("wx_openid_sellor >=", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorLessThan(Integer value) {
-            addCriterion("user_id_sellor <", value, "userIdSellor");
+        public Criteria andWxOpenidSellorLessThan(String value) {
+            addCriterion("wx_openid_sellor <", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id_sellor <=", value, "userIdSellor");
+        public Criteria andWxOpenidSellorLessThanOrEqualTo(String value) {
+            addCriterion("wx_openid_sellor <=", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorIn(List<Integer> values) {
-            addCriterion("user_id_sellor in", values, "userIdSellor");
+        public Criteria andWxOpenidSellorLike(String value) {
+            addCriterion("wx_openid_sellor like", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorNotIn(List<Integer> values) {
-            addCriterion("user_id_sellor not in", values, "userIdSellor");
+        public Criteria andWxOpenidSellorNotLike(String value) {
+            addCriterion("wx_openid_sellor not like", value, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorBetween(Integer value1, Integer value2) {
-            addCriterion("user_id_sellor between", value1, value2, "userIdSellor");
+        public Criteria andWxOpenidSellorIn(List<String> values) {
+            addCriterion("wx_openid_sellor in", values, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdSellorNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id_sellor not between", value1, value2, "userIdSellor");
+        public Criteria andWxOpenidSellorNotIn(List<String> values) {
+            addCriterion("wx_openid_sellor not in", values, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierIsNull() {
-            addCriterion("user_id_buier is null");
+        public Criteria andWxOpenidSellorBetween(String value1, String value2) {
+            addCriterion("wx_openid_sellor between", value1, value2, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierIsNotNull() {
-            addCriterion("user_id_buier is not null");
+        public Criteria andWxOpenidSellorNotBetween(String value1, String value2) {
+            addCriterion("wx_openid_sellor not between", value1, value2, "wxOpenidSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierEqualTo(Integer value) {
-            addCriterion("user_id_buier =", value, "userIdBuier");
+        public Criteria andWxNickNameSellorIsNull() {
+            addCriterion("wx_nick_name_sellor is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierNotEqualTo(Integer value) {
-            addCriterion("user_id_buier <>", value, "userIdBuier");
+        public Criteria andWxNickNameSellorIsNotNull() {
+            addCriterion("wx_nick_name_sellor is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierGreaterThan(Integer value) {
-            addCriterion("user_id_buier >", value, "userIdBuier");
+        public Criteria andWxNickNameSellorEqualTo(String value) {
+            addCriterion("wx_nick_name_sellor =", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id_buier >=", value, "userIdBuier");
+        public Criteria andWxNickNameSellorNotEqualTo(String value) {
+            addCriterion("wx_nick_name_sellor <>", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierLessThan(Integer value) {
-            addCriterion("user_id_buier <", value, "userIdBuier");
+        public Criteria andWxNickNameSellorGreaterThan(String value) {
+            addCriterion("wx_nick_name_sellor >", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id_buier <=", value, "userIdBuier");
+        public Criteria andWxNickNameSellorGreaterThanOrEqualTo(String value) {
+            addCriterion("wx_nick_name_sellor >=", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierIn(List<Integer> values) {
-            addCriterion("user_id_buier in", values, "userIdBuier");
+        public Criteria andWxNickNameSellorLessThan(String value) {
+            addCriterion("wx_nick_name_sellor <", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierNotIn(List<Integer> values) {
-            addCriterion("user_id_buier not in", values, "userIdBuier");
+        public Criteria andWxNickNameSellorLessThanOrEqualTo(String value) {
+            addCriterion("wx_nick_name_sellor <=", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierBetween(Integer value1, Integer value2) {
-            addCriterion("user_id_buier between", value1, value2, "userIdBuier");
+        public Criteria andWxNickNameSellorLike(String value) {
+            addCriterion("wx_nick_name_sellor like", value, "wxNickNameSellor");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBuierNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id_buier not between", value1, value2, "userIdBuier");
+        public Criteria andWxNickNameSellorNotLike(String value) {
+            addCriterion("wx_nick_name_sellor not like", value, "wxNickNameSellor");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameSellorIn(List<String> values) {
+            addCriterion("wx_nick_name_sellor in", values, "wxNickNameSellor");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameSellorNotIn(List<String> values) {
+            addCriterion("wx_nick_name_sellor not in", values, "wxNickNameSellor");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameSellorBetween(String value1, String value2) {
+            addCriterion("wx_nick_name_sellor between", value1, value2, "wxNickNameSellor");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameSellorNotBetween(String value1, String value2) {
+            addCriterion("wx_nick_name_sellor not between", value1, value2, "wxNickNameSellor");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierIsNull() {
+            addCriterion("wx_openid_buier is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierIsNotNull() {
+            addCriterion("wx_openid_buier is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierEqualTo(String value) {
+            addCriterion("wx_openid_buier =", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierNotEqualTo(String value) {
+            addCriterion("wx_openid_buier <>", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierGreaterThan(String value) {
+            addCriterion("wx_openid_buier >", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierGreaterThanOrEqualTo(String value) {
+            addCriterion("wx_openid_buier >=", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierLessThan(String value) {
+            addCriterion("wx_openid_buier <", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierLessThanOrEqualTo(String value) {
+            addCriterion("wx_openid_buier <=", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierLike(String value) {
+            addCriterion("wx_openid_buier like", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierNotLike(String value) {
+            addCriterion("wx_openid_buier not like", value, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierIn(List<String> values) {
+            addCriterion("wx_openid_buier in", values, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierNotIn(List<String> values) {
+            addCriterion("wx_openid_buier not in", values, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierBetween(String value1, String value2) {
+            addCriterion("wx_openid_buier between", value1, value2, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxOpenidBuierNotBetween(String value1, String value2) {
+            addCriterion("wx_openid_buier not between", value1, value2, "wxOpenidBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierIsNull() {
+            addCriterion("wx_nick_name_buier is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierIsNotNull() {
+            addCriterion("wx_nick_name_buier is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierEqualTo(String value) {
+            addCriterion("wx_nick_name_buier =", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierNotEqualTo(String value) {
+            addCriterion("wx_nick_name_buier <>", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierGreaterThan(String value) {
+            addCriterion("wx_nick_name_buier >", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierGreaterThanOrEqualTo(String value) {
+            addCriterion("wx_nick_name_buier >=", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierLessThan(String value) {
+            addCriterion("wx_nick_name_buier <", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierLessThanOrEqualTo(String value) {
+            addCriterion("wx_nick_name_buier <=", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierLike(String value) {
+            addCriterion("wx_nick_name_buier like", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierNotLike(String value) {
+            addCriterion("wx_nick_name_buier not like", value, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierIn(List<String> values) {
+            addCriterion("wx_nick_name_buier in", values, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierNotIn(List<String> values) {
+            addCriterion("wx_nick_name_buier not in", values, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierBetween(String value1, String value2) {
+            addCriterion("wx_nick_name_buier between", value1, value2, "wxNickNameBuier");
+            return (Criteria) this;
+        }
+
+        public Criteria andWxNickNameBuierNotBetween(String value1, String value2) {
+            addCriterion("wx_nick_name_buier not between", value1, value2, "wxNickNameBuier");
             return (Criteria) this;
         }
 

@@ -15,12 +15,14 @@ import java.util.TreeMap;
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.bean.pay.request.WxPayBaseRequest;
 import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
 import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,12 +36,19 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.Gson;
+import com.khpp.weixin.config.CommonConstans;
 import com.khpp.weixin.config.WxMpConfig;
+import com.khpp.weixin.db.domain.ParkingOffer;
+import com.khpp.weixin.db.domain.ParkingOrder;
+import com.khpp.weixin.db.service.ParkingOfferService;
+import com.khpp.weixin.db.service.ParkingOrderService;
 import com.khpp.weixin.service.WeixinService;
 import com.khpp.weixin.utils.MD5Util;
 import com.khpp.weixin.utils.Sha1Util;
+import com.khpp.weixin.utils.WebUtil;
 import com.khpp.weixin.utils.XMLUtil;
 import com.khpp.weixin.web.model.ReturnModel;
 
@@ -57,6 +66,11 @@ public class PaymentController extends GenericController {
 	protected WeixinService wxMpService;
 	@Autowired
 	private WxMpConfig wxConfig;
+	@Autowired
+	private ParkingOfferService parkingOfferService;
+
+	@Autowired
+	private ParkingOrderService parkingOrderService;
 
 	/**
 	 * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
@@ -68,6 +82,7 @@ public class PaymentController extends GenericController {
 	@RequestMapping(value = "getPrepayIdResult")
 	public void getPrepayId(HttpServletResponse response,
 			HttpServletRequest request) throws WxErrorException {
+
 		WxPayUnifiedOrderRequest payInfo = new WxPayUnifiedOrderRequest();
 		payInfo.setOpenid(request.getParameter("openid"));
 		payInfo.setOutTradeNo(request.getParameter("out_trade_no"));
@@ -92,20 +107,32 @@ public class PaymentController extends GenericController {
 	 */
 	@RequestMapping(value = "getJSSDKPayInfo")
 	public void getJSSDKPayInfo(HttpServletResponse response,
-			HttpServletRequest request) {
+			HttpServletRequest request, HttpSession session,
+			@RequestParam(value = "selectOfferId", required = true) int offerId) {
+		WxMpUser wxMapuser = (WxMpUser) session
+				.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
+		ParkingOffer offer = parkingOfferService.selectById(offerId);
 		WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
-		prepayInfo.setOpenid("oQ7vLv8wzJK5dV-xOHRqFb8pwjxI");
-		prepayInfo.setOutTradeNo("6AED000AF86A084F9CB0264161E29DD3");
-		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee("0.1"));
+		prepayInfo.setOpenid(wxMapuser.getOpenId());
+		ParkingOrder parkingOrder = new ParkingOrder(offer.getOfferId(),
+				offer.getParkingId(), offer.getParkingName(),
+				offer.getWxOpenid(), offer.getWxNickName(),
+				wxMapuser.getOpenId(), wxMapuser.getNickname(),
+				CommonConstans.PARKING_ORDER_STATUS_BUY, offer.getPrice(),
+				CommonConstans.ORDER_SERVICE_FEE);
+		parkingOrderService.insert(parkingOrder);
+		prepayInfo.setOutTradeNo(parkingOrder.getOrderId());
+		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee(offer.getPrice()
+				.toString()));
 		prepayInfo.setBody("1");
-		prepayInfo.setTradeType("JSAPI");
-		// prepayInfo.setSpbillCreateIp(WebUtil.getIpAddr(request));
-		prepayInfo.setSpbillCreateIp("58.35.32.146");
-		// prepayInfo.setTimeStart(DateUtil.dateToTightString(new Date()));
-		// prepayInfo.setTimeExpire(DateUtil.dateToTightString(DateUtil.hourSwing(
-		// new Date(), 1)));
-		prepayInfo
-				.setNotifyURL("ljyzzb.tunnel.qydev.com/wxPay/getJSSDKCallbackData");
+		prepayInfo.setTradeType(CommonConstans.WX_TRADETYPE_JSAPI);
+		prepayInfo.setSpbillCreateIp(WebUtil.getIpAddr(request));
+		prepayInfo.setNotifyURL(request.getScheme() + "://"
+				+ request.getServerName() + ":" + request.getServerPort()
+				+ "/wxPay/getJSSDKCallbackData");
+		logger.info("NotifyURL = " + request.getScheme() + "://"
+				+ request.getServerName() + ":" + request.getServerPort()
+				+ "/wxPay/getJSSDKCallbackData");
 		prepayInfo.setDeviceInfo("WEB");
 
 		try {
@@ -135,19 +162,27 @@ public class PaymentController extends GenericController {
 				Map<String, String> kvm = XMLUtil.parseRequestXmlToMap(request);
 				if (this.wxMpService.getPayService().checkSign(kvm,
 						getWxMpConfigStorage().getPartnerKey())) {
+					String outTradeNo = kvm.get("out_trade_no");
+
 					if (kvm.get("result_code").equals("SUCCESS")) {
-						// TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
+						ParkingOrder order = parkingOrderService
+								.selectById(outTradeNo);
+						if (order != null) {
+							parkingOfferService.updateOfferStatus(
+									order.getOfferId(),
+									CommonConstans.OFFERSTATUS_SOLD);
+							// TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
+						}
 						logger.info("out_trade_no: " + kvm.get("out_trade_no")
 								+ " pay SUCCESS!");
 						response.getWriter()
 								.write("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[ok]]></return_msg></xml>");
-					} else {
-						this.logger.error("out_trade_no: "
-								+ kvm.get("out_trade_no")
-								+ " result_code is FAIL");
-						response.getWriter()
-								.write("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
+						return;
 					}
+					this.logger.error("out_trade_no: "
+							+ kvm.get("out_trade_no") + " result_code is FAIL");
+					response.getWriter()
+							.write("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[result_code is FAIL]]></return_msg></xml>");
 				} else {
 					response.getWriter()
 							.write("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[check signature FAIL]]></return_msg></xml>");
@@ -157,7 +192,7 @@ public class PaymentController extends GenericController {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("微信支付回调处理失败！订单号：{},原因:{}", "", e.getMessage());
 		}
 	}
 

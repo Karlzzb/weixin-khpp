@@ -2,12 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.khpp.weixin.db.dao.ParkingOrderMapper" >
   <resultMap id="BaseResultMap" type="com.khpp.weixin.db.domain.ParkingOrder" >
-    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <id column="order_id" property="orderId" jdbcType="CHAR" />
     <result column="offer_id" property="offerId" jdbcType="INTEGER" />
     <result column="parking_id" property="parkingId" jdbcType="INTEGER" />
     <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
-    <result column="user_id_sellor" property="userIdSellor" jdbcType="INTEGER" />
-    <result column="user_id_buier" property="userIdBuier" jdbcType="INTEGER" />
+    <result column="wx_openid_sellor" property="wxOpenidSellor" jdbcType="VARCHAR" />
+    <result column="wx_nick_name_sellor" property="wxNickNameSellor" jdbcType="VARCHAR" />
+    <result column="wx_openid_buier" property="wxOpenidBuier" jdbcType="VARCHAR" />
+    <result column="wx_nick_name_buier" property="wxNickNameBuier" jdbcType="VARCHAR" />
     <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
     <result column="wx_from_order_id" property="wxFromOrderId" jdbcType="VARCHAR" />
     <result column="wx_to_order_id" property="wxToOrderId" jdbcType="VARCHAR" />
@@ -77,9 +79,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    order_id, offer_id, parking_id, parking_name, user_id_sellor, user_id_buier, order_status, 
-    wx_from_order_id, wx_to_order_id, paid_amount, service_fee, latitude, longitude, 
-    create_time, dml_time
+    order_id, offer_id, parking_id, parking_name, wx_openid_sellor, wx_nick_name_sellor, 
+    wx_openid_buier, wx_nick_name_buier, order_status, wx_from_order_id, wx_to_order_id, 
+    paid_amount, service_fee, latitude, longitude, create_time, dml_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
     select
@@ -95,15 +97,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from parking_order
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=CHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from parking_order
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.khpp.weixin.db.domain.ParkingOrderExample" >
     delete from parking_order
@@ -113,17 +115,17 @@
   </delete>
   <insert id="insert" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
     insert into parking_order (order_id, offer_id, parking_id, 
-      parking_name, user_id_sellor, user_id_buier, 
-      order_status, wx_from_order_id, wx_to_order_id, 
-      paid_amount, service_fee, latitude, 
-      longitude, create_time, dml_time
-      )
-    values (#{orderId,jdbcType=INTEGER}, #{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, 
-      #{parkingName,jdbcType=VARCHAR}, #{userIdSellor,jdbcType=INTEGER}, #{userIdBuier,jdbcType=INTEGER}, 
-      #{orderStatus,jdbcType=INTEGER}, #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, 
-      #{paidAmount,jdbcType=DECIMAL}, #{serviceFee,jdbcType=DECIMAL}, #{latitude,jdbcType=REAL}, 
-      #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}
-      )
+      parking_name, wx_openid_sellor, wx_nick_name_sellor, 
+      wx_openid_buier, wx_nick_name_buier, order_status, 
+      wx_from_order_id, wx_to_order_id, paid_amount, 
+      service_fee, latitude, longitude, 
+      create_time, dml_time)
+    values (#{orderId,jdbcType=CHAR}, #{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, 
+      #{parkingName,jdbcType=VARCHAR}, #{wxOpenidSellor,jdbcType=VARCHAR}, #{wxNickNameSellor,jdbcType=VARCHAR}, 
+      #{wxOpenidBuier,jdbcType=VARCHAR}, #{wxNickNameBuier,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
+      #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, #{paidAmount,jdbcType=DECIMAL}, 
+      #{serviceFee,jdbcType=DECIMAL}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
     insert into parking_order
@@ -140,11 +142,17 @@
       <if test="parkingName != null" >
         parking_name,
       </if>
-      <if test="userIdSellor != null" >
-        user_id_sellor,
+      <if test="wxOpenidSellor != null" >
+        wx_openid_sellor,
       </if>
-      <if test="userIdBuier != null" >
-        user_id_buier,
+      <if test="wxNickNameSellor != null" >
+        wx_nick_name_sellor,
+      </if>
+      <if test="wxOpenidBuier != null" >
+        wx_openid_buier,
+      </if>
+      <if test="wxNickNameBuier != null" >
+        wx_nick_name_buier,
       </if>
       <if test="orderStatus != null" >
         order_status,
@@ -176,7 +184,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
-        #{orderId,jdbcType=INTEGER},
+        #{orderId,jdbcType=CHAR},
       </if>
       <if test="offerId != null" >
         #{offerId,jdbcType=INTEGER},
@@ -187,11 +195,17 @@
       <if test="parkingName != null" >
         #{parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="userIdSellor != null" >
-        #{userIdSellor,jdbcType=INTEGER},
+      <if test="wxOpenidSellor != null" >
+        #{wxOpenidSellor,jdbcType=VARCHAR},
       </if>
-      <if test="userIdBuier != null" >
-        #{userIdBuier,jdbcType=INTEGER},
+      <if test="wxNickNameSellor != null" >
+        #{wxNickNameSellor,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenidBuier != null" >
+        #{wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickNameBuier != null" >
+        #{wxNickNameBuier,jdbcType=VARCHAR},
       </if>
       <if test="orderStatus != null" >
         #{orderStatus,jdbcType=INTEGER},
@@ -232,7 +246,7 @@
     update parking_order
     <set >
       <if test="record.orderId != null" >
-        order_id = #{record.orderId,jdbcType=INTEGER},
+        order_id = #{record.orderId,jdbcType=CHAR},
       </if>
       <if test="record.offerId != null" >
         offer_id = #{record.offerId,jdbcType=INTEGER},
@@ -243,11 +257,17 @@
       <if test="record.parkingName != null" >
         parking_name = #{record.parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="record.userIdSellor != null" >
-        user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
+      <if test="record.wxOpenidSellor != null" >
+        wx_openid_sellor = #{record.wxOpenidSellor,jdbcType=VARCHAR},
       </if>
-      <if test="record.userIdBuier != null" >
-        user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
+      <if test="record.wxNickNameSellor != null" >
+        wx_nick_name_sellor = #{record.wxNickNameSellor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxOpenidBuier != null" >
+        wx_openid_buier = #{record.wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxNickNameBuier != null" >
+        wx_nick_name_buier = #{record.wxNickNameBuier,jdbcType=VARCHAR},
       </if>
       <if test="record.orderStatus != null" >
         order_status = #{record.orderStatus,jdbcType=INTEGER},
@@ -283,12 +303,14 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update parking_order
-    set order_id = #{record.orderId,jdbcType=INTEGER},
+    set order_id = #{record.orderId,jdbcType=CHAR},
       offer_id = #{record.offerId,jdbcType=INTEGER},
       parking_id = #{record.parkingId,jdbcType=INTEGER},
       parking_name = #{record.parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{record.userIdSellor,jdbcType=INTEGER},
-      user_id_buier = #{record.userIdBuier,jdbcType=INTEGER},
+      wx_openid_sellor = #{record.wxOpenidSellor,jdbcType=VARCHAR},
+      wx_nick_name_sellor = #{record.wxNickNameSellor,jdbcType=VARCHAR},
+      wx_openid_buier = #{record.wxOpenidBuier,jdbcType=VARCHAR},
+      wx_nick_name_buier = #{record.wxNickNameBuier,jdbcType=VARCHAR},
       order_status = #{record.orderStatus,jdbcType=INTEGER},
       wx_from_order_id = #{record.wxFromOrderId,jdbcType=VARCHAR},
       wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
@@ -314,11 +336,17 @@
       <if test="parkingName != null" >
         parking_name = #{parkingName,jdbcType=VARCHAR},
       </if>
-      <if test="userIdSellor != null" >
-        user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
+      <if test="wxOpenidSellor != null" >
+        wx_openid_sellor = #{wxOpenidSellor,jdbcType=VARCHAR},
       </if>
-      <if test="userIdBuier != null" >
-        user_id_buier = #{userIdBuier,jdbcType=INTEGER},
+      <if test="wxNickNameSellor != null" >
+        wx_nick_name_sellor = #{wxNickNameSellor,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenidBuier != null" >
+        wx_openid_buier = #{wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickNameBuier != null" >
+        wx_nick_name_buier = #{wxNickNameBuier,jdbcType=VARCHAR},
       </if>
       <if test="orderStatus != null" >
         order_status = #{orderStatus,jdbcType=INTEGER},
@@ -348,15 +376,17 @@
         dml_time = #{dmlTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.khpp.weixin.db.domain.ParkingOrder" >
     update parking_order
     set offer_id = #{offerId,jdbcType=INTEGER},
       parking_id = #{parkingId,jdbcType=INTEGER},
       parking_name = #{parkingName,jdbcType=VARCHAR},
-      user_id_sellor = #{userIdSellor,jdbcType=INTEGER},
-      user_id_buier = #{userIdBuier,jdbcType=INTEGER},
+      wx_openid_sellor = #{wxOpenidSellor,jdbcType=VARCHAR},
+      wx_nick_name_sellor = #{wxNickNameSellor,jdbcType=VARCHAR},
+      wx_openid_buier = #{wxOpenidBuier,jdbcType=VARCHAR},
+      wx_nick_name_buier = #{wxNickNameBuier,jdbcType=VARCHAR},
       order_status = #{orderStatus,jdbcType=INTEGER},
       wx_from_order_id = #{wxFromOrderId,jdbcType=VARCHAR},
       wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
@@ -366,6 +396,6 @@
       longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       dml_time = #{dmlTime,jdbcType=TIMESTAMP}
-    where order_id = #{orderId,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=CHAR}
   </update>
 </mapper>
