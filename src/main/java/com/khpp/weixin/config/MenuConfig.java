@@ -41,18 +41,16 @@ public class MenuConfig {
 		WxMenuButton button21 = new WxMenuButton();
 		button21.setType(WxConsts.BUTTON_VIEW);
 		button21.setName("卖停车券");
-		button21.setKey(WxMenuKeyConfig.PARKING_SELL);
 		button21.setUrl(wxMpService.oauth2buildAuthorizationUrl(
 				"http://ljyzzb.tunnel.qydev.com/wxredirect/parkingOffer",
-				"snsapi_userinfo", null));
+				"snsapi_base", null));
 
 		WxMenuButton button22 = new WxMenuButton();
 		button22.setType(WxConsts.BUTTON_VIEW);
 		button22.setName("买停车券");
-		button22.setKey(WxMenuKeyConfig.PARKING_BUY);
 		button22.setUrl(wxMpService.oauth2buildAuthorizationUrl(
 				"http://ljyzzb.tunnel.qydev.com/wxredirect/parkingBuyList",
-				"snsapi_userinfo", null));
+				"snsapi_base", null));
 
 		WxMenuButton button23 = new WxMenuButton();
 		button23.setType(WxConsts.BUTTON_VIEW);

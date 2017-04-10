@@ -50,6 +50,7 @@ import com.khpp.weixin.utils.Sha1Util;
 import com.khpp.weixin.utils.WebUtil;
 import com.khpp.weixin.utils.XMLUtil;
 import com.khpp.weixin.web.model.ReturnModel;
+import com.khpp.weixin.web.security.Token;
 
 /**
  * 微信支付Controller
@@ -105,6 +106,7 @@ public class PaymentController extends GenericController {
 	 * @param request
 	 */
 	@RequestMapping(value = "getJSSDKPayInfo")
+	@Token(remove = true)
 	public void getJSSDKPayInfo(
 			HttpServletResponse response,
 			HttpServletRequest request,

@@ -142,6 +142,7 @@ function onBridgeReady(data){
                         <div class="form-group">
                             <label id="pricedesc" for="recipient-name" class="control-label"></label>
                             <input type="text" hidden="true" id="selectOfferId" name="selectOfferId">
+                            <input type="text" hidden="true" id="token" name="token" value="${token}">
                         </div>
 	 			        <div class="form-group">
 				            <div class="col-xs-offset-3 col-xs-9">
@@ -163,7 +164,7 @@ function onBridgeReady(data){
 			</div>
 			</div>
 		</div>
-   </div>
+     </div>
 </div>
 </body>
 </html>                                		

@@ -29,7 +29,7 @@ public class TokenInterceptor extends HandlerInterceptorAdapter {
 				boolean needRemoveSession = annotation.remove();
 				if (needRemoveSession) {
 					if (isRepeatSubmit(request)) {
-						logger.warn("please don't repeat submit,url:"
+						logger.error("please don't repeat submit,url:"
 								+ request.getServletPath());
 						return false;
 					}

@@ -28,6 +28,7 @@ import com.khpp.weixin.db.service.ParkingOrderService;
 import com.khpp.weixin.service.WeixinService;
 import com.khpp.weixin.utils.DateUtil;
 import com.khpp.weixin.web.model.ParkingOfferModel;
+import com.khpp.weixin.web.security.Token;
 
 @Controller
 @RequestMapping("/wxredirect")
@@ -53,6 +54,7 @@ public class WxRedirectController extends GenericController {
 	 * @return
 	 */
 	@RequestMapping(value = "parkingBuyList", method = RequestMethod.GET)
+	@Token(save = true)
 	public String parkingList(
 			@RequestParam(value = "selectParking", required = false) String selectParkingIdStr,
 			Model model) {
@@ -84,6 +86,7 @@ public class WxRedirectController extends GenericController {
 	 * @throws WxErrorException
 	 */
 	@RequestMapping(value = "parkingOffer", method = RequestMethod.GET)
+	@Token(save = true)
 	public ModelAndView parkingOffer(Model model) throws WxErrorException {
 		List<DictParking> parkingList = dictParkingService.selectList();
 		model.addAttribute("parkingList", parkingList);

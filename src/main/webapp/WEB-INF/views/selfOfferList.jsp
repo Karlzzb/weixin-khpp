@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>停车券列表</title>
+<title>我发布的停车券</title>
 <link rel="stylesheet" href="/css/bootstrap.min.css" >
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 <script src="/js/jquery.min.js"></script>
@@ -28,7 +28,7 @@
 <div class="bs-body">
 	<ul class="nav nav-tabs">
         <li class="active"><a href="${pageContext.request.contextPath}/wxredirect/selfOfferList">我发布的停车券</a></li>
-        <li><a href="${pageContext.request.contextPath}/wxredirect/selfOrderList">我购买的券</a></li>
+        <li><a href="${pageContext.request.contextPath}/wxredirect/selfOrderList">我购买的停车券</a></li>
 	</ul>
     <table class="table table-hover">
         <thead>

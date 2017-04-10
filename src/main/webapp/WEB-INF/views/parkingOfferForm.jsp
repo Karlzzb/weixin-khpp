@@ -96,6 +96,7 @@ $(document).ready(function(){
 			    <div id="validEndTimeDiv" class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="dtp_input1">
                     <input id="validEndTime" name="validEndTime" class="form-control" size="16" type="text" value="${parkingOfferModel.validEndTimeFormat}" readonly>
 					<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                    <input type="text" hidden="true" id="token" name="token" value="${token}">
                 </div>
 			</div>
 		</div>		

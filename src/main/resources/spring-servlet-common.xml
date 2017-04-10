@@ -52,12 +52,12 @@
             <mvc:mapping path="/wxredirect/*"/>
             <bean id="wxredirectInterceptor" class="com.khpp.weixin.web.security.WxredirectInterceptor"/>
         </mvc:interceptor>       
-        <!-- 配置Token拦截器，防止用户重复提交数据
+        <!-- 配置Token拦截器，防止用户重复提交数据 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.khpp.weixin.web.security.TokenInterceptor"/>
         </mvc:interceptor>
-         -->
+        
     </mvc:interceptors>       
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">

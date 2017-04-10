@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
-import me.chanjar.weixin.mp.bean.WxMpMassOpenIdsMessage;
+import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,14 +51,29 @@ public class ParkingOrderServiceImpl extends
 		parkingOrderMapper.updateByPrimaryKeySelective(new ParkingOrder(
 				orderId, CommonConstans.PARKING_ORDER_STATUS_BUY));
 		try {
-			WxMpMassOpenIdsMessage wxMpMassOpenIdsMessage = new WxMpMassOpenIdsMessage();
-			wxMpMassOpenIdsMessage.addUser(order.getWxOpenidSellor());
-			wxMpMassOpenIdsMessage.addUser("");
-			wxMpMassOpenIdsMessage.setMsgType(WxConsts.MASS_MSG_TEXT);
-			wxMpMassOpenIdsMessage.setContent("你的停车券已经出售，请联系买家发货！");
-			weixinService.massOpenIdsMessageSend(wxMpMassOpenIdsMessage);
+			weixinService.getKefuService().sendKefuMessage(
+					WxMpKefuMessage.TEXT().toUser(order.getWxOpenidSellor())
+							.content("你的停车券已经出售，请联系买家发货！").build());
 		} catch (WxErrorException e) {
 			logger.error("通知卖家售出失败：", e);
+		}
+
+		return false;
+	}
+
+	@Override
+	public Boolean orderBuierConfirm(String orderId) {
+		ParkingOrder order = parkingOrderMapper.selectByPrimaryKey(orderId);
+		parkingOrderMapper.updateByPrimaryKeySelective(new ParkingOrder(
+				orderId, CommonConstans.PARKING_ORDER_STATUS_SUCCESS));
+		// TODO paid sellor
+
+		try {
+			weixinService.getKefuService().sendKefuMessage(
+					WxMpKefuMessage.TEXT().toUser(order.getWxOpenidSellor())
+							.content("你的停车券已经交易成功，钱款已转入你的账户，稍有延迟！").build());
+		} catch (WxErrorException e) {
+			logger.error("通知卖家收钱失败：", e);
 		}
 
 		return false;
@@ -72,4 +86,5 @@ public class ParkingOrderServiceImpl extends
 		example.setOrderByClause("dml_time desc");
 		return parkingOrderMapper.selectByExample(example);
 	}
+
 }

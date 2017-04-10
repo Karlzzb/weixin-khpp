@@ -12,4 +12,6 @@ public interface ParkingOrderService extends
 
 	List<ParkingOrder> getOrderListByBuier(String openId);
 
+	Boolean orderBuierConfirm(String orderId);
+
 }
