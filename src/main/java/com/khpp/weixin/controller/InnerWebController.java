@@ -50,7 +50,7 @@ public class InnerWebController extends GenericController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "pakringBuyList", method = RequestMethod.GET)
+	@RequestMapping(value = "parkingBuyList", method = RequestMethod.GET)
 	public String parkingList(
 			@RequestParam(value = "selectParking", required = false) String selectParkingIdStr,
 			Model model) {
@@ -72,7 +72,7 @@ public class InnerWebController extends GenericController {
 				.getOfferListByParkingId(selectParkingId);
 		model.addAttribute("offerList", parkingOfferList);
 
-		return "pakringBuyList";
+		return "parkingBuyList";
 	}
 
 	/**
@@ -92,13 +92,15 @@ public class InnerWebController extends GenericController {
 				.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
 		if (wxMapuser == null) {
 			logger.error("wxMapuser is not exists in Session, parkingOfferSubmit failed!");
+			return "wxinfoNotExitst";
 		}
+
 		DictParking dictParking = dictParkingService
 				.selectById(parkingOfferModel.getParkingId());
 
 		parkingOfferService.insert(parkingOfferModel.toDomain(dictParking,
 				wxMapuser));
-		return "redirect:/innerweb/pakringBuyList?selectParking="
+		return "redirect:/wxredirect/parkingBuyList?selectParking="
 				+ parkingOfferModel.getParkingId();
 	}
 }

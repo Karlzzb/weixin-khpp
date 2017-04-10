@@ -5,6 +5,25 @@ import java.util.Date;
 import com.khpp.weixin.utils.MD5Util;
 
 public class ParkingOrder {
+
+	/**
+	 * 
+	 * @param offerId
+	 * @param parkingId
+	 * @param parkingName
+	 * @param wxOpenidSellor
+	 * @param wxNickNameSellor
+	 * @param wxOpenidBuier
+	 * @param wxNickNameBuier
+	 *            <pre>
+	 * 订单状态
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_BUY}
+	 * </pre>
+	 * @param orderStatus
+	 * @param paidAmount
+	 * @param serviceFee
+	 */
 	public ParkingOrder(Integer offerId, Integer parkingId, String parkingName,
 			String wxOpenidSellor, String wxNickNameSellor,
 			String wxOpenidBuier, String wxNickNameBuier, Integer orderStatus,
@@ -21,11 +40,26 @@ public class ParkingOrder {
 		this.paidAmount = paidAmount;
 		this.serviceFee = serviceFee;
 		this.orderId = MD5Util.md5EncodeUTF8(wxOpenidBuier + offerId
-				+ wxOpenidSellor);
+				+ wxOpenidSellor + System.currentTimeMillis());
 	}
 
 	public ParkingOrder() {
 		super();
+	}
+
+	/**
+	 * 
+	 * @param orderId
+	 *            <pre>
+	 * 订单状态
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_BUY}
+	 * </pre>
+	 * @param orderStatus
+	 */
+	public ParkingOrder(String orderId, Integer orderStatus) {
+		this.orderId = orderId;
+		this.orderStatus = orderStatus;
 	}
 
 	private String orderId;

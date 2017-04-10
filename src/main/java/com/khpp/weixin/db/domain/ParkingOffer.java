@@ -5,6 +5,18 @@ import java.util.Date;
 import com.khpp.weixin.utils.DateUtil;
 
 public class ParkingOffer {
+
+	/**
+	 * <pre>
+	 * 停车券状态
+	 * {@link com.khpp.weixin.config.CommonConstans#OFFERSTATUS_PUBLIC}
+	 * {@link com.khpp.weixin.config.CommonConstans#OFFERSTATUS_SOLD}
+	 * {@link com.khpp.weixin.config.CommonConstans#OFFERSTATUS_UNAVILABLE}
+	 * {@link com.khpp.weixin.config.CommonConstans#OFFERVALIDHOURS}
+	 * </pre>
+	 * 
+	 * @param offerStatus
+	 */
 	public ParkingOffer(Integer offerId, Integer offerStatus) {
 		super();
 		this.offerId = offerId;

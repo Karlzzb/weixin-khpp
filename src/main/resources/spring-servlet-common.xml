@@ -47,10 +47,17 @@
     
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+        <!-- 配置微信跳转信息拦截器，保证微信到本服务跳转中的用户信息传递 -->
         <mvc:interceptor>
-            <bean id="wxredirectInterceptor" class="com.khpp.weixin.web.security.WxredirectInterceptor"/>
             <mvc:mapping path="/wxredirect/*"/>
+            <bean id="wxredirectInterceptor" class="com.khpp.weixin.web.security.WxredirectInterceptor"/>
         </mvc:interceptor>       
+        <!-- 配置Token拦截器，防止用户重复提交数据
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.khpp.weixin.web.security.TokenInterceptor"/>
+        </mvc:interceptor>
+         -->
     </mvc:interceptors>       
 
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">

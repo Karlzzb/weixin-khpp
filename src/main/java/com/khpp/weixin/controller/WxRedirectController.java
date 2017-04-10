@@ -4,21 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.khpp.weixin.config.CommonConstans;
 import com.khpp.weixin.db.domain.DictParking;
 import com.khpp.weixin.db.domain.ParkingOffer;
-import com.khpp.weixin.db.domain.User;
+import com.khpp.weixin.db.domain.ParkingOrder;
 import com.khpp.weixin.db.service.DictParkingService;
 import com.khpp.weixin.db.service.ParkingOfferService;
-import com.khpp.weixin.db.service.UserService;
+import com.khpp.weixin.db.service.ParkingOrderService;
 import com.khpp.weixin.service.WeixinService;
 import com.khpp.weixin.utils.DateUtil;
 import com.khpp.weixin.web.model.ParkingOfferModel;
@@ -45,47 +39,13 @@ public class WxRedirectController extends GenericController {
 	private WeixinService weixinService;
 
 	@Resource
-	private UserService userService;
-
-	@Resource
 	private DictParkingService dictParkingService;
 
 	@Resource
 	private ParkingOfferService parkingOfferService;
 
-	/**
-	 * 用户登录
-	 * 
-	 * @param user
-	 * @param result
-	 * @return
-	 */
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@Valid User user, BindingResult result, Model model,
-			HttpServletRequest request) {
-		try {
-			Subject subject = SecurityUtils.getSubject();
-			// 已登陆则 跳到首页
-			if (subject.isAuthenticated()) {
-				return "redirect:/";
-			}
-			if (result.hasErrors()) {
-				model.addAttribute("error", "参数错误！");
-				return "login";
-			}
-			// 身份验证
-			subject.login(new UsernamePasswordToken(user.getUsername(), user
-					.getPassword()));
-			// 验证成功在Session中保存用户信息
-			final User authUserInfo = userService.selectOne();
-			request.getSession().setAttribute("userInfo", authUserInfo);
-		} catch (AuthenticationException e) {
-			// 身份验证失败
-			model.addAttribute("error", "用户名或密码错误 ！");
-			return "login";
-		}
-		return "redirect:/";
-	}
+	@Resource
+	private ParkingOrderService parkingOrderService;
 
 	/**
 	 * 
@@ -111,10 +71,10 @@ public class WxRedirectController extends GenericController {
 		}
 		model.addAttribute("selectParking", selectParking);
 		List<ParkingOffer> parkingOfferList = parkingOfferService
-				.getOfferListByParkingId(selectParkingId);
+				.getAvailableOfferListByParkingId(selectParkingId);
 		model.addAttribute("offerList", parkingOfferList);
 
-		return "pakringBuyList";
+		return "parkingBuyList";
 	}
 
 	/**
@@ -124,8 +84,7 @@ public class WxRedirectController extends GenericController {
 	 * @throws WxErrorException
 	 */
 	@RequestMapping(value = "parkingOffer", method = RequestMethod.GET)
-	public ModelAndView parkingOffer(Model model, HttpSession session)
-			throws WxErrorException {
+	public ModelAndView parkingOffer(Model model) throws WxErrorException {
 		List<DictParking> parkingList = dictParkingService.selectList();
 		model.addAttribute("parkingList", parkingList);
 		ModelAndView modelAndView = new ModelAndView("parkingOfferForm");
@@ -134,5 +93,45 @@ public class WxRedirectController extends GenericController {
 		modelAndView.addObject("parkingOfferModel", offerModel);
 		modelAndView.addObject("parkingList", parkingList);
 		return modelAndView;
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "selfOfferList", method = RequestMethod.GET)
+	public String selfOfferList(Model model, HttpSession session) {
+		WxMpUser wxMapuser = (WxMpUser) session
+				.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
+		if (wxMapuser == null) {
+			logger.error("wxMapuser is not exists in Session, parkingOfferSubmit failed!");
+			return "wxinfoNotExitst";
+		}
+		List<ParkingOffer> parkingOfferList = parkingOfferService
+				.getOfferListByOwner(wxMapuser.getOpenId());
+		model.addAttribute("offerList", parkingOfferList);
+
+		return "selfOfferList";
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "selfOrderList", method = RequestMethod.GET)
+	public String selfOrderList(Model model, HttpSession session) {
+		WxMpUser wxMapuser = (WxMpUser) session
+				.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
+		if (wxMapuser == null) {
+			logger.error("wxMapuser is not exists in Session, parkingOfferSubmit failed!");
+			return "wxinfoNotExitst";
+		}
+		List<ParkingOrder> parkingOrderList = parkingOrderService
+				.getOrderListByBuier(wxMapuser.getOpenId());
+		model.addAttribute("orderList", parkingOrderList);
+
+		return "selfOrderList";
 	}
 }

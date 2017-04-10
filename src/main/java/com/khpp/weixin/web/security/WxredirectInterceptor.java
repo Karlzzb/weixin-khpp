@@ -24,12 +24,16 @@ public class WxredirectInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
+		Object wxMapuserObj = request.getSession().getAttribute(
+				CommonConstans.SESSION_WXUSER_KEY);
+		if (wxMapuserObj != null && wxMapuserObj instanceof WxMpUser) {
+			return Boolean.TRUE;
+		}
 		String code = request.getParameter("code");
 		if (code == null || code.isEmpty()) {
 			logger.error("Redirect code is not exists, auth failed!");
 			return Boolean.FALSE;
 		}
-
 		WxMpUser wxMapuser = weixinService.oauth2getUserInfo(
 				weixinService.oauth2getAccessToken(code), null);
 		if (wxMapuser == null) {

@@ -22,7 +22,7 @@ CREATE TABLE `parking_order` (
   `wx_nick_name_sellor` varchar(64) NOT NULL COMMENT '卖家微信匿名',
   `wx_openid_buier` varchar(64) NOT NULL COMMENT '买家微信ID',
   `wx_nick_name_buier` varchar(64) NOT NULL COMMENT '买家微信匿名',
-  `order_status` int(11) NOT NULL DEFAULT '1' COMMENT '订单户状态：1-买家已支付；2-卖家发货；3-买家确认（交易成功）；4-交易失败',
+  `order_status` int(11) NOT NULL DEFAULT '1' COMMENT '订单户状态：0-订单已提交；1-买家已支付；2-卖家发货；3-买家确认（交易成功）；4-交易失败',
   `wx_from_order_id` varchar(64) NOT NULL COMMENT '微信订单ID,收取订单',
   `wx_to_order_id` varchar(64) NOT NULL COMMENT '微信订单ID,支付订单',
   `paid_amount` decimal(8,2) NOT NULL COMMENT '支付价格',

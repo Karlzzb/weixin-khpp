@@ -19,7 +19,6 @@ import javax.servlet.http.HttpSession;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.bean.pay.request.WxPayBaseRequest;
 import me.chanjar.weixin.mp.bean.pay.request.WxPayUnifiedOrderRequest;
 import me.chanjar.weixin.mp.bean.pay.result.WxPayUnifiedOrderResult;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
@@ -106,24 +105,29 @@ public class PaymentController extends GenericController {
 	 * @param request
 	 */
 	@RequestMapping(value = "getJSSDKPayInfo")
-	public void getJSSDKPayInfo(HttpServletResponse response,
-			HttpServletRequest request, HttpSession session,
-			@RequestParam(value = "selectOfferId", required = true) int offerId) {
+	public void getJSSDKPayInfo(
+			HttpServletResponse response,
+			HttpServletRequest request,
+			HttpSession session,
+			@RequestParam(value = "selectOfferId", required = true) String offerId) {
 		WxMpUser wxMapuser = (WxMpUser) session
 				.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
-		ParkingOffer offer = parkingOfferService.selectById(offerId);
+		// 生成订单数据对象
+		ParkingOffer offer = parkingOfferService.selectById(Integer
+				.valueOf(offerId));
 		WxPayUnifiedOrderRequest prepayInfo = new WxPayUnifiedOrderRequest();
 		prepayInfo.setOpenid(wxMapuser.getOpenId());
 		ParkingOrder parkingOrder = new ParkingOrder(offer.getOfferId(),
 				offer.getParkingId(), offer.getParkingName(),
 				offer.getWxOpenid(), offer.getWxNickName(),
 				wxMapuser.getOpenId(), wxMapuser.getNickname(),
-				CommonConstans.PARKING_ORDER_STATUS_BUY, offer.getPrice(),
-				CommonConstans.ORDER_SERVICE_FEE);
-		parkingOrderService.insert(parkingOrder);
+				CommonConstans.PARKING_ORDER_STATUS_SUBMIT,
+				offer.getPrice() * 0.01, CommonConstans.ORDER_SERVICE_FEE);
+		// 微信接口参数组装
 		prepayInfo.setOutTradeNo(parkingOrder.getOrderId());
-		prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee(offer.getPrice()
-				.toString()));
+		// prepayInfo.setTotalFee(WxPayBaseRequest.yuanToFee(String.valueOf((offer
+		// .getPrice() * 0.01))));
+		prepayInfo.setTotalFee(1);
 		prepayInfo.setBody("1");
 		prepayInfo.setTradeType(CommonConstans.WX_TRADETYPE_JSAPI);
 		prepayInfo.setSpbillCreateIp(WebUtil.getIpAddr(request));
@@ -134,18 +138,24 @@ public class PaymentController extends GenericController {
 				+ request.getServerName() + ":" + request.getServerPort()
 				+ "/wxPay/getJSSDKCallbackData");
 		prepayInfo.setDeviceInfo("WEB");
-
+		// 页面返回处理
+		ReturnModel returnModel = new ReturnModel();
 		try {
 			Map<String, String> payInfo = wxMpService.getPayService()
 					.getPayInfo(prepayInfo);
 			logger.info("paidedResult=" + new Gson().toJson(prepayInfo));
-			ReturnModel returnModel = new ReturnModel();
 			returnModel.setResult(true);
 			returnModel.setDatum(payInfo);
-			renderString(response, returnModel);
+			// 保持订单信息
+			parkingOrder.setWxFromOrderId(payInfo
+					.get(CommonConstans.WX_PREPAY_ID_KEY));
+			parkingOrderService.insert(parkingOrder);
 		} catch (WxErrorException e) {
 			logger.error("微信支付失败！订单号：{},原因:{}", "", e.getMessage());
+			returnModel.setResult(false);
+			returnModel.setReason("支付失败，请重试！");
 		}
+		renderString(response, returnModel);
 	}
 
 	/**
@@ -164,15 +174,15 @@ public class PaymentController extends GenericController {
 						getWxMpConfigStorage().getPartnerKey())) {
 					String outTradeNo = kvm.get("out_trade_no");
 
+					for (String key : kvm.keySet()) {
+						logger.info("kvm: Key = " + key + "|Value="
+								+ kvm.get(key));
+					}
+
 					if (kvm.get("result_code").equals("SUCCESS")) {
-						ParkingOrder order = parkingOrderService
-								.selectById(outTradeNo);
-						if (order != null) {
-							parkingOfferService.updateOfferStatus(
-									order.getOfferId(),
-									CommonConstans.OFFERSTATUS_SOLD);
-							// TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
-						}
+						// TODO(user) 微信服务器通知此回调接口支付成功后，通知给业务系统做处理
+						Boolean result = parkingOrderService
+								.orderPayConfirm(outTradeNo);
 						logger.info("out_trade_no: " + kvm.get("out_trade_no")
 								+ " pay SUCCESS!");
 						response.getWriter()

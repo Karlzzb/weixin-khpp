@@ -58,7 +58,8 @@ public class MenuConfig {
 		button23.setType(WxConsts.BUTTON_VIEW);
 		button23.setName("我的订单");
 		button23.setUrl(wxMpService.oauth2buildAuthorizationUrl(
-				"http://ljyzzb.tunnel.qydev.com/index", "snsapi_base", null));
+				"http://ljyzzb.tunnel.qydev.com/wxredirect/selfOrderList",
+				"snsapi_base", null));
 
 		WxMenuButton button24 = new WxMenuButton();
 		button24.setType(WxConsts.BUTTON_VIEW);

@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.khpp.weixin.config.CommonConstans;
 import com.khpp.weixin.core.GenericDao;
 import com.khpp.weixin.core.GenericServiceImpl;
 import com.khpp.weixin.db.dao.ParkingOfferMapper;
@@ -43,5 +44,34 @@ public class ParkingOfferServiceImpl extends
 	public Integer updateOfferStatus(int offerId, int offerStatus) {
 		return parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(
 				offerId, offerStatus));
+	}
+
+	@Override
+	public ParkingOffer selectById(Integer offerId) {
+
+		return parkingOfferMapper.selectByPrimaryKey(offerId);
+	}
+
+	@Override
+	public List<ParkingOffer> getAvailableOfferListByParkingId(Integer parkingId) {
+		return getAvailableOfferListByParkingId(parkingId,
+				CommonConstans.OFFERSTATUS_PUBLIC);
+	}
+
+	private List<ParkingOffer> getAvailableOfferListByParkingId(
+			Integer parkingId, Integer offerStatus) {
+		ParkingOfferExample example = new ParkingOfferExample();
+		example.createCriteria().andParkingIdEqualTo(parkingId);
+		example.createCriteria().andOfferStatusEqualTo(offerStatus);
+		example.setOrderByClause("dml_time desc");
+		return parkingOfferMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<ParkingOffer> getOfferListByOwner(String openId) {
+		ParkingOfferExample example = new ParkingOfferExample();
+		example.createCriteria().andWxOpenidEqualTo(openId);
+		example.setOrderByClause("dml_time desc");
+		return parkingOfferMapper.selectByExample(example);
 	}
 }

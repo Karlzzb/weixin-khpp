@@ -14,4 +14,8 @@ public interface ParkingOfferService extends
 
 	Integer updateOfferStatus(int offerId, int offerStatus);
 
+	List<ParkingOffer> getAvailableOfferListByParkingId(Integer selectParkingId);
+
+	List<ParkingOffer> getOfferListByOwner(String openId);
+
 }
