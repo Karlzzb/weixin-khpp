@@ -6,6 +6,9 @@ import javax.annotation.Resource;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
+import me.chanjar.weixin.mp.bean.pay.request.WxPayBaseRequest;
+import me.chanjar.weixin.mp.bean.pay.request.WxPaySendRedpackRequest;
+import me.chanjar.weixin.mp.bean.pay.result.WxPaySendRedpackResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import com.khpp.weixin.db.domain.ParkingOrder;
 import com.khpp.weixin.db.domain.ParkingOrderExample;
 import com.khpp.weixin.db.service.ParkingOrderService;
 import com.khpp.weixin.service.WeixinService;
+import com.khpp.weixin.utils.MathUtil;
 
 @Service
 public class ParkingOrderServiceImpl extends
@@ -64,19 +68,37 @@ public class ParkingOrderServiceImpl extends
 	@Override
 	public Boolean orderBuierConfirm(String orderId) {
 		ParkingOrder order = parkingOrderMapper.selectByPrimaryKey(orderId);
+		order.genratewxToOrderId();
 		parkingOrderMapper.updateByPrimaryKeySelective(new ParkingOrder(
-				orderId, CommonConstans.PARKING_ORDER_STATUS_SUCCESS));
-		// TODO paid sellor
-
+				orderId, CommonConstans.PARKING_ORDER_STATUS_SUCCESS, order
+						.getWxToOrderId()));
 		try {
+			WxPaySendRedpackResult wxPaySendRedpackResult = weixinService
+					.getPayService().sendRedpack(assembleRedRequest(order));
+			logger.info("向个人支付红包的结果：" + wxPaySendRedpackResult.getXmlString());
 			weixinService.getKefuService().sendKefuMessage(
 					WxMpKefuMessage.TEXT().toUser(order.getWxOpenidSellor())
 							.content("你的停车券已经交易成功，钱款已转入你的账户，稍有延迟！").build());
 		} catch (WxErrorException e) {
 			logger.error("通知卖家收钱失败：", e);
 		}
-
 		return false;
+	}
+
+	private WxPaySendRedpackRequest assembleRedRequest(ParkingOrder order) {
+		WxPaySendRedpackRequest request = new WxPaySendRedpackRequest();
+		request.setNonceStr("");
+		request.setReOpenid(order.getWxOpenidSellor());
+		request.setTotalAmount(WxPayBaseRequest.yuanToFee(String
+				.valueOf(MathUtil.sub(order.getPaidAmount(),
+						order.getServiceFee()))));
+		request.setSendName("停车券平台");
+		request.setTotalNum(1);
+		request.setWishing("感谢你的使用，祝你生活愉快");
+		request.setClientIp("192.168.1.1");
+		request.setActName("停车券售出！");
+		request.setMchBillNo(order.getWxToOrderId());
+		return request;
 	}
 
 	@Override

@@ -62,6 +62,22 @@ public class ParkingOrder {
 		this.orderStatus = orderStatus;
 	}
 
+	/**
+	 * 
+	 * @param orderId
+	 *            <pre>
+	 * 订单状态
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
+	 * {@link com.khpp.weixin.config.CommonConstans#PARKING_ORDER_STATUS_BUY}
+	 * </pre>
+	 * @param orderStatus
+	 */
+	public ParkingOrder(String orderId, Integer orderStatus, String wxToOrderId) {
+		this.orderId = orderId;
+		this.orderStatus = orderStatus;
+		this.wxToOrderId = wxToOrderId;
+	}
+
 	private String orderId;
 
 	private Integer offerId;
@@ -235,5 +251,10 @@ public class ParkingOrder {
 
 	public void setDmlTime(Date dmlTime) {
 		this.dmlTime = dmlTime;
+	}
+
+	public String genratewxToOrderId() {
+		this.wxToOrderId = String.valueOf(System.currentTimeMillis());
+		return this.wxToOrderId;
 	}
 }

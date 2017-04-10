@@ -1,6 +1,11 @@
 package com.khpp.weixin.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.KeyStore;
+
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
 
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -11,6 +16,7 @@ import me.chanjar.weixin.mp.bean.kefu.result.WxMpKfOnlineList;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +81,7 @@ public class WeixinService extends WxMpServiceImpl {
 	private WxMpMessageRouter router;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		final WxMpInMemoryConfigStorage config = new WxMpInMemoryConfigStorage();
 		config.setAppId(this.wxConfig.getAppid());// 设置微信公众号的appid
 		config.setSecret(this.wxConfig.getAppsecret());// 设置微信公众号的app corpSecret
@@ -83,8 +89,18 @@ public class WeixinService extends WxMpServiceImpl {
 		config.setAesKey(this.wxConfig.getAesKey());// 设置消息加解密密钥
 		config.setPartnerId(this.wxConfig.getParentId());
 		config.setPartnerKey(this.wxConfig.getParentKey());
+		// 证书设置
+		KeyStore keyStore = KeyStore.getInstance("PKCS12");
+		try (FileInputStream instream = new FileInputStream(new File(
+				this.wxConfig.getCertificatePath()))) {
+			keyStore.load(instream, this.wxConfig.getParentId().toCharArray());
+		}
+		SSLContext sslcontext = SSLContexts
+				.custom()
+				.loadKeyMaterial(keyStore,
+						this.wxConfig.getParentId().toCharArray()).build();
+		config.setSslContext(sslcontext);
 		super.setWxMpConfigStorage(config);
-
 		this.refreshRouter();
 
 		try {
