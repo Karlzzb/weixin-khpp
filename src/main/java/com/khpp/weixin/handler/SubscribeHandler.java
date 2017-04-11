@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.khpp.weixin.builder.TextBuilder;
-import com.khpp.weixin.service.WeixinService;
+import com.khpp.weixin.service.WxGenricService;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -28,7 +28,7 @@ public class SubscribeHandler extends AbstractHandler {
 
     this.logger.info("新关注用户 OPENID: " + wxMessage.getFromUser());
 
-    WeixinService weixinService = (WeixinService) wxMpService;
+    WxGenricService weixinService = (WxGenricService) wxMpService;
 
     // 获取微信用户基本信息
     WxMpUser userWxInfo = weixinService.getUserService().userInfo(wxMessage.getFromUser(), null);

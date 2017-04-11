@@ -28,7 +28,7 @@ $(document).ready(function(){
         success: onBridgeReady
     };	
     $('#prepayform').ajaxForm(options);
-});
+
 
 //pre-submit callback 
 function showRequest(formData, jqForm, options) { 
@@ -47,6 +47,10 @@ function showRequest(formData, jqForm, options) {
 }
 
 function onBridgeReady(data){
+   if(!data.result) {
+	   alert(data.reason);
+	   return false;
+   }
    WeixinJSBridge.invoke(
        'getBrandWCPayRequest', {
            "appId":data.datum.appId,
@@ -57,16 +61,32 @@ function onBridgeReady(data){
            "paySign":data.datum.paySign
        },
        function(res){
-    	   //alert(JSON.stringify(res));
-           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-        	   window.location.href="${pageContext.request.contextPath}/wxredirect/selfOrderList";
-           } else {
-        	    $('#offerModal').modal('hide');
-        	    $('#processBarModal').modal('hide');
-           }
+    	    $.ajax({
+    	        type: "POST",
+    	        url: "${pageContext.request.contextPath}/wxPayParking/prepayResult?selectOfferId="+$("#selectOfferId").val(),
+    	        contentType: "application/json; charset=utf-8",
+    	        data: JSON.stringify(res),
+    	        dataType: "json",
+    	        success: function (data) {
+   	        	   if(data.result) {
+       	               window.location.href="${pageContext.request.contextPath}/wxredirect/selfOrderList";
+   	        	   }else {
+   	        		if(data.reason) {
+   	        			alert(data.reason);
+   	        		}
+   	        	   }
+    	        },
+    	        error: function (message) {
+    	        },
+    	        complete:function (XMLHttpRequest, textStatus) {
+            	    $('#offerModal').modal('hide');
+            	    $('#processBarModal').modal('hide');
+    	        }
+    	    });
        }
    ); 
 }
+});
 </script>
 <style type="text/css">
     .bs-example{
@@ -138,7 +158,7 @@ function onBridgeReady(data){
                     <h4 class="modal-title">购买车停车券</h4>
                 </div>
                 <div class="modal-body">
-                    <form:form id="prepayform" class="form-horizontal" action="/wxPay/getJSSDKPayInfo" method="post">
+                    <form:form id="prepayform" class="form-horizontal" action="/wxPayParking/getJSSDKPayInfo" method="post">
                         <div class="form-group">
                             <label id="pricedesc" for="recipient-name" class="control-label"></label>
                             <input type="text" hidden="true" id="selectOfferId" name="selectOfferId">

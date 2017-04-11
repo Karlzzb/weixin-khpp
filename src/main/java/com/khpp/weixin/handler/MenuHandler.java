@@ -12,14 +12,14 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.khpp.common.constants.WxMenuKeyConfig;
+import com.khpp.db.domain.DictParking;
+import com.khpp.db.service.DictParkingService;
+import com.khpp.db.service.UserService;
 import com.khpp.weixin.builder.AbstractBuilder;
 import com.khpp.weixin.builder.TextBuilder;
-import com.khpp.weixin.config.WxMenuKeyConfig;
-import com.khpp.weixin.db.domain.DictParking;
-import com.khpp.weixin.db.service.DictParkingService;
-import com.khpp.weixin.db.service.UserService;
 import com.khpp.weixin.dto.WxMenuKey;
-import com.khpp.weixin.service.WeixinService;
+import com.khpp.weixin.service.WxGenricService;
 
 /**
  * 
@@ -39,7 +39,7 @@ public class MenuHandler extends AbstractHandler {
 	public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
 			Map<String, Object> context, WxMpService wxMpService,
 			WxSessionManager sessionManager) {
-		WeixinService weixinService = (WeixinService) wxMpService;
+		WxGenricService weixinService = (WxGenricService) wxMpService;
 
 		String key = wxMessage.getEventKey();
 		WxMenuKey menuKey = new WxMenuKey(key, key);

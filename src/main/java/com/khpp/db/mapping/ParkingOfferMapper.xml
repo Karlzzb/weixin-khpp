@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.khpp.db.dao.ParkingOfferMapper" >
+  <resultMap id="BaseResultMap" type="com.khpp.db.domain.ParkingOffer" >
+    <id column="offer_id" property="offerId" jdbcType="INTEGER" />
+    <result column="parking_id" property="parkingId" jdbcType="INTEGER" />
+    <result column="parking_name" property="parkingName" jdbcType="VARCHAR" />
+    <result column="wx_openid" property="wxOpenid" jdbcType="VARCHAR" />
+    <result column="wx_nick_name" property="wxNickName" jdbcType="VARCHAR" />
+    <result column="offer_status" property="offerStatus" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="valid_start_time" property="validStartTime" jdbcType="TIMESTAMP" />
+    <result column="valid_end_time" property="validEndTime" jdbcType="TIMESTAMP" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    offer_id, parking_id, parking_name, wx_openid, wx_nick_name, offer_status, price, 
+    valid_start_time, valid_end_time, detail, latitude, longitude, create_time, dml_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.db.domain.ParkingOfferExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from parking_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from parking_offer
+    where offer_id = #{offerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parking_offer
+    where offer_id = #{offerId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.khpp.db.domain.ParkingOfferExample" >
+    delete from parking_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.khpp.db.domain.ParkingOffer" >
+    insert into parking_offer (offer_id, parking_id, parking_name, 
+      wx_openid, wx_nick_name, offer_status, 
+      price, valid_start_time, valid_end_time, 
+      detail, latitude, longitude, 
+      create_time, dml_time)
+    values (#{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, #{parkingName,jdbcType=VARCHAR}, 
+      #{wxOpenid,jdbcType=VARCHAR}, #{wxNickName,jdbcType=VARCHAR}, #{offerStatus,jdbcType=INTEGER}, 
+      #{price,jdbcType=DECIMAL}, #{validStartTime,jdbcType=TIMESTAMP}, #{validEndTime,jdbcType=TIMESTAMP}, 
+      #{detail,jdbcType=VARCHAR}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.khpp.db.domain.ParkingOffer" >
+    insert into parking_offer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="offerId != null" >
+        offer_id,
+      </if>
+      <if test="parkingId != null" >
+        parking_id,
+      </if>
+      <if test="parkingName != null" >
+        parking_name,
+      </if>
+      <if test="wxOpenid != null" >
+        wx_openid,
+      </if>
+      <if test="wxNickName != null" >
+        wx_nick_name,
+      </if>
+      <if test="offerStatus != null" >
+        offer_status,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time,
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dmlTime != null" >
+        dml_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="offerId != null" >
+        #{offerId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingId != null" >
+        #{parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingName != null" >
+        #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenid != null" >
+        #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null" >
+        #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="offerStatus != null" >
+        #{offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="validStartTime != null" >
+        #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        #{validEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.khpp.db.domain.ParkingOfferExample" resultType="java.lang.Integer" >
+    select count(*) from parking_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update parking_offer
+    <set >
+      <if test="record.offerId != null" >
+        offer_id = #{record.offerId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkingId != null" >
+        parking_id = #{record.parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="record.parkingName != null" >
+        parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxOpenid != null" >
+        wx_openid = #{record.wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxNickName != null" >
+        wx_nick_name = #{record.wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.offerStatus != null" >
+        offer_status = #{record.offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.validStartTime != null" >
+        valid_start_time = #{record.validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.validEndTime != null" >
+        valid_end_time = #{record.validEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.detail != null" >
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dmlTime != null" >
+        dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update parking_offer
+    set offer_id = #{record.offerId,jdbcType=INTEGER},
+      parking_id = #{record.parkingId,jdbcType=INTEGER},
+      parking_name = #{record.parkingName,jdbcType=VARCHAR},
+      wx_openid = #{record.wxOpenid,jdbcType=VARCHAR},
+      wx_nick_name = #{record.wxNickName,jdbcType=VARCHAR},
+      offer_status = #{record.offerStatus,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      valid_start_time = #{record.validStartTime,jdbcType=TIMESTAMP},
+      valid_end_time = #{record.validEndTime,jdbcType=TIMESTAMP},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=REAL},
+      longitude = #{record.longitude,jdbcType=REAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.khpp.db.domain.ParkingOffer" >
+    update parking_offer
+    <set >
+      <if test="parkingId != null" >
+        parking_id = #{parkingId,jdbcType=INTEGER},
+      </if>
+      <if test="parkingName != null" >
+        parking_name = #{parkingName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenid != null" >
+        wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null" >
+        wx_nick_name = #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="offerStatus != null" >
+        offer_status = #{offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="validStartTime != null" >
+        valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="validEndTime != null" >
+        valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where offer_id = #{offerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.khpp.db.domain.ParkingOffer" >
+    update parking_offer
+    set parking_id = #{parkingId,jdbcType=INTEGER},
+      parking_name = #{parkingName,jdbcType=VARCHAR},
+      wx_openid = #{wxOpenid,jdbcType=VARCHAR},
+      wx_nick_name = #{wxNickName,jdbcType=VARCHAR},
+      offer_status = #{offerStatus,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      valid_start_time = #{validStartTime,jdbcType=TIMESTAMP},
+      valid_end_time = #{validEndTime,jdbcType=TIMESTAMP},
+      detail = #{detail,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=REAL},
+      longitude = #{longitude,jdbcType=REAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP}
+    where offer_id = #{offerId,jdbcType=INTEGER}
+  </update>
+</mapper>

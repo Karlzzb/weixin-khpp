@@ -4,8 +4,8 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.khpp.weixin.db.domain.User;
-import com.khpp.weixin.db.service.UserService;
+import com.khpp.db.domain.User;
+import com.khpp.db.service.UserService;
 
 public class UserServiceTest extends TestSupport {
 

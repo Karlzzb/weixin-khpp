@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.khpp.weixin.builder.TextBuilder;
-import com.khpp.weixin.service.WeixinService;
+import com.khpp.weixin.service.WxGenricService;
 
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.session.WxSessionManager;
@@ -27,7 +27,7 @@ public class MsgHandler extends AbstractHandler {
       Map<String, Object> context, WxMpService wxMpService,
             WxSessionManager sessionManager)    {
 
-        WeixinService weixinService = (WeixinService) wxMpService;
+        WxGenricService weixinService = (WxGenricService) wxMpService;
 
         if (!wxMessage.getMsgType().equals(WxConsts.XML_MSG_EVENT)) {
             //TODO 可以选择将消息保存到本地

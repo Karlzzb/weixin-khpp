@@ -46,7 +46,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
         <property name="dataSource" ref="dataSource" />  
         <!-- 自动扫描mapping.xml文件 -->  
-        <property name="mapperLocations" value="classpath:com/khpp/weixin/db/mapping/*.xml"></property>  
+        <property name="mapperLocations" value="classpath:com/khpp/db/mapping/*.xml"></property>  
     </bean>
     
     <!-- 对dataSource 数据源进行事务管理 -->
@@ -60,6 +60,7 @@
             <tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
             <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
             <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
+            <tx:method name="tx*" propagation="REQUIRED" rollback-for="java.lang.Throwable"/>
             <!-- select,count开头的方法,开启只读,提高数据库访问性能 -->
             <tx:method name="select*" read-only="true"/>
             <tx:method name="count*" read-only="true"/>
@@ -70,13 +71,13 @@
   
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
-        <property name="basePackage" value="com.khpp.weixin.db.dao" />  
+        <property name="basePackage" value="com.khpp.db.dao" />  
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
     </bean>  
   
     <!-- 事务 aop 配置 -->
     <aop:config>
-        <aop:pointcut id="serviceMethods" expression="execution(* com.khpp.weixin.db.service..*(..))"/>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.khpp.db.service..*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
     </aop:config>
     
@@ -92,6 +93,4 @@
           p:configLocation="classpath:ehcache.xml"/>
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
           p:cacheManager-ref="ehCacheManagerFactory"/>
-    
-  
 </beans>  
