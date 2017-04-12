@@ -88,6 +88,7 @@ function messageDeliverCallBack(res) {
 				<tr>
 					<th>成交时间</th>
 					<th>停车场</th>
+					<th>卖家</th>
 					<th>状态</th>
 					<th>价格(元)</th>
 					<th></th>
@@ -100,7 +101,8 @@ function messageDeliverCallBack(res) {
 							<tr class="danger">
 								<td><fmt:formatDate value='${parkingOrder.createTime}'
 										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
-								<td>${parkingOffer.parkingName}</td>
+								<td>${parkingOrder.parkingName}</td>
+								<td>${parkingOrder.wxNickNameSellor}</td>
 								<td>已支付</td>
 								<td>${parkingOrder.paidAmount}(元)</td>
 								<td>
@@ -111,7 +113,8 @@ function messageDeliverCallBack(res) {
 							<tr class="active">
 								<td><fmt:formatDate value='${parkingOrder.createTime}'
 										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
-								<td>${parkingOffer.parkingName}</td>
+								<td>${parkingOrder.parkingName}</td>
+								<td>${parkingOrder.wxNickNameSellor}</td>
 								<td>未支付</td>
 								<td>${parkingOrder.paidAmount}(元)</td>
 								<td>
@@ -130,7 +133,8 @@ function messageDeliverCallBack(res) {
 							<tr class="success">
 								<td><fmt:formatDate value='${parkingOrder.createTime}'
 										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
-								<td>${parkingOffer.parkingName}</td>
+								<td>${parkingOrder.parkingName}</td>
+								<td>${parkingOrder.wxNickNameSellor}</td>
 								<td>交易成功</td>
 								<td>${parkingOrder.paidAmount}(元)</td>
 								<td>
@@ -141,7 +145,8 @@ function messageDeliverCallBack(res) {
 							<tr class="warning">
 								<td><fmt:formatDate value='${parkingOrder.createTime}'
 										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
-								<td>${parkingOffer.parkingName}</td>
+								<td>${parkingOrder.parkingName}</td>
+								<td>${parkingOrder.wxNickNameSellor}</td>
 								<td>交易失败</td>
 								<td>${parkingOrder.paidAmount}(元)</td>
 								<td>
