@@ -22,8 +22,10 @@ import com.khpp.common.constants.CommonConstans;
 import com.khpp.common.utils.WebUtil;
 import com.khpp.db.domain.ParkingOffer;
 import com.khpp.db.domain.ParkingOrder;
+import com.khpp.db.genric.DomainBuilder;
 import com.khpp.db.service.ParkingOfferService;
 import com.khpp.db.service.ParkingOrderService;
+import com.khpp.web.model.ParkingOrderModel;
 
 @Service
 public class WxPayService {
@@ -108,12 +110,13 @@ public class WxPayService {
 	 * @param string
 	 * 
 	 * @param request
-	 * @param offerId
+	 * @param parkingorderModel
 	 * @return
 	 * @throws WxErrorException
 	 */
 	public Map<String, String> prepayParkingSentor(String requestMappingValue,
-			HttpServletRequest request, String offerId) throws WxErrorException {
+			HttpServletRequest request, ParkingOrderModel parkingorderModel)
+			throws WxErrorException {
 		Object wxMapuserObj = request.getSession().getAttribute(
 				CommonConstans.SESSION_WXUSER_KEY);
 		if (wxMapuserObj == null || !(wxMapuserObj instanceof WxMpUser)) {
@@ -123,8 +126,8 @@ public class WxPayService {
 			throw new WxErrorException(wxError);
 		}
 		WxMpUser wxMapuser = (WxMpUser) wxMapuserObj;
-		ParkingOffer offer = parkingOfferService.selectById(Integer
-				.valueOf(offerId));
+		ParkingOffer offer = parkingOfferService.selectById(parkingorderModel
+				.getSelectOfferId());
 		if (offer == null
 				|| !offer.getOfferStatus().equals(
 						CommonConstans.OFFERSTATUS_PUBLIC)) {
@@ -134,12 +137,14 @@ public class WxPayService {
 			throw new WxErrorException(wxError);
 		}
 
-		ParkingOrder parkingOrder = new ParkingOrder(offer.getOfferId(),
-				offer.getParkingId(), offer.getParkingName(),
-				offer.getWxOpenid(), offer.getWxNickName(),
-				wxMapuser.getOpenId(), wxMapuser.getNickname(),
+		ParkingOrder parkingOrder = DomainBuilder.buildParkingOrder(
+				offer.getOfferId(), offer.getParkingId(),
+				offer.getParkingName(), offer.getWxOpenid(),
+				offer.getWxNickName(), wxMapuser.getOpenId(),
+				wxMapuser.getNickname(),
 				CommonConstans.PARKING_ORDER_STATUS_SUBMIT, offer.getPrice(),
-				CommonConstans.ORDER_SERVICE_FEE);
+				CommonConstans.ORDER_SERVICE_FEE,
+				parkingorderModel.getDetail(), offer.getDetail());
 		Map<String, String> payInfo = prepayGenricSentor(requestMappingValue,
 				wxMapuser, request, parkingOrder.getOrderId(), offer.getPrice());
 		logger.info("paidedResult=" + new Gson().toJson(payInfo));

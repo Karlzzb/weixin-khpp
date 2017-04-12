@@ -19,6 +19,7 @@ import com.khpp.db.dao.ParkingOrderMapper;
 import com.khpp.db.domain.ParkingOffer;
 import com.khpp.db.domain.ParkingOrder;
 import com.khpp.db.domain.ParkingOrderExample;
+import com.khpp.db.genric.DomainBuilder;
 import com.khpp.db.genric.GenericDao;
 import com.khpp.db.genric.GenericServiceImpl;
 import com.khpp.db.service.ParkingOrderService;
@@ -59,16 +60,33 @@ public class ParkingOrderServiceImpl extends
 		}
 
 		try {
+			// notice sellor
 			wxGenricService.getKefuService().sendKefuMessage(
-					WxMpKefuMessage.TEXT().toUser(order.getWxOpenidSellor())
-							.content("你的停车券已经出售，请联系买家发货！").build());
+					WxMpKefuMessage
+							.TEXT()
+							.toUser(order.getWxOpenidSellor())
+							.content(
+									"你的停车券已经出售,买家已支付，请及时联系买家发货！\n买家【"
+											+ order.getWxNickNameBuier()
+											+ "】预留信息：" + order.getBuierMsg())
+							.build());
+			// notice buier
+			wxGenricService.getKefuService().sendKefuMessage(
+					WxMpKefuMessage
+							.TEXT()
+							.toUser(order.getWxOpenidBuier())
+							.content(
+									"卖家【" + order.getWxNickNameSellor()
+											+ "】预留信息：" + order.getSellorMsg())
+							.build());
 		} catch (WxErrorException e) {
-			logger.error("通知卖家售出失败：", e);
+			logger.error("通知买卖方交易信息失败：", e);
 		}
 		parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(order
 				.getOfferId(), CommonConstans.OFFERSTATUS_SOLD));
-		parkingOrderMapper.updateByPrimaryKeySelective(new ParkingOrder(
-				orderId, CommonConstans.PARKING_ORDER_STATUS_BUY));
+		parkingOrderMapper.updateByPrimaryKeySelective(DomainBuilder
+				.buildParkingOrder(orderId,
+						CommonConstans.PARKING_ORDER_STATUS_BUY));
 
 		return false;
 	}
@@ -76,7 +94,7 @@ public class ParkingOrderServiceImpl extends
 	@Override
 	public Boolean txOrderBuierConfirm(String orderId) {
 		ParkingOrder order = parkingOrderMapper.selectByPrimaryKey(orderId);
-		order.genratewxToOrderId();
+		DomainBuilder.genratewxToOrderId(order);
 		try {
 			WxPaySendRedpackResult wxPaySendRedpackResult = wxPayService
 					.singleRedBagSentor(
@@ -89,10 +107,10 @@ public class ParkingOrderServiceImpl extends
 			wxGenricService.getKefuService().sendKefuMessage(
 					WxMpKefuMessage.TEXT().toUser(order.getWxOpenidSellor())
 							.content("你的停车券已经交易成功，钱款已转入你的账户，稍有延迟！").build());
-			parkingOrderMapper.updateByPrimaryKeySelective(new ParkingOrder(
-					order.getOrderId(),
-					CommonConstans.PARKING_ORDER_STATUS_SUCCESS, order
-							.getWxToOrderId()));
+			parkingOrderMapper.updateByPrimaryKeySelective(DomainBuilder
+					.buildParkingOrder(order.getOrderId(),
+							CommonConstans.PARKING_ORDER_STATUS_SUCCESS,
+							order.getWxToOrderId()));
 			return true;
 		} catch (WxErrorException e) {
 			logger.error("通知卖家收钱失败：", e);
@@ -110,9 +128,9 @@ public class ParkingOrderServiceImpl extends
 
 	@Override
 	public void txOrderCreator(ParkingOrder parkingOrder) {
-		parkingOrderMapper.insert(parkingOrder);
+		parkingOrderMapper.insertSelective(parkingOrder);
 		parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(
 				parkingOrder.getOfferId(),
-				CommonConstans.OFFERSTATUS_UNAVILABLE));
+				CommonConstans.OFFERSTATUS_TMP_UNAVILABLE));
 	}
 }

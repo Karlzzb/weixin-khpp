@@ -25,6 +25,7 @@ import com.khpp.db.service.DictParkingService;
 import com.khpp.db.service.ParkingOfferService;
 import com.khpp.db.service.ParkingOrderService;
 import com.khpp.web.model.ParkingOfferModel;
+import com.khpp.web.model.ParkingOrderModel;
 import com.khpp.web.security.Token;
 import com.khpp.weixin.service.WxGenricService;
 
@@ -51,9 +52,10 @@ public class WxRedirectController extends GenericController {
 	 */
 	@RequestMapping(value = "parkingBuyList", method = RequestMethod.GET)
 	@Token(save = true)
-	public String parkingList(
+	public ModelAndView parkingList(
 			@RequestParam(value = "selectParking", required = false) String selectParkingIdStr,
 			Model model) {
+		ModelAndView modelAndView = new ModelAndView("parkingBuyList");
 		List<DictParking> parkingList = dictParkingService.selectList();
 		model.addAttribute("parkingList", parkingList);
 		DictParking selectParking = parkingList.get(0);
@@ -71,8 +73,9 @@ public class WxRedirectController extends GenericController {
 		List<ParkingOffer> parkingOfferList = parkingOfferService
 				.getAvailableOfferListByParkingId(selectParkingId);
 		model.addAttribute("offerList", parkingOfferList);
+		modelAndView.addObject("parkingOrderModel", new ParkingOrderModel());
 
-		return "parkingBuyList";
+		return modelAndView;
 	}
 
 	/**

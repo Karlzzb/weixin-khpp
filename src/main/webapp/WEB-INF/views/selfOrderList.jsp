@@ -21,11 +21,23 @@ $(document).ready(function(){
         $("#selectOrderId").val(button.data('orderid'));
 	    $(this).find('.modal-title').text('确认收货');
 	});
+	$("#messageModal").on('show.bs.modal', function(event){
+        var button = $(event.relatedTarget);  // Button that triggered the modal
+        $("#sellorId").val(button.data('sellorid'));
+	    $(this).find('.modal-title').text('联系卖家');
+	});
+	
     var options = {
     	beforeSubmit: showRequest,
         success: orderConfirmCallBack
     };	
     $('#confirmform').ajaxForm(options);
+    
+    var options2 = {
+        	//beforeSubmit: showRequest,
+            success: messageDeliverCallBack
+        };	
+    $('#messageform').ajaxForm(options2);
 });
 
 //pre-submit callback 
@@ -52,6 +64,10 @@ function orderConfirmCallBack(res){
   	    alert(res.reason);
      }
 }
+function messageDeliverCallBack(res) {
+    $('#messageModal').modal('hide');
+}
+
 </script>
 <style type="text/css">
 .bs-body {
@@ -79,25 +95,62 @@ function orderConfirmCallBack(res){
 			</thead>
 			<tbody>
 				<c:forEach items="${orderList}" var="parkingOrder">
-					<tr class="info">
-						<td><fmt:formatDate value='${parkingOrder.createTime}'
-								type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
-						<td>${parkingOffer.parkingName}</td>
-						<td><c:choose>
-								<c:when test="${parkingOrder.orderStatus == 0}">未支付</c:when>
-								<c:when test="${parkingOrder.orderStatus == 1}">已支付</c:when>
-								<c:when test="${parkingOrder.orderStatus == 3}">交易成功</c:when>
-								<c:when test="${parkingOrder.orderStatus == 4}">交易失败</c:when>
-							</c:choose></td>
-						<td>${parkingOrder.paidAmount}(元)</td>
-						<td><c:choose>
-								<c:when test="${parkingOrder.orderStatus == 1}">
-									<button type="button" class="btn btn-primary"
+					<c:choose>
+						<c:when test="${parkingOrder.orderStatus == 0}">
+							<tr class="danger">
+								<td><fmt:formatDate value='${parkingOrder.createTime}'
+										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
+								<td>${parkingOffer.parkingName}</td>
+								<td>已支付</td>
+								<td>${parkingOrder.paidAmount}(元)</td>
+								<td>
+								</td>
+							</tr>						
+						</c:when>
+						<c:when test="${parkingOrder.orderStatus == 1}">
+							<tr class="active">
+								<td><fmt:formatDate value='${parkingOrder.createTime}'
+										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
+								<td>${parkingOffer.parkingName}</td>
+								<td>未支付</td>
+								<td>${parkingOrder.paidAmount}(元)</td>
+								<td>
+									<button type="button" class="btn btn-success btn-sm"
 										data-toggle="modal" data-target="#confirmModal"
 										data-orderid="${parkingOrder.orderId}">确认收货</button>
-								</c:when>
-							</c:choose></td>
-					</tr>
+									<br>
+									<br>
+									<button type="button" class="btn btn-info btn-sm"
+										data-toggle="modal" data-target="#messageModal"
+										data-sellorid="${parkingOrder.wxOpenidSellor}">联系卖家</button>
+								</td>
+							</tr>						
+						</c:when>
+						<c:when test="${parkingOrder.orderStatus == 3}">
+							<tr class="success">
+								<td><fmt:formatDate value='${parkingOrder.createTime}'
+										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
+								<td>${parkingOffer.parkingName}</td>
+								<td>交易成功</td>
+								<td>${parkingOrder.paidAmount}(元)</td>
+								<td>
+								</td>
+							</tr>						
+						</c:when>
+						<c:when test="${parkingOrder.orderStatus == 4}">
+							<tr class="warning">
+								<td><fmt:formatDate value='${parkingOrder.createTime}'
+										type='date' pattern='yyyy-MM-dd HH:mm:SS' /></td>
+								<td>${parkingOffer.parkingName}</td>
+								<td>交易失败</td>
+								<td>${parkingOrder.paidAmount}(元)</td>
+								<td>
+								</td>
+							</tr>						
+						</c:when>
+					</c:choose>					
+					
+					
 				</c:forEach>
 			</tbody>
 		</table>
@@ -124,6 +177,31 @@ function orderConfirmCallBack(res){
 							<input type="submit" class="btn btn-primary" value="确认">
 							<input type="reset" class="btn btn-default" data-dismiss="modal"
 								value="关闭">
+						</div>
+					</form:form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal HTML -->
+		<div id="messageModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form:form id="messageform" class="form-horizontal"
+						action="/innerweb/messageDeliver" method="post">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+							<h4 class="modal-title">通知卖家</h4>
+						</div>
+						<div class="modal-body">
+							<textarea id="msg2sellor" name="msg2sellor" class="form-control"
+								placeholder="...想对卖家说点什么？"></textarea>
+							<input type="text" hidden="true" id="sellorId" name="sellorId">
+						</div>
+						<div class="modal-footer">
+							<input type="submit" class="btn btn-primary" value="发送">
+							<input type="reset" class="btn btn-default" data-dismiss="modal"
+								value="取消">
 						</div>
 					</form:form>
 				</div>

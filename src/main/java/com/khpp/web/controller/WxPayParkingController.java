@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
@@ -24,6 +25,7 @@ import com.khpp.common.constants.CommonConstans;
 import com.khpp.common.utils.XMLUtil;
 import com.khpp.db.service.ParkingOfferService;
 import com.khpp.db.service.ParkingOrderService;
+import com.khpp.web.model.ParkingOrderModel;
 import com.khpp.web.model.ReturnModel;
 import com.khpp.web.security.Token;
 import com.khpp.weixin.dto.WxMpConfig;
@@ -88,15 +90,13 @@ public class WxPayParkingController extends GenericController {
 	 */
 	@RequestMapping(value = "getJSSDKPayInfo")
 	@Token(remove = true)
-	public void getJSSDKPayInfo(
-			HttpServletResponse response,
-			HttpServletRequest request,
-			HttpSession session,
-			@RequestParam(value = "selectOfferId", required = true) String offerId) {
+	public void getJSSDKPayInfo(HttpServletResponse response,
+			HttpServletRequest request, HttpSession session,
+			@Valid ParkingOrderModel parkingorderModel) {
 		ReturnModel returnModel = new ReturnModel();
 		try {
 			Map<String, String> payInfo = wxPayService.prepayParkingSentor(
-					"wxPayParking", request, offerId);
+					"wxPayParking", request, parkingorderModel);
 			returnModel.setResult(true);
 			returnModel.setDatum(payInfo);
 		} catch (WxErrorException e) {

@@ -966,6 +966,146 @@ public class ParkingOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andSellorMsgIsNull() {
+            addCriterion("sellor_msg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgIsNotNull() {
+            addCriterion("sellor_msg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgEqualTo(String value) {
+            addCriterion("sellor_msg =", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgNotEqualTo(String value) {
+            addCriterion("sellor_msg <>", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgGreaterThan(String value) {
+            addCriterion("sellor_msg >", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgGreaterThanOrEqualTo(String value) {
+            addCriterion("sellor_msg >=", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgLessThan(String value) {
+            addCriterion("sellor_msg <", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgLessThanOrEqualTo(String value) {
+            addCriterion("sellor_msg <=", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgLike(String value) {
+            addCriterion("sellor_msg like", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgNotLike(String value) {
+            addCriterion("sellor_msg not like", value, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgIn(List<String> values) {
+            addCriterion("sellor_msg in", values, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgNotIn(List<String> values) {
+            addCriterion("sellor_msg not in", values, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgBetween(String value1, String value2) {
+            addCriterion("sellor_msg between", value1, value2, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andSellorMsgNotBetween(String value1, String value2) {
+            addCriterion("sellor_msg not between", value1, value2, "sellorMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgIsNull() {
+            addCriterion("buier_msg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgIsNotNull() {
+            addCriterion("buier_msg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgEqualTo(String value) {
+            addCriterion("buier_msg =", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgNotEqualTo(String value) {
+            addCriterion("buier_msg <>", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgGreaterThan(String value) {
+            addCriterion("buier_msg >", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgGreaterThanOrEqualTo(String value) {
+            addCriterion("buier_msg >=", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgLessThan(String value) {
+            addCriterion("buier_msg <", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgLessThanOrEqualTo(String value) {
+            addCriterion("buier_msg <=", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgLike(String value) {
+            addCriterion("buier_msg like", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgNotLike(String value) {
+            addCriterion("buier_msg not like", value, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgIn(List<String> values) {
+            addCriterion("buier_msg in", values, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgNotIn(List<String> values) {
+            addCriterion("buier_msg not in", values, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgBetween(String value1, String value2) {
+            addCriterion("buier_msg between", value1, value2, "buierMsg");
+            return (Criteria) this;
+        }
+
+        public Criteria andBuierMsgNotBetween(String value1, String value2) {
+            addCriterion("buier_msg not between", value1, value2, "buierMsg");
+            return (Criteria) this;
+        }
+
         public Criteria andLatitudeIsNull() {
             addCriterion("latitude is null");
             return (Criteria) this;

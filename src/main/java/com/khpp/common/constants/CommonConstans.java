@@ -6,7 +6,8 @@ public class CommonConstans {
 	// 停车券状态
 	public static final Integer OFFERSTATUS_PUBLIC = 1;
 	public static final Integer OFFERSTATUS_SOLD = 2;
-	public static final Integer OFFERSTATUS_UNAVILABLE = 3;
+	public static final Integer OFFERSTATUS_TMP_UNAVILABLE = 3;
+	public static final Integer OFFERSTATUS_USELESS = 4;
 	public static final Integer OFFERVALIDHOURS = 4;
 
 	// 服务费

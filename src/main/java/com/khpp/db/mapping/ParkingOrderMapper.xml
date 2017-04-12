@@ -15,6 +15,8 @@
     <result column="wx_to_order_id" property="wxToOrderId" jdbcType="VARCHAR" />
     <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
     <result column="service_fee" property="serviceFee" jdbcType="DECIMAL" />
+    <result column="sellor_msg" property="sellorMsg" jdbcType="VARCHAR" />
+    <result column="buier_msg" property="buierMsg" jdbcType="VARCHAR" />
     <result column="latitude" property="latitude" jdbcType="REAL" />
     <result column="longitude" property="longitude" jdbcType="REAL" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -81,7 +83,8 @@
   <sql id="Base_Column_List" >
     order_id, offer_id, parking_id, parking_name, wx_openid_sellor, wx_nick_name_sellor, 
     wx_openid_buier, wx_nick_name_buier, order_status, wx_from_order_id, wx_to_order_id, 
-    paid_amount, service_fee, latitude, longitude, create_time, dml_time
+    paid_amount, service_fee, sellor_msg, buier_msg, latitude, longitude, create_time, 
+    dml_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.db.domain.ParkingOrderExample" >
     select
@@ -118,14 +121,16 @@
       parking_name, wx_openid_sellor, wx_nick_name_sellor, 
       wx_openid_buier, wx_nick_name_buier, order_status, 
       wx_from_order_id, wx_to_order_id, paid_amount, 
-      service_fee, latitude, longitude, 
-      create_time, dml_time)
+      service_fee, sellor_msg, buier_msg, 
+      latitude, longitude, create_time, 
+      dml_time)
     values (#{orderId,jdbcType=CHAR}, #{offerId,jdbcType=INTEGER}, #{parkingId,jdbcType=INTEGER}, 
       #{parkingName,jdbcType=VARCHAR}, #{wxOpenidSellor,jdbcType=VARCHAR}, #{wxNickNameSellor,jdbcType=VARCHAR}, 
       #{wxOpenidBuier,jdbcType=VARCHAR}, #{wxNickNameBuier,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, 
       #{wxFromOrderId,jdbcType=VARCHAR}, #{wxToOrderId,jdbcType=VARCHAR}, #{paidAmount,jdbcType=DECIMAL}, 
-      #{serviceFee,jdbcType=DECIMAL}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
+      #{serviceFee,jdbcType=DECIMAL}, #{sellorMsg,jdbcType=VARCHAR}, #{buierMsg,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{dmlTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.khpp.db.domain.ParkingOrder" >
     insert into parking_order
@@ -168,6 +173,12 @@
       </if>
       <if test="serviceFee != null" >
         service_fee,
+      </if>
+      <if test="sellorMsg != null" >
+        sellor_msg,
+      </if>
+      <if test="buierMsg != null" >
+        buier_msg,
       </if>
       <if test="latitude != null" >
         latitude,
@@ -221,6 +232,12 @@
       </if>
       <if test="serviceFee != null" >
         #{serviceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="sellorMsg != null" >
+        #{sellorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="buierMsg != null" >
+        #{buierMsg,jdbcType=VARCHAR},
       </if>
       <if test="latitude != null" >
         #{latitude,jdbcType=REAL},
@@ -284,6 +301,12 @@
       <if test="record.serviceFee != null" >
         service_fee = #{record.serviceFee,jdbcType=DECIMAL},
       </if>
+      <if test="record.sellorMsg != null" >
+        sellor_msg = #{record.sellorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.buierMsg != null" >
+        buier_msg = #{record.buierMsg,jdbcType=VARCHAR},
+      </if>
       <if test="record.latitude != null" >
         latitude = #{record.latitude,jdbcType=REAL},
       </if>
@@ -316,6 +339,8 @@
       wx_to_order_id = #{record.wxToOrderId,jdbcType=VARCHAR},
       paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
       service_fee = #{record.serviceFee,jdbcType=DECIMAL},
+      sellor_msg = #{record.sellorMsg,jdbcType=VARCHAR},
+      buier_msg = #{record.buierMsg,jdbcType=VARCHAR},
       latitude = #{record.latitude,jdbcType=REAL},
       longitude = #{record.longitude,jdbcType=REAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -363,6 +388,12 @@
       <if test="serviceFee != null" >
         service_fee = #{serviceFee,jdbcType=DECIMAL},
       </if>
+      <if test="sellorMsg != null" >
+        sellor_msg = #{sellorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="buierMsg != null" >
+        buier_msg = #{buierMsg,jdbcType=VARCHAR},
+      </if>
       <if test="latitude != null" >
         latitude = #{latitude,jdbcType=REAL},
       </if>
@@ -392,6 +423,8 @@
       wx_to_order_id = #{wxToOrderId,jdbcType=VARCHAR},
       paid_amount = #{paidAmount,jdbcType=DECIMAL},
       service_fee = #{serviceFee,jdbcType=DECIMAL},
+      sellor_msg = #{sellorMsg,jdbcType=VARCHAR},
+      buier_msg = #{buierMsg,jdbcType=VARCHAR},
       latitude = #{latitude,jdbcType=REAL},
       longitude = #{longitude,jdbcType=REAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},

@@ -2,82 +2,7 @@ package com.khpp.db.domain;
 
 import java.util.Date;
 
-import com.khpp.common.utils.MD5Util;
-
 public class ParkingOrder {
-
-	/**
-	 * 
-	 * @param offerId
-	 * @param parkingId
-	 * @param parkingName
-	 * @param wxOpenidSellor
-	 * @param wxNickNameSellor
-	 * @param wxOpenidBuier
-	 * @param wxNickNameBuier
-	 *            <pre>
-	 * 订单状态
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_BUY}
-	 * </pre>
-	 * @param orderStatus
-	 * @param paidAmount
-	 * @param serviceFee
-	 */
-	public ParkingOrder(Integer offerId, Integer parkingId, String parkingName,
-			String wxOpenidSellor, String wxNickNameSellor,
-			String wxOpenidBuier, String wxNickNameBuier, Integer orderStatus,
-			Double paidAmount, Double serviceFee) {
-		super();
-		this.offerId = offerId;
-		this.parkingId = parkingId;
-		this.parkingName = parkingName;
-		this.wxOpenidSellor = wxOpenidSellor;
-		this.wxNickNameSellor = wxNickNameSellor;
-		this.wxOpenidBuier = wxOpenidBuier;
-		this.wxNickNameBuier = wxNickNameBuier;
-		this.orderStatus = orderStatus;
-		this.paidAmount = paidAmount;
-		this.serviceFee = serviceFee;
-		this.orderId = MD5Util.md5EncodeUTF8(wxOpenidBuier + offerId
-				+ wxOpenidSellor + System.currentTimeMillis());
-	}
-
-	public ParkingOrder() {
-		super();
-	}
-
-	/**
-	 * 
-	 * @param orderId
-	 *            <pre>
-	 * 订单状态
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_BUY}
-	 * </pre>
-	 * @param orderStatus
-	 */
-	public ParkingOrder(String orderId, Integer orderStatus) {
-		this.orderId = orderId;
-		this.orderStatus = orderStatus;
-	}
-
-	/**
-	 * 
-	 * @param orderId
-	 *            <pre>
-	 * 订单状态
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_SUBMIT}
-	 * {@link com.khpp.common.constants.CommonConstans#PARKING_ORDER_STATUS_BUY}
-	 * </pre>
-	 * @param orderStatus
-	 */
-	public ParkingOrder(String orderId, Integer orderStatus, String wxToOrderId) {
-		this.orderId = orderId;
-		this.orderStatus = orderStatus;
-		this.wxToOrderId = wxToOrderId;
-	}
-
 	private String orderId;
 
 	private Integer offerId;
@@ -103,6 +28,10 @@ public class ParkingOrder {
 	private Double paidAmount;
 
 	private Double serviceFee;
+
+	private String sellorMsg;
+
+	private String buierMsg;
 
 	private Float latitude;
 
@@ -221,6 +150,22 @@ public class ParkingOrder {
 		this.serviceFee = serviceFee;
 	}
 
+	public String getSellorMsg() {
+		return sellorMsg;
+	}
+
+	public void setSellorMsg(String sellorMsg) {
+		this.sellorMsg = sellorMsg == null ? null : sellorMsg.trim();
+	}
+
+	public String getBuierMsg() {
+		return buierMsg;
+	}
+
+	public void setBuierMsg(String buierMsg) {
+		this.buierMsg = buierMsg == null ? null : buierMsg.trim();
+	}
+
 	public Float getLatitude() {
 		return latitude;
 	}
@@ -251,10 +196,5 @@ public class ParkingOrder {
 
 	public void setDmlTime(Date dmlTime) {
 		this.dmlTime = dmlTime;
-	}
-
-	public String genratewxToOrderId() {
-		this.wxToOrderId = String.valueOf(System.currentTimeMillis());
-		return this.wxToOrderId;
 	}
 }

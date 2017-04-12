@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,7 @@ import com.khpp.weixin.service.WxGenricService;
 public class InnerWebController extends GenericController {
 
 	@Resource
-	private WxGenricService weixinService;
+	private WxGenricService wxGenricService;
 
 	@Resource
 	private UserService userService;
@@ -92,6 +94,35 @@ public class InnerWebController extends GenericController {
 		}
 
 		parkingorderService.txOrderBuierConfirm(orderId);
+		returnModel.setResult(true);
+		renderString(response, returnModel);
+	}
+
+	@RequestMapping(value = "messageDeliver")
+	public void messageDeliver(
+			HttpServletResponse response,
+			HttpServletRequest request,
+			HttpSession session,
+			@RequestParam(value = "sellorId", required = true) String sellorId,
+			@RequestParam(value = "msg2sellor", required = true) String msg2sellor) {
+		if (sellorId == null || sellorId.isEmpty() || msg2sellor == null
+				|| msg2sellor.isEmpty()) {
+			return;
+		}
+		ReturnModel returnModel = new ReturnModel();
+		try {
+			WxMpUser wxMapuser = (WxMpUser) session
+					.getAttribute(CommonConstans.SESSION_WXUSER_KEY);
+			wxGenricService.getKefuService().sendKefuMessage(
+					WxMpKefuMessage
+							.TEXT()
+							.toUser(sellorId)
+							.content(
+									"买家【" + wxMapuser.getNickname() + "】向你留言："
+											+ msg2sellor).build());
+		} catch (WxErrorException e) {
+			logger.error("发送信息给卖家失败：", e);
+		}
 		returnModel.setResult(true);
 		renderString(response, returnModel);
 	}
