@@ -1,0 +1,135 @@
+.navbar-brand,.navbar-nav > li > a {
+	text-shadow:0 1px 0 rgba(255,255,255,.25)
+}
+
+.navbar-inverse {
+	background-image: -webkit-linear-gradient(top,#3c3c3c 0,#222 100%);
+	background-image: -o-linear-gradient(top,#3c3c3c 0,#222 100%);
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#3c3c3c),to(#222));
+	background-image: linear-gradient(to bottom,#3c3c3c 0,#222 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+	filter:progid:DXImageTransform.Microsoft.gradient(enabled=false);
+	background-repeat:repeat-x
+}
+
+.navbar-inverse .navbar-brand,.navbar-inverse .navbar-nav > li > a {
+	text-shadow:0 -1px 0 rgba(0,0,0,.25)
+}
+
+.navbar-fixed-top {
+	border-radius:0
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+  background-color: black;
+  padding: 0px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#container {
+  background-color: black;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  border: 0;
+  margin: 0 auto 0 auto;
+  padding: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#container div {
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  display: inline-block;
+  padding: 0;
+  margin: 15px;
+  width:  320px;
+  height: 240px;
+  border: 1px solid #999;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  opacity: 0.8;
+}
+
+#container div:hover {
+	opacity: 1.0;
+}
+
+#container div span:first-child {
+	display: inline-block;
+	width: 100%;
+	text-align: left;
+	margin: 0;
+	padding: 3px 12px 3px 6px;
+	background: black;
+	color: white;
+	opacity: 0.8;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#container div span:last-child {
+	font-size: 12px;
+	display: inline-block;
+	width: 100%;
+	text-align: left;
+	margin: 0;
+	padding: 3px 12px 3px 6px;
+	background: black;
+	color: white;
+	opacity: 0.9;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+
+.modal-backdrop.in {
+	filter: alpha(opacity=90);
+	opacity: .9;
+}
+
+.bs-glyphicons{margin:0;overflow:hidden}
+.bs-glyphicons-list{padding-left:0;list-style:none}
+.bs-glyphicons li{float:left;width:25%;height:115px;padding:10px;font-size:10px;line-height:1.4;text-align:center;background-color:#f9f9f9;border:1px solid #fff}
+.bs-glyphicons .glyphicon{margin-top:5px;margin-bottom:10px;font-size:24px}
+.bs-glyphicons .glyphicon-class{display:block;text-align:center;word-wrap:break-word}
+.bs-glyphicons li:hover{color:#fff;background-color:#563d7c}
+
+@media (min-width:768px){
+	.bs-glyphicons{margin-right:0;margin-left:0}
+	.bs-glyphicons li{width:12.5%;font-size:12px}
+}
+
+.input-group[class*="col-"] {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#modalVideoBody {
+  padding: 0px;
+  width: 608px;
+  height: 468px;
+}

@@ -8,7 +8,7 @@ import com.khpp.db.genric.GenericService;
 public interface ParkingOrderService extends
 		GenericService<ParkingOrder, String> {
 
-	Boolean txOrderPayConfirm(String outTradeNo);
+	Boolean txOrderPayConfirm(String outTradeNo, String wxTransactionId);
 
 	List<ParkingOrder> getOrderListByBuier(String openId);
 

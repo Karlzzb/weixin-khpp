@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.khpp.common.constants.CommonConstans;
 import com.khpp.common.utils.XMLUtil;
-import com.khpp.db.service.ParkingOfferService;
-import com.khpp.db.service.ParkingOrderService;
-import com.khpp.web.model.ParkingOrderModel;
+import com.khpp.db.service.CouponOfferService;
+import com.khpp.db.service.CouponOrderService;
+import com.khpp.web.model.CouponOrderModel;
 import com.khpp.web.model.ReturnModel;
 import com.khpp.web.security.Token;
 import com.khpp.weixin.dto.WxMpConfig;
@@ -37,8 +37,8 @@ import com.khpp.weixin.service.WxPayService;
  *
  */
 @Controller
-@RequestMapping(value = "wxPayParking")
-public class WxPayParkingController extends GenericController {
+@RequestMapping(value = "wxPayCoupon")
+public class WxPayCouponController extends GenericController {
 
 	@Autowired
 	protected WxGenricService wxGenricService;
@@ -50,10 +50,10 @@ public class WxPayParkingController extends GenericController {
 	private WxMpConfig wxConfig;
 
 	@Autowired
-	private ParkingOfferService parkingOfferService;
+	private CouponOfferService couponOfferService;
 
 	@Autowired
-	private ParkingOrderService parkingOrderService;
+	private CouponOrderService couponOrderService;
 
 	/**
 	 * 用于返回预支付的结果 WxMpPrepayIdResult，一般不需要使用此接口
@@ -92,11 +92,11 @@ public class WxPayParkingController extends GenericController {
 	@Token(remove = true)
 	public void getJSSDKPayInfo(HttpServletResponse response,
 			HttpServletRequest request, HttpSession session,
-			@Valid ParkingOrderModel parkingorderModel) {
+			@Valid CouponOrderModel couponOrderModel) {
 		ReturnModel returnModel = new ReturnModel();
 		try {
-			Map<String, String> payInfo = wxPayService.prepayParkingSentor(
-					"wxPayParking", request, parkingorderModel);
+			Map<String, String> payInfo = wxPayService.prepayCouponSentor(
+					"wxPayCoupon", request, couponOrderModel);
 			returnModel.setResult(true);
 			returnModel.setDatum(payInfo);
 		} catch (WxErrorException e) {
@@ -125,13 +125,12 @@ public class WxPayParkingController extends GenericController {
 			returnSign = "get_brand_wcpay_request:ok".equals(result
 					.get("err_msg"));
 		}
-
-		// 解冻停车券
+		// 解冻优惠券
 		if (!returnSign) {
-			parkingOfferService.updateOfferStatus(Integer.valueOf(offerId),
-					CommonConstans.OFFERSTATUS_PUBLIC);
+			couponOfferService.updateCouponOfferStatus(
+					Integer.valueOf(offerId),
+					CommonConstans.COUPON_OFFER_STATUS_PUBLIC);
 		}
-
 		returnModel.setResult(returnSign);
 		renderString(response, returnModel);
 	}
@@ -153,8 +152,8 @@ public class WxPayParkingController extends GenericController {
 					String outTradeNo = kvm.get("out_trade_no");
 					String wxTransactionId = kvm.get("transaction_id");
 					if (kvm.get("result_code").equals("SUCCESS")) {
-						if (parkingOrderService.txOrderPayConfirm(outTradeNo,
-								wxTransactionId)) {
+						if (couponOrderService.txOrderPayConfirm(request,
+								outTradeNo, wxTransactionId)) {
 							logger.info("out_trade_no: "
 									+ kvm.get("out_trade_no") + " pay SUCCESS!");
 							response.getWriter()

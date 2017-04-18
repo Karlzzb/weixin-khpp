@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.khpp.db.dao.CouponOfferMapper" >
+  <resultMap id="BaseResultMap" type="com.khpp.db.domain.CouponOffer" >
+    <id column="coupon_id" property="couponId" jdbcType="INTEGER" />
+    <result column="coupon_brand" property="couponBrand" jdbcType="VARCHAR" />
+    <result column="coupon_type" property="couponType" jdbcType="INTEGER" />
+    <result column="offer_status" property="offerStatus" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="coupon_qrcode" property="couponQrcode" jdbcType="VARCHAR" />
+    <result column="detail" property="detail" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    coupon_id, coupon_brand, coupon_type, offer_status, price, coupon_qrcode, detail, 
+    create_time, dml_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.db.domain.CouponOfferExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coupon_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectByExamplePage" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from coupon_offer
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+    limit #{beginLine},#{endLine}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupon_offer
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coupon_offer
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.khpp.db.domain.CouponOfferExample" >
+    delete from coupon_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.khpp.db.domain.CouponOffer" >
+    insert into coupon_offer (coupon_id, coupon_brand, coupon_type, 
+      offer_status, price, coupon_qrcode, 
+      detail, create_time, dml_time
+      )
+    values (#{couponId,jdbcType=INTEGER}, #{couponBrand,jdbcType=VARCHAR}, #{couponType,jdbcType=INTEGER}, 
+      #{offerStatus,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{couponQrcode,jdbcType=VARCHAR}, 
+      #{detail,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.khpp.db.domain.CouponOffer" >
+    insert into coupon_offer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="couponId != null" >
+        coupon_id,
+      </if>
+      <if test="couponBrand != null" >
+        coupon_brand,
+      </if>
+      <if test="couponType != null" >
+        coupon_type,
+      </if>
+      <if test="offerStatus != null" >
+        offer_status,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="couponQrcode != null" >
+        coupon_qrcode,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dmlTime != null" >
+        dml_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="couponId != null" >
+        #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="couponBrand != null" >
+        #{couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        #{couponType,jdbcType=INTEGER},
+      </if>
+      <if test="offerStatus != null" >
+        #{offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="couponQrcode != null" >
+        #{couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.khpp.db.domain.CouponOfferExample" resultType="java.lang.Integer" >
+    select count(*) from coupon_offer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update coupon_offer
+    <set >
+      <if test="record.couponId != null" >
+        coupon_id = #{record.couponId,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponBrand != null" >
+        coupon_brand = #{record.couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponType != null" >
+        coupon_type = #{record.couponType,jdbcType=INTEGER},
+      </if>
+      <if test="record.offerStatus != null" >
+        offer_status = #{record.offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponQrcode != null" >
+        coupon_qrcode = #{record.couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detail != null" >
+        detail = #{record.detail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dmlTime != null" >
+        dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update coupon_offer
+    set coupon_id = #{record.couponId,jdbcType=INTEGER},
+      coupon_brand = #{record.couponBrand,jdbcType=VARCHAR},
+      coupon_type = #{record.couponType,jdbcType=INTEGER},
+      offer_status = #{record.offerStatus,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      coupon_qrcode = #{record.couponQrcode,jdbcType=VARCHAR},
+      detail = #{record.detail,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.khpp.db.domain.CouponOffer" >
+    update coupon_offer
+    <set >
+      <if test="couponBrand != null" >
+        coupon_brand = #{couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        coupon_type = #{couponType,jdbcType=INTEGER},
+      </if>
+      <if test="offerStatus != null" >
+        offer_status = #{offerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="couponQrcode != null" >
+        coupon_qrcode = #{couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.khpp.db.domain.CouponOffer" >
+    update coupon_offer
+    set coupon_brand = #{couponBrand,jdbcType=VARCHAR},
+      coupon_type = #{couponType,jdbcType=INTEGER},
+      offer_status = #{offerStatus,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      coupon_qrcode = #{couponQrcode,jdbcType=VARCHAR},
+      detail = #{detail,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP}
+    where coupon_id = #{couponId,jdbcType=INTEGER}
+  </update>
+</mapper>

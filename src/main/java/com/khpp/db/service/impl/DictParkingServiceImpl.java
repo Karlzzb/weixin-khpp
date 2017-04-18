@@ -14,7 +14,7 @@ import com.khpp.db.genric.GenericServiceImpl;
 import com.khpp.db.service.DictParkingService;
 
 /**
- * 用户Service实现类
+ * 停车字典Service实现类
  *
  */
 @Service

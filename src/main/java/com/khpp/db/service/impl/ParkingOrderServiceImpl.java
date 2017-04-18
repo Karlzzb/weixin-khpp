@@ -51,7 +51,7 @@ public class ParkingOrderServiceImpl extends
 	}
 
 	@Override
-	public Boolean txOrderPayConfirm(String orderId) {
+	public Boolean txOrderPayConfirm(String orderId, String wxTransactionId) {
 		ParkingOrder order = parkingOrderMapper.selectByPrimaryKey(orderId);
 		if (order == null
 				|| !order.getOrderStatus().equals(
@@ -79,14 +79,16 @@ public class ParkingOrderServiceImpl extends
 									"卖家【" + order.getWxNickNameSellor()
 											+ "】预留信息：" + order.getSellorMsg())
 							.build());
-		} catch (WxErrorException e) {
-			logger.error("通知买卖方交易信息失败：", e);
+			parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(
+					order.getOfferId(), CommonConstans.OFFERSTATUS_SOLD));
+			parkingOrderMapper.updateByPrimaryKeySelective(DomainBuilder
+					.buildParkingOrder(orderId, wxTransactionId,
+							CommonConstans.PARKING_ORDER_STATUS_BUY));
+			return true;
+		} catch (Exception e) {
+			logger.error("停车券交易确认失败{orderId:" + orderId + ",wxTransactionId:"
+					+ wxTransactionId + "}", e);
 		}
-		parkingOfferMapper.updateByPrimaryKeySelective(new ParkingOffer(order
-				.getOfferId(), CommonConstans.OFFERSTATUS_SOLD));
-		parkingOrderMapper.updateByPrimaryKeySelective(DomainBuilder
-				.buildParkingOrder(orderId,
-						CommonConstans.PARKING_ORDER_STATUS_BUY));
 
 		return false;
 	}

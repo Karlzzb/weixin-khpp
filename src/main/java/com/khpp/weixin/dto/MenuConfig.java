@@ -1,11 +1,11 @@
 package com.khpp.weixin.dto;
 
-import com.khpp.common.constants.WxMenuKeyConfig;
-
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.mp.api.WxMpService;
+
+import com.khpp.common.constants.WxMenuKeyConfig;
 
 /**
  * Created by FirenzesEagle on 2016/6/1 0001. Email:liumingbo2008@gmail.com
@@ -26,13 +26,15 @@ public class MenuConfig {
 		WxMenuButton button11 = new WxMenuButton();
 		button11.setType(WxConsts.BUTTON_VIEW);
 		button11.setName("下单");
-		button11.setUrl(wxMpService.oauth2buildAuthorizationUrl("",
+		button11.setUrl(wxMpService.oauth2buildAuthorizationUrl(
+				"http://ljyzzb.tunnel.qydev.com/wxredirect/starbucksBuyList",
 				"snsapi_base", ""));
 
 		WxMenuButton button12 = new WxMenuButton();
 		button12.setType(WxConsts.BUTTON_VIEW);
 		button12.setName("我的订单");
-		button12.setUrl(wxMpService.oauth2buildAuthorizationUrl("",
+		button12.setUrl(wxMpService.oauth2buildAuthorizationUrl(
+				"http://ljyzzb.tunnel.qydev.com/wxredirect/selfCouponList",
 				"snsapi_base", ""));
 		button1.getSubButtons().add(button11);
 		button1.getSubButtons().add(button12);

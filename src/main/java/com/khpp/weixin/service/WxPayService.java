@@ -20,11 +20,16 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.khpp.common.constants.CommonConstans;
 import com.khpp.common.utils.WebUtil;
+import com.khpp.db.domain.CouponOffer;
+import com.khpp.db.domain.CouponOrder;
 import com.khpp.db.domain.ParkingOffer;
 import com.khpp.db.domain.ParkingOrder;
 import com.khpp.db.genric.DomainBuilder;
+import com.khpp.db.service.CouponOfferService;
+import com.khpp.db.service.CouponOrderService;
 import com.khpp.db.service.ParkingOfferService;
 import com.khpp.db.service.ParkingOrderService;
+import com.khpp.web.model.CouponOrderModel;
 import com.khpp.web.model.ParkingOrderModel;
 
 @Service
@@ -39,6 +44,12 @@ public class WxPayService {
 
 	@Resource
 	private ParkingOrderService parkingOrderService;
+
+	@Resource
+	private CouponOrderService couponOrderService;
+
+	@Resource
+	private CouponOfferService couponOfferService;
 
 	/**
 	 * 
@@ -110,7 +121,7 @@ public class WxPayService {
 	 * @param string
 	 * 
 	 * @param request
-	 * @param parkingorderModel
+	 * @param couponOrderModel
 	 * @return
 	 * @throws WxErrorException
 	 */
@@ -128,15 +139,6 @@ public class WxPayService {
 		WxMpUser wxMapuser = (WxMpUser) wxMapuserObj;
 		ParkingOffer offer = parkingOfferService.selectById(parkingorderModel
 				.getSelectOfferId());
-		if (offer == null
-				|| !offer.getOfferStatus().equals(
-						CommonConstans.OFFERSTATUS_PUBLIC)) {
-			WxError wxError = new WxError();
-			wxError.setErrorCode(6002);
-			wxError.setErrorMsg("当前停车券不可用，请选择其他车券。");
-			throw new WxErrorException(wxError);
-		}
-
 		ParkingOrder parkingOrder = DomainBuilder.buildParkingOrder(
 				offer.getOfferId(), offer.getParkingId(),
 				offer.getParkingName(), offer.getWxOpenid(),
@@ -147,13 +149,60 @@ public class WxPayService {
 				parkingorderModel.getDetail(), offer.getDetail());
 		Map<String, String> payInfo = prepayGenricSentor(requestMappingValue,
 				wxMapuser, request, parkingOrder.getOrderId(), offer.getPrice());
-		logger.info("paidedResult=" + new Gson().toJson(payInfo));
+		logger.info("\nparking paidedResult=" + new Gson().toJson(payInfo));
 
 		// 保存订单信息
-		parkingOrder.setWxFromOrderId(payInfo
-				.get(CommonConstans.WX_PACKAGE_KEY).replace(
-						CommonConstans.WX_PACKAGE_PREFIX, ""));
 		parkingOrderService.txOrderCreator(parkingOrder);
+		return payInfo;
+	}
+
+	/**
+	 * 预支付ID获取优惠券券业务方法
+	 * 
+	 * @param string
+	 * 
+	 * @param request
+	 * @param parkingorderModel
+	 * @return
+	 * @throws WxErrorException
+	 */
+	public Map<String, String> prepayCouponSentor(String requestMappingValue,
+			HttpServletRequest request, CouponOrderModel couponOrderModel)
+			throws WxErrorException {
+		Object wxMapuserObj = request.getSession().getAttribute(
+				CommonConstans.SESSION_WXUSER_KEY);
+		if (wxMapuserObj == null || !(wxMapuserObj instanceof WxMpUser)) {
+			WxError wxError = new WxError();
+			wxError.setErrorCode(6001);
+			wxError.setErrorMsg("微信登陆信息失效，Session 中无用户信息。");
+			throw new WxErrorException(wxError);
+		}
+		WxMpUser wxMapuser = (WxMpUser) wxMapuserObj;
+		CouponOffer offer = couponOfferService.takeCoupon(
+				couponOrderModel.getCouponBrand(),
+				couponOrderModel.getCouponType());
+
+		if (offer == null
+				|| !offer.getOfferStatus().equals(
+						CommonConstans.COUPON_OFFER_STATUS_PUBLIC)) {
+			WxError wxError = new WxError();
+			wxError.setErrorCode(6002);
+			wxError.setErrorMsg("优惠券已销售一空，我们会加紧上货，请稍后重试！");
+			throw new WxErrorException(wxError);
+		}
+
+		CouponOrder couponOrder = DomainBuilder.buildCouponOrder(
+				offer.getCouponId(), offer.getCouponBrand(),
+				offer.getCouponType(), offer.getCouponQrcode(),
+				wxMapuser.getOpenId(), wxMapuser.getNickname(),
+				CommonConstans.COUPON_ORDER_STATUS_SUBMIT, offer.getPrice());
+		Map<String, String> payInfo = prepayGenricSentor(requestMappingValue,
+				wxMapuser, request, couponOrder.getCouponOrderId(),
+				offer.getPrice());
+		logger.info("\n Coupon paidedResult=" + new Gson().toJson(payInfo));
+
+		// 保存订单信息
+		couponOrderService.txOrderCreator(couponOrder);
 		return payInfo;
 	}
 }

@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.khpp.db.dao.CouponOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.khpp.db.domain.CouponOrder" >
+    <id column="coupon_order_id" property="couponOrderId" jdbcType="CHAR" />
+    <result column="coupon_id" property="couponId" jdbcType="INTEGER" />
+    <result column="coupon_brand" property="couponBrand" jdbcType="VARCHAR" />
+    <result column="coupon_type" property="couponType" jdbcType="INTEGER" />
+    <result column="coupon_qrcode" property="couponQrcode" jdbcType="VARCHAR" />
+    <result column="wx_openid_buier" property="wxOpenidBuier" jdbcType="VARCHAR" />
+    <result column="wx_nick_name_buier" property="wxNickNameBuier" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="wx_order_id" property="wxOrderId" jdbcType="VARCHAR" />
+    <result column="paid_amount" property="paidAmount" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="REAL" />
+    <result column="longitude" property="longitude" jdbcType="REAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="dml_time" property="dmlTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    coupon_order_id, coupon_id, coupon_brand, coupon_type, coupon_qrcode, wx_openid_buier, 
+    wx_nick_name_buier, order_status, wx_order_id, paid_amount, latitude, longitude, 
+    create_time, dml_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.khpp.db.domain.CouponOrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from coupon_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from coupon_order
+    where coupon_order_id = #{couponOrderId,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from coupon_order
+    where coupon_order_id = #{couponOrderId,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.khpp.db.domain.CouponOrderExample" >
+    delete from coupon_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.khpp.db.domain.CouponOrder" >
+    insert into coupon_order (coupon_order_id, coupon_id, coupon_brand, 
+      coupon_type, coupon_qrcode, wx_openid_buier, 
+      wx_nick_name_buier, order_status, wx_order_id, 
+      paid_amount, latitude, longitude, 
+      create_time, dml_time)
+    values (#{couponOrderId,jdbcType=CHAR}, #{couponId,jdbcType=INTEGER}, #{couponBrand,jdbcType=VARCHAR}, 
+      #{couponType,jdbcType=INTEGER}, #{couponQrcode,jdbcType=VARCHAR}, #{wxOpenidBuier,jdbcType=VARCHAR}, 
+      #{wxNickNameBuier,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, #{wxOrderId,jdbcType=VARCHAR}, 
+      #{paidAmount,jdbcType=DECIMAL}, #{latitude,jdbcType=REAL}, #{longitude,jdbcType=REAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{dmlTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.khpp.db.domain.CouponOrder" >
+    insert into coupon_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="couponOrderId != null" >
+        coupon_order_id,
+      </if>
+      <if test="couponId != null" >
+        coupon_id,
+      </if>
+      <if test="couponBrand != null" >
+        coupon_brand,
+      </if>
+      <if test="couponType != null" >
+        coupon_type,
+      </if>
+      <if test="couponQrcode != null" >
+        coupon_qrcode,
+      </if>
+      <if test="wxOpenidBuier != null" >
+        wx_openid_buier,
+      </if>
+      <if test="wxNickNameBuier != null" >
+        wx_nick_name_buier,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="wxOrderId != null" >
+        wx_order_id,
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="dmlTime != null" >
+        dml_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="couponOrderId != null" >
+        #{couponOrderId,jdbcType=CHAR},
+      </if>
+      <if test="couponId != null" >
+        #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="couponBrand != null" >
+        #{couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        #{couponType,jdbcType=INTEGER},
+      </if>
+      <if test="couponQrcode != null" >
+        #{couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenidBuier != null" >
+        #{wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickNameBuier != null" >
+        #{wxNickNameBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="wxOrderId != null" >
+        #{wxOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="paidAmount != null" >
+        #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.khpp.db.domain.CouponOrderExample" resultType="java.lang.Integer" >
+    select count(*) from coupon_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update coupon_order
+    <set >
+      <if test="record.couponOrderId != null" >
+        coupon_order_id = #{record.couponOrderId,jdbcType=CHAR},
+      </if>
+      <if test="record.couponId != null" >
+        coupon_id = #{record.couponId,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponBrand != null" >
+        coupon_brand = #{record.couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.couponType != null" >
+        coupon_type = #{record.couponType,jdbcType=INTEGER},
+      </if>
+      <if test="record.couponQrcode != null" >
+        coupon_qrcode = #{record.couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxOpenidBuier != null" >
+        wx_openid_buier = #{record.wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxNickNameBuier != null" >
+        wx_nick_name_buier = #{record.wxNickNameBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null" >
+        order_status = #{record.orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.wxOrderId != null" >
+        wx_order_id = #{record.wxOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paidAmount != null" >
+        paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.latitude != null" >
+        latitude = #{record.latitude,jdbcType=REAL},
+      </if>
+      <if test="record.longitude != null" >
+        longitude = #{record.longitude,jdbcType=REAL},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dmlTime != null" >
+        dml_time = #{record.dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update coupon_order
+    set coupon_order_id = #{record.couponOrderId,jdbcType=CHAR},
+      coupon_id = #{record.couponId,jdbcType=INTEGER},
+      coupon_brand = #{record.couponBrand,jdbcType=VARCHAR},
+      coupon_type = #{record.couponType,jdbcType=INTEGER},
+      coupon_qrcode = #{record.couponQrcode,jdbcType=VARCHAR},
+      wx_openid_buier = #{record.wxOpenidBuier,jdbcType=VARCHAR},
+      wx_nick_name_buier = #{record.wxNickNameBuier,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=INTEGER},
+      wx_order_id = #{record.wxOrderId,jdbcType=VARCHAR},
+      paid_amount = #{record.paidAmount,jdbcType=DECIMAL},
+      latitude = #{record.latitude,jdbcType=REAL},
+      longitude = #{record.longitude,jdbcType=REAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dml_time = #{record.dmlTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.khpp.db.domain.CouponOrder" >
+    update coupon_order
+    <set >
+      <if test="couponId != null" >
+        coupon_id = #{couponId,jdbcType=INTEGER},
+      </if>
+      <if test="couponBrand != null" >
+        coupon_brand = #{couponBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="couponType != null" >
+        coupon_type = #{couponType,jdbcType=INTEGER},
+      </if>
+      <if test="couponQrcode != null" >
+        coupon_qrcode = #{couponQrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenidBuier != null" >
+        wx_openid_buier = #{wxOpenidBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickNameBuier != null" >
+        wx_nick_name_buier = #{wxNickNameBuier,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="wxOrderId != null" >
+        wx_order_id = #{wxOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="paidAmount != null" >
+        paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dmlTime != null" >
+        dml_time = #{dmlTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where coupon_order_id = #{couponOrderId,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.khpp.db.domain.CouponOrder" >
+    update coupon_order
+    set coupon_id = #{couponId,jdbcType=INTEGER},
+      coupon_brand = #{couponBrand,jdbcType=VARCHAR},
+      coupon_type = #{couponType,jdbcType=INTEGER},
+      coupon_qrcode = #{couponQrcode,jdbcType=VARCHAR},
+      wx_openid_buier = #{wxOpenidBuier,jdbcType=VARCHAR},
+      wx_nick_name_buier = #{wxNickNameBuier,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      wx_order_id = #{wxOrderId,jdbcType=VARCHAR},
+      paid_amount = #{paidAmount,jdbcType=DECIMAL},
+      latitude = #{latitude,jdbcType=REAL},
+      longitude = #{longitude,jdbcType=REAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      dml_time = #{dmlTime,jdbcType=TIMESTAMP}
+    where coupon_order_id = #{couponOrderId,jdbcType=CHAR}
+  </update>
+</mapper>

@@ -63,7 +63,8 @@
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
 		<!-- 配置微信跳转信息拦截器，保证微信到本服务跳转中的用户信息传递 -->
 		<mvc:interceptor>
-			<mvc:mapping path="/wxredirect/*" />
+			<mvc:mapping path="/wxredirect/**" />
+			<mvc:exclude-mapping path="/wxredirect/couponqr" /> 
 			<bean id="wxredirectInterceptor" class="com.khpp.web.security.WxredirectInterceptor" />
 		</mvc:interceptor>
 		<!-- 配置Token拦截器，防止用户重复提交数据 -->
